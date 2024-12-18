@@ -12,10 +12,12 @@ INCLUDES := $(addprefix $(INCLUDES_DIR)/, \
 	) \
 )
 INCFLAGS := $(addprefix -I, \
+	/usr/include \
 	$(INCLUDES_DIR) \
 	$(LIBFT_DIR)/$(INCLUDES_DIR) \
 )
 LIBS := $(LIBFT)
+LIBFLAGS := -lreadline
 
 NUM_FILES := $(words $(SRCS))
 
@@ -31,7 +33,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(INCLUDES)
 
 $(NAME): $(LIBS) $(OBJS)
 	@printf "\r$(CLEAR)%-15s: $(GREEN)compilation finished$(END)\n" $(NAME)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	@$(CC) $(OBJS) $(LIBFLAGS) $(LIBS) -o $(NAME)
 	@printf "%-15s: create $(NAME)\n" $(NAME)
 
 .PHONY: all clean fclean re test norm lsp
