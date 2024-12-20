@@ -47,7 +47,7 @@ CLEAR := $(ESC)[K
 
 # コンパイルの設定
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -ggdb
 ARFLAGS := -rcs
 
 # ディレクトリの設定
