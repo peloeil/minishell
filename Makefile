@@ -3,7 +3,7 @@ include library.mk
 
 NAME := minishell
 SRCS := $(addprefix $(SRCS_DIR)/, \
-	minishell.c \
+	main.c \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 INCLUDES := $(addprefix $(INCLUDES_DIR)/, \
