@@ -1,0 +1,37 @@
+name: Run Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Pull Bash Docker Image
+        run: |
+          docker pull bash:latest
+
+      - name: Run Integration Tests
+        run: |
+          # Ensure the integration_tests directory exists
+          if [ ! -d "integration_tests" ]; then
+            echo "Error: integration_tests directory not found."
+            exit 1
+          fi
+
+          # Iterate over all shell scripts in integration_tests
+          for test_script in integration_tests/*.sh; do
+            echo "Running test: $test_script"
+            # Execute the script inside the bash Docker container
+            docker run --rm -v "$(pwd):/workspace" -w /workspace bash:latest bash "$test_script"
+          done
+
