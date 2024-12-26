@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+make -C .. re > /dev/null
+
 # Define color codes for output formatting
 readonly ESC=$(printf '\033')
 readonly END="${ESC}[0m"
@@ -43,6 +45,7 @@ test_bash() {
 # Test commands array
 readonly commands=(
     "echo hello"
+    "echo world"
 )
 
 # Execute tests
