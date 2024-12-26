@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-make -C .. re > /dev/null
-
 # Define color codes for output formatting
 readonly ESC=$(printf '\033')
 readonly END="${ESC}[0m"
@@ -18,7 +16,7 @@ test_bash() {
     # Execute commands in parallel using background processes
     echo "$command" | bash >out_bash 2>err_bash &
     local bash_pid=$!
-    
+
     echo "$command" | ./minishell >out_minishell 2>err_minishell &
     local minishell_pid=$!
 
@@ -31,8 +29,8 @@ test_bash() {
     # Compare outputs and cleanup in a single pass
     local has_error=0
     if ! diff out_bash out_minishell >/dev/null ||
-       ! diff err_bash err_minishell >/dev/null ||
-       [ $bash_status -ne $minishell_status ]; then
+        ! diff err_bash err_minishell >/dev/null ||
+        [ $bash_status -ne $minishell_status ]; then
         print_error "$command"
         has_error=1
     fi
