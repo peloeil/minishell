@@ -20,11 +20,17 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      # Step 3: Build project components
+      # Step 3: Install required system dependencies
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreadline-dev
+
+      # Step 4: Build project components
       - name: Build Project
         run: make all
 
-      # Step 3: Execute integration tests in parallel
+      # Step 5: Execute integration tests in parallel
       - name: Run Integration Tests
         run: |-
           # Pull the bash image in background and wait for completion
