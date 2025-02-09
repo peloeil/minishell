@@ -36,7 +36,7 @@ $(NAME): $(LIBS) $(OBJS)
 	@$(CC) $(OBJS) $(LIBFLAGS) $(LIBS) -o $(NAME)
 	@printf "%-15s: create $(NAME)\n" $(NAME)
 
-.PHONY: all clean fclean re test norm lsp
+.PHONY: all clean fclean re test norm lsp analyze
 .DEFAULT_GOAL := all
 all: $(NAME)
 
@@ -61,6 +61,8 @@ lsp: fclean
 	@bear -- make --no-print-directory all
 	@compdb list | sponge compile_commands.json
 
+analyze:
+	@clang-tidy --quiet $(SRCS)
 
 TESTS := $(patsubst $(SRCS_DIR)/%, $(TESTS_DIR)/%, $(SRCS))
 TEST_UTILS := $(addprefix $(TESTS_DIR)/, \
