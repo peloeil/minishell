@@ -1,5 +1,5 @@
-include common.mk
-include library.mk
+include makefiles/common.mk
+include makefiles/library.mk
 
 NAME := minishell
 SRCS := $(addprefix $(SRCS_DIR)/, \
