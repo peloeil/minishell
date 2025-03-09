@@ -4,6 +4,9 @@ include library.mk
 NAME := minishell
 SRCS := $(addprefix $(SRCS_DIR)/, \
 	main.c \
+	$(addprefix wrappers/, \
+		readline.c \
+	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 INCLUDES := $(addprefix $(INCLUDES_DIR)/, \
