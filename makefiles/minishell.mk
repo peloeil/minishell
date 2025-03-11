@@ -1,0 +1,47 @@
+include makefiles/common.mk
+include makefiles/library.mk
+
+# binary name
+NAME := minishell
+
+# sources and objects
+SRCS := $(addprefix $(SRCS_DIR)/, \
+	main.c \
+	$(addprefix wrappers/, \
+		readline.c \
+	) \
+)
+OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
+
+# includes
+INCLUDES := $(addprefix $(INCLUDES_DIR)/, \
+	$(addprefix $(NAME)/, \
+		minishell.h \
+	) \
+)
+INCFLAGS := $(addprefix -I, \
+	/usr/include \
+	$(INCLUDES_DIR) \
+	$(LIBFT_DIR)/$(INCLUDES_DIR) \
+)
+
+# libraries
+LIBS := $(LIBFT)
+LIBFLAGS := -lreadline
+
+NUM_FILES := $(words $(SRCS))
+
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(INCLUDES)
+	@mkdir -p $(@D)
+	@printf \
+		"\r$(CLEAR)%-15s: [%2d/%2d] $(GREEN)compiling $(CYAN)%s$(END)" \
+		$(NAME) \
+		$(shell echo "$(SRCS)" | tr " " "\n" | grep -n "$<" | cut -d : -f 1) \
+		$(NUM_FILES) \
+		$(shell echo $< | sed 's|$(SRCS_DIR)/||g')
+	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
+
+$(NAME): $(LIBS) $(OBJS)
+	@printf "\r$(CLEAR)%-15s: $(GREEN)compilation finished$(END)\n" $(NAME)
+	@$(CC) $(OBJS) $(LIBFLAGS) $(LIBS) -o $(NAME)
+	@printf "%-15s: create $(NAME)\n" $(NAME)
