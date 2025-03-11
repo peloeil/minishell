@@ -2,8 +2,10 @@ Checks: '
   -*,
   clang-diagnostic-*,
   clang-analyzer-*,
-  bugprone-*,
   cert-*,
+
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
 
   cppcoreguidelines-*,
   -cppcoreguidelines-init-variables,

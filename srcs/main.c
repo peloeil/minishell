@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/03/11 17:58:03 by sota             ###   ########.fr       */
+/*   Updated: 2025/03/11 18:27:22 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 #include <stdlib.h>
 #include <libft/ft_stdio.h>
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
+	char	*cmd_str;
 
+	(void)argc;
+	(void)argv;
 	while (1)
 	{
-		input = wrap_readline(
+		cmd_str = wrap_readline(
 				PROMPT, isatty(STDIN_FILENO) && isatty(STDERR_FILENO)
 				);
-		if (input == NULL)
+		if (cmd_str == NULL)
 			break ;
-		ft_printf("%s\n", input);
-		free(input);
+		eval_cmd(cmd_str, (const char **)envp);
+		free(cmd_str);
 	}
 	return (EXIT_SUCCESS);
 }
