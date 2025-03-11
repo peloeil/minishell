@@ -1,4 +1,5 @@
 include makefiles/minishell.mk
+include makefiles/test.mk
 
 .PHONY: all clean fclean re norm lsp analyze
 .DEFAULT_GOAL := all
