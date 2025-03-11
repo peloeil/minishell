@@ -8,7 +8,7 @@ int	main(void)
 
 	while (1)
 	{
-		input = xreadline(PROMPT, isatty(STDIN_FILENO) && isatty(STDERR_FILENO));
+		input = wrap_readline(PROMPT, isatty(STDIN_FILENO) && isatty(STDERR_FILENO));
 		if (input == NULL)
 			break ;
 		ft_printf("%s\n", input);

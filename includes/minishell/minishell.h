@@ -3,6 +3,6 @@
 
 # define PROMPT "minishell$ "
 
-char	*xreadline(const char *prompt, const int is_interactive);
+char	*wrap_readline(const char *prompt, const int is_interactive);
 
 #endif // MNISHELL_H

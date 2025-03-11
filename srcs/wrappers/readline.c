@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-char	*xreadline(const char *prompt, const int is_interactive)
+char	*wrap_readline(const char *prompt, const int is_interactive)
 {
 	int		saved_stdout;
 	int		saved_stderr;
