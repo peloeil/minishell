@@ -11,6 +11,8 @@ Checks: '
   -cppcoreguidelines-init-variables,
 
   misc-*,
+  -misc-include-cleaner,
+
   performance-*,
 
   readability-*,
