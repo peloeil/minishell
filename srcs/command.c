@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/03/12 22:23:17 by sota             ###   ########.fr       */
+/*   Updated: 2025/03/12 22:37:06 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
 		if (access(*path_ptr, F_OK | X_OK) != 0)
 		{
 			free(*path_ptr);
+			*path_ptr = NULL;
 			i++;
 			continue ;
 		}
