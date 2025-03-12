@@ -46,10 +46,10 @@ BG_DEFAULT := $(ESC)[49m
 CLEAR := $(ESC)[K
 
 # コンパイルの設定
-# CC := gcc
-# CFLAGS := -Wall -Wextra -fanalyzer
-CC := clang
-CFLAGS := -Wall -Wextra --analyze
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror
+# CC := clang
+# CFLAGS := -Wall -Wextra -Werror
 ARFLAGS := -rcs
 
 # ディレクトリの設定
