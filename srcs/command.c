@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/03/12 22:37:06 by sota             ###   ########.fr       */
+/*   Updated: 2025/03/12 22:50:36 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
 		break ;
 		i++;
 	}
+	free_strs((const char **)path_dirs);
 	return (0);
 }
