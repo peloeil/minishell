@@ -4,3 +4,4 @@ objs
 /minishell
 !/includes/minishell/
 result.log
+.vscode
