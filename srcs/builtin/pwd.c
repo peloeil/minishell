@@ -1,8 +1,10 @@
 #include <minishell/minishell.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <libft/ft_stdio.h>
 
-int pwd(int argc, char *argv[])
+int pwd(char **argv)
 {
     char	*cwd;
 
