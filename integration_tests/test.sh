@@ -7,7 +7,7 @@ readonly RED="${ESC}[31m"
 readonly GREEN="${ESC}[32m"
 
 print_ok() {
-    printf "%-50s %b\n" "$1" "${GREEN}KO${END}"
+    printf "%-50s %b\n" "$1" "${GREEN}OK${END}"
 }
 
 print_ko() {
@@ -39,7 +39,7 @@ test_bash() {
         print_ko "$command"
         has_error=1
     else
-        print_ok 
+        print_ok "$command"
     fi
 
     # Cleanup temporary files
