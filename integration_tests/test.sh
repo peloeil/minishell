@@ -4,8 +4,13 @@
 readonly ESC=$(printf '\033')
 readonly END="${ESC}[0m"
 readonly RED="${ESC}[31m"
+readonly GREEN="${ESC}[32m"
 
-print_error() {
+print_ok() {
+    printf "%-50s %b\n" "$1" "${GREEN}KO${END}"
+}
+
+print_ko() {
     printf "%-50s %b\n" "$1" "${RED}KO${END}"
 }
 
@@ -31,8 +36,10 @@ test_bash() {
     if ! diff out_bash out_minishell >/dev/null ||
         ! diff err_bash err_minishell >/dev/null ||
         [ $bash_status -ne $minishell_status ]; then
-        print_error "$command"
+        print_ko "$command"
         has_error=1
+    else
+        print_ok 
     fi
 
     # Cleanup temporary files
