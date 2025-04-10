@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_value.c                                       :+:      :+:    :+:   */
+/*   ft_getenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:18:58 by sota              #+#    #+#             */
-/*   Updated: 2025/03/12 22:12:14 by sota             ###   ########.fr       */
+/*   Updated: 2025/04/10 13:55:52 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft/ft_string.h>
 
-char	*find_value(const char **envp, const char *key)
+char	*ft_getenv(const char *key, const char **envp)
 {
 	size_t	i;
 	size_t	key_len;

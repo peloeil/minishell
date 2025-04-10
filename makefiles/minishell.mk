@@ -13,7 +13,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		readline.c \
 	) \
 	$(addprefix env/, \
-		find_value.c \
+		ft_getenv.c \
 	) \
 	$(addprefix error/, \
 		free_strs.c \

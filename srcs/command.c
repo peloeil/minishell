@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/03/12 22:50:36 by sota             ###   ########.fr       */
+/*   Updated: 2025/04/10 13:56:42 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
 	char	**path_dirs;
 	size_t	i;
 
-	env_path = find_value(envp, "PATH");
+	env_path = ft_getenv("PATH", envp);
 	if (env_path == NULL)
 		return (-1);
 	path_dirs = ft_split(env_path, ':');
