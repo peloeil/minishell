@@ -16,10 +16,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Setup Docker BuildX for improved build capabilities
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
-
       # Step 3: Install required system dependencies
       - name: Install Dependencies
         run: |
