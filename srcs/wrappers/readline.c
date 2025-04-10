@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   readline.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/11 17:58:12 by sota              #+#    #+#             */
+/*   Updated: 2025/03/11 17:58:13 by sota             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>
 #include <fcntl.h>
 
-char	*xreadline(const char *prompt, const int is_interactive)
+char	*wrap_readline(const char *prompt, const int is_interactive)
 {
 	int		saved_stdout;
 	int		saved_stderr;

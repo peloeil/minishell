@@ -7,8 +7,16 @@ NAME := minishell
 # sources and objects
 SRCS := $(addprefix $(SRCS_DIR)/, \
 	main.c \
+	eval.c \
+	command.c \
 	$(addprefix wrappers/, \
 		readline.c \
+	) \
+	$(addprefix env/, \
+		ft_getenv.c \
+	) \
+	$(addprefix error/, \
+		free_strs.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))

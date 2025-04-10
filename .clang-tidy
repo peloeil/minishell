@@ -2,16 +2,21 @@ Checks: '
   -*,
   clang-diagnostic-*,
   clang-analyzer-*,
-  bugprone-*,
   cert-*,
+
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
 
   cppcoreguidelines-*,
   -cppcoreguidelines-init-variables,
 
   misc-*,
+  -misc-include-cleaner,
+
   performance-*,
 
   readability-*,
   -readability-braces-around-statements,
   -readability-identifier-length,
+  -readability-avoid-const-params-in-decls,
   '
