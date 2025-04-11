@@ -16,10 +16,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Setup Docker BuildX for improved build capabilities
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
-
       # Step 3: Install required system dependencies
       - name: Install Dependencies
         run: |
@@ -33,16 +29,12 @@ jobs:
       # Step 5: Execute integration tests in parallel
       - name: Run Integration Tests
         run: |-
-          # Pull the bash image in background and wait for completion
-          docker pull bash:latest &
-          wait
-
           # Array to store failed test paths
           failed_tests=()
 
           # Launch each test script in a separate container in parallel
           for test_script in integration_tests/*.sh; do
-            docker run --rm -v "$(pwd):/workspace" -w /workspace bash:latest bash "$test_script" &
+            bash "$test_script" &
             pids[$!]="$test_script"
           done
 
