@@ -13,7 +13,7 @@ CLEAR := $(ESC)[K
 
 # コンパイルの設定
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -fPIC
 ARFLAGS := -rcs
 
 # ディレクトリの設定

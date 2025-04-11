@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_getenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/03/11 18:27:22 by sota             ###   ########.fr       */
+/*   Created: 2025/03/11 22:18:58 by sota              #+#    #+#             */
+/*   Updated: 2025/04/10 13:55:52 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <stdlib.h>
-#include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_getenv(const char *key, const char **envp)
 {
-	char	*cmd_str;
+	size_t	i;
+	size_t	key_len;
+	char	*value;
 
-	(void)argc;
-	(void)argv;
-	while (1)
+	key_len = ft_strlen(key);
+	i = 0;
+	value = NULL;
+	while (value == NULL && envp[i] != NULL)
 	{
-		cmd_str = wrap_readline(
-				PROMPT, isatty(STDIN_FILENO) && isatty(STDERR_FILENO)
-				);
-		if (cmd_str == NULL)
-			break ;
-		eval_cmd(cmd_str, (const char **)envp);
-		free(cmd_str);
+		if (ft_strncmp(key, envp[i], key_len) == 0 && envp[i][key_len] == '=')
+			value = (char *)envp[i] + key_len + 1;
+		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (value);
 }
