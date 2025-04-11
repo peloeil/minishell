@@ -4,7 +4,6 @@ include makefiles/library.mk
 # binary name
 NAME := minishell
 
-# sources and objects
 SRCS := $(addprefix $(SRCS_DIR)/, \
 	main.c \
 	eval.c \
@@ -17,6 +16,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	) \
 	$(addprefix error/, \
 		free_strs.c \
+	) \
 	$(addprefix builtin/, \
 		pwd.c \
 	) \

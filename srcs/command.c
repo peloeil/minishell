@@ -14,6 +14,7 @@
 #include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
@@ -22,6 +23,8 @@ int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
 	char	**path_dirs;
 	size_t	i;
 
+	// if (ft_strcmp(cmd, "pwd") == 0)
+	// 	return (pwd(path_ptr));
 	env_path = ft_getenv("PATH", envp);
 	if (env_path == NULL)
 		return (-1);
