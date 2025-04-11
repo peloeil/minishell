@@ -8,35 +8,44 @@
 // テスト1: 引数なしでpwdを呼び出す
 int test_pwd_no_arguments()
 {
-    char *argv[] = {"pwd", NULL};
     char *expected = getcwd(NULL, 0);
-    int result = pwd(1, argv);
-
-    if (result != 0)
+    if (!expected)
     {
-        printf("test_pwd_no_arguments: FAILED (pwd returned %d)\n", result);
+        perror("getcwd");
+        return 1;
+    }
+
+    // Use popen to capture the output of the pwd function
+    FILE *fp = popen("./minishell_pwd", "r");
+    if (!fp)
+    {
+        perror("popen");
         free(expected);
         return 1;
     }
 
-    printf("test_pwd_no_arguments: PASSED (Output: %s)\n", expected);
-    free(expected);
-    return 0;
-}
-
-// テスト2: 引数が多すぎる場合
-int test_pwd_too_many_arguments()
-{
-    char *argv[] = {"pwd", "extra_arg", NULL};
-    int result = pwd(2, argv);
-
-    if (result != 1)
+    char actual[1024];
+    if (!fgets(actual, sizeof(actual), fp))
     {
-        printf("test_pwd_too_many_arguments: FAILED (Expected 1, got %d)\n", result);
+        perror("fgets");
+        pclose(fp);
+        free(expected);
+        return 1;
+    }
+    pclose(fp);
+
+    // Remove trailing newline from actual output
+    actual[strcspn(actual, "\n")] = '\0';
+
+    if (strcmp(expected, actual) != 0)
+    {
+        printf("test_pwd_no_arguments: FAILED (Expected: %s, Actual: %s)\n", expected, actual);
+        free(expected);
         return 1;
     }
 
-    printf("test_pwd_too_many_arguments: PASSED\n");
+    printf("test_pwd_no_arguments: PASSED (Output: %s)\n", actual);
+    free(expected);
     return 0;
 }
 
@@ -48,7 +57,6 @@ int main()
     printf("Running pwd tests...\n");
 
     failed += test_pwd_no_arguments();
-    failed += test_pwd_too_many_arguments();
 
     if (failed == 0)
         printf("All tests passed!\n");

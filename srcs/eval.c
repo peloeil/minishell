@@ -14,8 +14,11 @@
 #include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+
+int	builtin()
 
 int	eval_cmd(const char *cmd, const char **envp)
 {
@@ -27,6 +30,12 @@ int	eval_cmd(const char *cmd, const char **envp)
 	argv = ft_split(cmd, ' ');
 	if (argv == NULL)
 		return (-1);
+	if (ft_strcmp(argv[0], "pwd") == 0)
+    {
+        status = pwd();
+        free_strs((const char **)argv);
+        return (status);
+    }
 	status = set_cmd_path(&cmd_path, argv[0], envp);
 	if (status == -1)
 		return (-1);
