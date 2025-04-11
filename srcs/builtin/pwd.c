@@ -4,16 +4,16 @@
 #include <string.h>
 #include <libft/ft_stdio.h>
 
-int pwd(char **argv)
+int pwd(void)
 {
     char	*cwd;
 
-	if (argv[1])
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
 	{
-		printf("pwd: too many arguments\n");
+		perror("getcwd");
 		return (1);
 	}
-	cwd = getcwd(NULL, 0);
 	ft_printf("%s\n", cwd);
 	free(cwd);
 	return (0);

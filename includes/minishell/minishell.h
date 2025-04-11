@@ -24,7 +24,7 @@ char	*ft_getenv(const char *key, const char **envp)
 		__attribute__((nonnull(1, 2)));
 
 //builtin
-int		pwd(char *argv[]);
+int		pwd(void);
 int		echo(int argc, char *argv[]);
 
 #endif // MINISHELL_H

@@ -29,6 +29,7 @@ int	main(int argc, char **argv, char **envp)
 		if (cmd_str == NULL)
 			break ;
 		eval_cmd(cmd_str, (const char **)envp);
+		printf("cmd_str: %s\n", cmd_str);
 		free(cmd_str);
 	}
 	return (EXIT_SUCCESS);
