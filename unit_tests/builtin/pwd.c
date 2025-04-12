@@ -46,7 +46,7 @@ int test_pwd_no_arguments()
         printf("test_pwd_no_arguments: FAILED\nExpected: [%s]\nActual:   [%s]\n", expected, actual);
         free(expected);
         free(actual);
-        return 1;
+        return (1);
     }
 
     printf("test_pwd_no_arguments: PASSED (Output: %s)\n", actual);
