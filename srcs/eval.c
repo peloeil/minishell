@@ -10,7 +10,7 @@ int	handle_builtin_command(char **argv)
 {
 	if (ft_strcmp(argv[0], "pwd") == 0)
 		return pwd();
-	return -2;
+	return (-2);
 }
 
 int	handle_external_command(char **argv, const char **envp)
@@ -21,13 +21,12 @@ int	handle_external_command(char **argv, const char **envp)
 
 	status = set_cmd_path(&cmd_path, argv[0], envp);
 	if (status == -1)
-		return -1;
-
+		return (-1);
 	pid = fork();
 	if (pid == -1)
 	{
 		free(cmd_path);
-		return -1;
+		return (-1);
 	}
 	if (pid == 0)
 	{
@@ -36,7 +35,7 @@ int	handle_external_command(char **argv, const char **envp)
 	}
 	wait(NULL);
 	free(cmd_path);
-	return 0;
+	return (0);
 }
 
 int	eval_cmd(const char *cmd, const char **envp)
@@ -46,12 +45,10 @@ int	eval_cmd(const char *cmd, const char **envp)
 
 	argv = ft_split(cmd, ' ');
 	if (!argv)
-		return -1;
-
+		return (-1);
 	status = handle_builtin_command(argv);
 	if (status == -2)
 		status = handle_external_command(argv, envp);
-
 	free_strs((const char **)argv);
-	return status;
+	return (status);
 }
