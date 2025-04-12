@@ -1,59 +1,63 @@
-#include <minishell/minishell.h>
-#include <libft/ft_stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
-// テスト1: 引数なしでpwdを呼び出す
-int test_pwd_no_arguments()
+// 標準出力の1行目を読み取る関数（改行も含めて返す）
+char *get_command_output(const char *cmd)
 {
-    char *expected = getcwd(NULL, 0);
-    if (!expected)
-    {
-        perror("getcwd");
-        return 1;
-    }
-
-    // Use popen to capture the output of the pwd function
-    FILE *fp = popen("./minishell_pwd", "r");
+    FILE *fp = popen(cmd, "r");
     if (!fp)
     {
         perror("popen");
-        free(expected);
-        return 1;
+        return NULL;
     }
 
-    char actual[1024];
-    if (!fgets(actual, sizeof(actual), fp))
+    char *buffer = malloc(1024);
+    if (!fgets(buffer, 1024, fp))
     {
         perror("fgets");
         pclose(fp);
+        free(buffer);
+        return NULL;
+    }
+
+    pclose(fp);
+    return buffer;
+}
+
+int test_pwd_no_arguments()
+{
+    char *expected = get_command_output("pwd");
+    char *actual = get_command_output("echo pwd | ./minishell");
+
+    if (!expected || !actual)
+    {
         free(expected);
+        free(actual);
         return 1;
     }
-    pclose(fp);
 
-    // Remove trailing newline from actual output
+    // 改行を削除して比較
+    expected[strcspn(expected, "\n")] = '\0';
     actual[strcspn(actual, "\n")] = '\0';
 
     if (strcmp(expected, actual) != 0)
     {
-        printf("test_pwd_no_arguments: FAILED (Expected: %s, Actual: %s)\n", expected, actual);
+        printf("test_pwd_no_arguments: FAILED\nExpected: [%s]\nActual:   [%s]\n", expected, actual);
         free(expected);
+        free(actual);
         return 1;
     }
 
     printf("test_pwd_no_arguments: PASSED (Output: %s)\n", actual);
     free(expected);
+    free(actual);
     return 0;
 }
 
-// テスト実行
 int main()
 {
     int failed = 0;
-
     printf("Running pwd tests...\n");
 
     failed += test_pwd_no_arguments();
