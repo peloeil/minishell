@@ -19,8 +19,6 @@ int env(char **argv, const char **envp)
     int	i;
 
     (void)argv;
-    if (envp == NULL)
-        return (EXIT_FAILURE);
     i = 0;
     while (envp[i] != NULL)
     {
