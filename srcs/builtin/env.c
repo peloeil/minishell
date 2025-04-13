@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <libft/ft_stdio.h>
 
-int env(char **argv, char **envp)
+int env(char **argv, const char **envp)
 {
     int	i;
 

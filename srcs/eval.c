@@ -6,10 +6,12 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
-int	handle_builtin_command(char **argv)
+int	handle_builtin_command(char **argv, const char **envp)
 {
 	if (ft_strcmp(argv[0], "pwd") == 0)
 		return pwd();
+	if (ft_strcmp(argv[0], "env") == 0)
+		return env(argv, envp);
 	return (-2);
 }
 
@@ -46,7 +48,7 @@ int	eval_cmd(const char *cmd, const char **envp)
 	argv = ft_split(cmd, ' ');
 	if (!argv)
 		return (-1);
-	status = handle_builtin_command(argv);
+	status = handle_builtin_command(argv, envp);
 	if (status == -2)
 		status = handle_external_command(argv, envp);
 	free_strs((const char **)argv);
