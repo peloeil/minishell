@@ -1,71 +1,79 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-// 標準出力の1行目を読み取る関数（改行も含めて返す）
-char *get_command_output(const char *cmd)
-{
-    FILE *fp = popen(cmd, "r");
-    if (!fp)
-    {
-        perror("popen");
-        return NULL;
-    }
+// minishellのpwd関数（引数なし）
+int pwd(void);
 
-    char *buffer = malloc(1024);
-    if (!fgets(buffer, 1024, fp))
-    {
-        perror("fgets");
-        pclose(fp);
-        free(buffer);
-        return NULL;
-    }
+// 標準出力をキャプチャ（引数なしの関数用）
+static char *capture_stdout_no_args(int (*func)(void)) {
+	int pipefd[2];
+	if (pipe(pipefd) == -1) {
+		perror("pipe");
+		exit(1);
+	}
 
-    pclose(fp);
-    return buffer;
+	int saved_stdout = dup(STDOUT_FILENO);
+	dup2(pipefd[1], STDOUT_FILENO);
+	close(pipefd[1]);
+
+	func(); // minishellのpwd関数を呼び出し
+	fflush(stdout);
+
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdout);
+
+	char *buffer = malloc(4096);
+	if (!buffer)
+		exit(1);
+
+	ssize_t n = read(pipefd[0], buffer, 4095);
+	if (n < 0) n = 0;
+	buffer[n] = '\0';
+	close(pipefd[0]);
+
+	return buffer;
 }
 
-int test_pwd_no_arguments()
-{
-    char *expected = get_command_output("pwd");
-    char *actual = get_command_output("echo pwd | ./minishell");
+// bashのpwd出力を取得
+static char *capture_builtin_pwd(void) {
+	FILE *fp = popen("pwd", "r");
+	if (!fp) {
+		perror("popen");
+		exit(1);
+	}
 
-    if (!expected || !actual)
-    {
-        free(expected);
-        free(actual);
-        return 1;
-    }
+	char *buffer = malloc(4096);
+	if (!buffer)
+		exit(1);
 
-    // 改行を削除して比較
-    expected[strcspn(expected, "\n")] = '\0';
-    actual[strcspn(actual, "\n")] = '\0';
-
-    if (strcmp(expected, actual) != 0)
-    {
-        printf("test_pwd_no_arguments: FAILED\nExpected: [%s]\nActual:   [%s]\n", expected, actual);
-        free(expected);
-        free(actual);
-        return (1);
-    }
-
-    printf("test_pwd_no_arguments: PASSED (Output: %s)\n", actual);
-    free(expected);
-    free(actual);
-    return 0;
+	size_t total = fread(buffer, 1, 4095, fp);
+	buffer[total] = '\0';
+	pclose(fp);
+	return buffer;
 }
 
-int main()
-{
-    int failed = 0;
-    printf("Running pwd tests...\n");
+int main(void) {
+	char *custom_out = capture_stdout_no_args(pwd);
+	char *builtin_out = capture_builtin_pwd();
 
-    failed += test_pwd_no_arguments();
+	// 改行を削除
+	custom_out[strcspn(custom_out, "\n")] = '\0';
+	builtin_out[strcspn(builtin_out, "\n")] = '\0';
 
-    if (failed == 0)
-        printf("All tests passed!\n");
-    else
-        printf("%d test(s) failed.\n", failed);
+	if (strcmp(custom_out, builtin_out) != 0) {
+		fprintf(stderr, "NG: pwd command\n");
+		fprintf(stderr, "  Custom : [%s]\n", custom_out);
+		fprintf(stderr, "  Builtin: [%s]\n", builtin_out);
+		free(custom_out);
+		free(builtin_out);
+		return 1;
+	}
 
-    return failed;
+	printf("OK: pwd command passed (Output: %s)\n", custom_out);
+
+	free(custom_out);
+	free(builtin_out);
+	return 0;
 }
