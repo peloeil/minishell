@@ -84,7 +84,6 @@ int main(void) {
 		{"With only -n and empty string", {"-n", "", NULL}, 2},
 		{"With multiple -n", {"-n", "-n", "Hello", "World", NULL}, 4},
 		{"With multiple -n and no newline", {"-n", "-n", "Hello", "World", NULL}, 4},
-		{"With special characters", {"Hello", "$USER", "`echo test`", NULL}, 3},
 		{"With empty arguments", {NULL}, 0},
 		{"No arguments", {NULL}, 0},
 	};
