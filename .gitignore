@@ -5,3 +5,5 @@ objs
 !/includes/minishell/
 result.log
 .vscode
+*.o
+*.exe
