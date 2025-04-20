@@ -21,20 +21,21 @@ int echo(int argc, char *argv[])
     int i;
 
     n_option = 0;
-    i = 0;
+    i = 1;
+    while (i < argc && ft_strcmp(argv[i], "-n") == 0)
+    {
+        n_option = 1;
+        i++;
+    }
     while (i < argc)
     {
-        if (ft_strncmp(argv[i], "-n", 2) == 0)
-            n_option = 1;
-        else
-        {
-            ft_printf("%s", argv[i]);
-            if (i < argc - 1)
-                ft_printf(" ");
-        }
-        i ++;
+        ft_printf("%s", argv[i]);
+        if (i < argc - 1)
+            ft_printf(" ");
+        i++;
     }
-    if (n_option != 1)
+    if (!n_option)
         ft_printf("\n");
-    return (0);
+
+    return 0;
 }

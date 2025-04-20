@@ -40,22 +40,14 @@ int	handle_external_command(char **argv, const char **envp)
 	return (0);
 }
 
-int	ft_count_argc(const char *str)
-
+int ft_count_argc(char **argv)
 {
-	int	count;
+	int		i;
 
-	count = 0;
-	while (*str != '\0')
-	{
-		while (*str == ' ')
-			str++;
-		if (*str != '\0')
-			count++;
-		while (*str != ' ' && *str != '\0')
-			str++;
-	}
-	return (count);
+	i = 0;
+	while (argv[i])
+		i++;
+	return (i);
 }
 
 int	eval_cmd(const char *cmd, const char **envp)
@@ -64,8 +56,8 @@ int	eval_cmd(const char *cmd, const char **envp)
 	char	**argv;
 	int		argc;
 
-	argc = ft_count_argc(cmd);
 	argv = ft_split(cmd, ' ');
+	argc = ft_count_argc(argv);
 	if (!argv)
 		return (-1);
 	status = handle_builtin_command(argc, argv);

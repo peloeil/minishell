@@ -48,7 +48,7 @@ static char *capture_stdout_with_read(int (*func)(int, char **), int argc, char 
 
 static char *capture_builtin_echo(char *args[]) {
 	char command[1024] = "bash -c 'builtin echo";
-	for (int i = 0; args[i] != NULL; i++) {
+	for (int i = 1; args[i] != NULL; i++) {
 		strcat(command, " ");
 		strcat(command, args[i]);
 	}
