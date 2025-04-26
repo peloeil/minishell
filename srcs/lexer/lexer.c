@@ -1,4 +1,3 @@
-#include "strings.h"
 #include <minishell/lexer.h>
 #include <libft/ft_string.h>
 #include <libft/ft_list.h>
@@ -22,6 +21,7 @@ static int	is_dollar(char c)
 
 int	set_next_token(t_token *token, const char *input, size_t *index)
 {
+	token->id = TOKEN;
 	token->str = NULL;
 	while (input[*index] != '\0' && is_blank(input[*index]))
 		(*index)++;
@@ -33,20 +33,11 @@ int	set_next_token(t_token *token, const char *input, size_t *index)
 		token->str = read_operator_string(input, *index, token->id);
 	}
 	else if (is_quote(input[*index]))
-	{
-		token->id = TOKEN;
 		token->str = read_quoted_string(input, *index);
-	}
 	else if (is_dollar(input[*index]))
-	{
-		token->id = TOKEN;
 		token->str = read_expandable_string(input, *index);
-	}
 	else
-	{
-		token->id = TOKEN;
 		token->str = read_unquoted_string(input, *index);
-	}
 	if (token->str == NULL) // syntax error
 		return (-1);
 	*index += ft_strlen(token->str);

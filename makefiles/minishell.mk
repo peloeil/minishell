@@ -38,6 +38,7 @@ OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 INCLUDES := $(addprefix $(INCLUDES_DIR)/, \
 	$(addprefix $(NAME)/, \
 		minishell.h \
+		lexer.h \
 	) \
 )
 INCFLAGS := $(addprefix -I, \
