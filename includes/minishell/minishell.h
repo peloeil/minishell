@@ -23,7 +23,7 @@ typedef struct minishell_envp
 	struct minishell_envp *next;
 }	t_minishell_envp;
 
-char	*wrap_readline(const char *prompt, const int is_interactive);
+char	*wrap_readline(const char *prompt, const int is_interactive)
 		__attribute__((nonnull(1)));
 int		eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
 		__attribute__((nonnull(1, 2)));
