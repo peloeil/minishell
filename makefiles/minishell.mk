@@ -21,6 +21,13 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		pwd.c \
 		echo.c \
 	) \
+	$(addprefix lexer/, \
+		lexer.c \
+		operator.c \
+		quoted.c \
+		expandable.c \
+		unquoted.c \
+	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 
