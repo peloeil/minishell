@@ -20,6 +20,7 @@ void bubble_sort(char **array, int size)
 {
     int     i = 0;
     char    *temp;
+
     while (i < size - 1)
     {
         int j = 0;
@@ -40,8 +41,9 @@ void bubble_sort(char **array, int size)
 int add_double_quote(t_minishell_envp *envp, char **envp_copy)
 {
     char *temp;
-    int i = 0;
+    int i;
 
+    i = 0;
     while (envp != NULL && envp->exported == 1)
     {
         envp_copy[i] = ft_strjoin(envp->key, "=");
