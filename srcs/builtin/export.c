@@ -18,7 +18,8 @@
 
 void bubble_sort(char **array, int size)
 {
-    int i = 0;
+    int     i = 0;
+    char    *temp;
     while (i < size - 1)
     {
         int j = 0;
@@ -26,7 +27,7 @@ void bubble_sort(char **array, int size)
         {
             if (ft_strcmp(array[j], array[j + 1]) > 0)
             {
-                char *temp = array[j];
+                temp = array[j];
                 array[j] = array[j + 1];
                 array[j + 1] = temp;
             }
