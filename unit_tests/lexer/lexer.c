@@ -16,9 +16,6 @@ static char *token_name(t_token_id id) {
 	if (id == NAME) {
 		return "NAME";
 	}
-	if (id == NEWLINE) {
-		return "NEWLINE";
-	}
 	if (id == IO_NUMBER) {
 		return "IO NUMBER";
 	}
