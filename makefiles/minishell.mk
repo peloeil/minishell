@@ -31,6 +31,9 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		expandable.c \
 		unquoted.c \
 	) \
+	$(addprefix parser/, \
+		parser.c \
+	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 
@@ -39,6 +42,7 @@ INCLUDES := $(addprefix $(INCLUDES_DIR)/, \
 	$(addprefix $(NAME)/, \
 		minishell.h \
 		lexer.h \
+		parser.h \
 	) \
 )
 INCFLAGS := $(addprefix -I, \
