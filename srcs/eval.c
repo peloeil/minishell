@@ -6,12 +6,12 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
-int	handle_builtin_command(char **argv, struct minishell_envp *envp)
+int	handle_builtin_command(int fd, char **argv, t_minishell_envp *envp)
 {
 	if (ft_strcmp(argv[0], "pwd") == 0)
 		return pwd();
 	if (ft_strcmp(argv[0], "export") == 0)
-		return export(argv, envp);
+		return export(fd, argv, envp);
 	return (-2);
 }
 
@@ -40,7 +40,7 @@ int	handle_external_command(char **argv, const char **envp)
 	return (0);
 }
 
-int	eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
+int	eval_cmd(int fd, const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
 {
 	int		status;
 	char	**argv;
@@ -48,7 +48,7 @@ int	eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **env
 	argv = ft_split(cmd, ' ');
 	if (!argv)
 		return (-1);
-	status = handle_builtin_command(argv, minishell_envp);
+	status = handle_builtin_command(fd, argv, minishell_envp);
 	if (status == -2)
 		status = handle_external_command(argv, envp);
 	free_strs((const char **)argv);

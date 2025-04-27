@@ -44,12 +44,14 @@ t_minishell_envp	*make_minishell_envp(char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-    char			*cmd_str;
+    char			    *cmd_str;
     t_minishell_envp	*minishell_envp;
+    int                 fd;
 
     (void)argc;
     (void)argv;
     minishell_envp = make_minishell_envp(envp);
+    fd = STDOUT_FILENO;
     while (1)
     {
         cmd_str = wrap_readline(
@@ -57,7 +59,7 @@ int	main(int argc, char **argv, char **envp)
                 );
         if (cmd_str == NULL)
             break ;
-        eval_cmd(cmd_str, minishell_envp, (const char **)envp);
+        eval_cmd(fd, cmd_str, minishell_envp, (const char **)envp);
         free(cmd_str);
     }
     return (EXIT_SUCCESS);

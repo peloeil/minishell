@@ -25,8 +25,8 @@ typedef struct minishell_envp
 
 char	*wrap_readline(const char *prompt, const int is_interactive)
 		__attribute__((nonnull(1)));
-int		eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
-		__attribute__((nonnull(1, 2)));
+int		eval_cmd(int fd, const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
+		__attribute__((nonnull(2, 3)));
 int		set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
 		__attribute__((nonnull(3)));
 void	free_strs(const char **strs)
@@ -37,6 +37,6 @@ char	*ft_getenv(const char *key, const char **envp)
 //builtin
 int		pwd(void);
 int		echo(int argc, char *argv[]);
-int 	export(char *argv[], t_minishell_envp *envp);
+int 	export(int fd, char *argv[], t_minishell_envp *envp);
 
 #endif // MINISHELL_H

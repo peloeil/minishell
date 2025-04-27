@@ -16,75 +16,40 @@
 #include <libft/ft_string.h>
 #include <string.h>
 
-void bubble_sort(char **array, int size)
+void sort_envp(t_minishell_envp **head)
 {
-    int     i = 0;
-    char    *temp;
+    int 				sorted;
+    t_minishell_envp 	**curr;
 
-    while (i < size - 1)
+    sorted = 0;
+    while (!sorted)
     {
-        int j = 0;
-        while (j < size - i - 1)
+        sorted = 1;
+        curr = head;
+        while ((*curr) && (*curr)->next)
         {
-            if (ft_strcmp(array[j], array[j + 1]) > 0)
+            if (ft_strcmp((*curr)->key, (*curr)->next->key) > 0)
             {
-                temp = array[j];
-                array[j] = array[j + 1];
-                array[j + 1] = temp;
+                t_minishell_envp *tmp = (*curr)->next;
+                (*curr)->next = tmp->next;
+                tmp->next = *curr;
+                *curr = tmp;
+                sorted = 0;
             }
-            j++;
+            curr = &(*curr)->next;
         }
-        i++;
     }
 }
 
-int add_double_quote(t_minishell_envp *envp, char **envp_copy)
+void print_sorted_env(int fd, t_minishell_envp *envp)
 {
-    char *temp;
-    int i;
-
-    i = 0;
-    while (envp != NULL && envp->exported == 1)
+    sort_envp(&envp);
+    while (envp != NULL)
     {
-        envp_copy[i] = ft_strjoin(envp->key, "=");
-        temp = envp_copy[i];
-        envp_copy[i] = ft_strjoin(envp_copy[i], "\"");
-        free(temp);
-        temp = envp_copy[i];
-        envp_copy[i] = ft_strjoin(envp_copy[i], envp->value);
-        free(temp);
-        temp = envp_copy[i];
-        envp_copy[i] = ft_strjoin(envp_copy[i], "\"");
-        free(temp);
+        if (envp->key[0] != '_')
+            ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
         envp = envp->next;
-        i++;
     }
-    return (i);
-}
-
-int print_sorted_env(t_minishell_envp *envp)
-{
-    char **envp_copy;
-    int i;
-
-    envp_copy = malloc(sizeof(char *) * 1000);
-    if (!envp_copy)
-        return (-1);
-    i = add_double_quote(envp, envp_copy);
-    envp_copy[i] = NULL;
-    bubble_sort(envp_copy, i);
-    i = 0;
-    while (envp_copy[i] != NULL)
-    {
-        if (envp_copy[i][0] != '_')
-        {
-            ft_printf("declare -x %s\n", envp_copy[i]);
-            free(envp_copy[i]);
-        }
-        i++;
-    }
-    free(envp_copy);
-    return (0);
 }
 
 void	register_env_with_value(t_minishell_envp *envp, char *key, char *value)
@@ -159,10 +124,10 @@ void	register_env(t_minishell_envp *envp, char *str)
 	register_env_with_value(envp, key, value);
 }
 
-int export(char *argv[], t_minishell_envp *envp)
+int export(int fd, char *argv[], t_minishell_envp *envp)
 {
     if (argv[1] == NULL)
-        print_sorted_env(envp);
+        print_sorted_env(fd, envp);
     else
         register_env(envp, argv[1]);
     return (0);
