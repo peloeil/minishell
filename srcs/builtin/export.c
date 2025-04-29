@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/04/30 00:25:13 by sota             ###   ########.fr       */
+/*   Updated: 2025/04/30 01:10:00 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	print_sorted_env(int fd, t_minishell_envp *envp)
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
-		if (envp->key[0] != '_')
-			ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
+		ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
 		envp = envp->next;
 	}
 }
