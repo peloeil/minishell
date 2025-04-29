@@ -100,9 +100,9 @@ void	register_env_without_value(t_minishell_envp *envp, char *key)
 
 void	register_env(t_minishell_envp *envp, char *str)
 {
-	char *key;
-	char *value;
-	char *delimiter_pos;
+	char	*key;
+	char	*value;
+	char	*delimiter_pos;
 
 	delimiter_pos = ft_strchr(str, '=');
 	if (delimiter_pos == NULL)
