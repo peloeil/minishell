@@ -8,10 +8,13 @@
 
 int	handle_builtin_command(char **argv, const char **envp)
 {
+	int fd = STDOUT_FILENO;
 	if (ft_strcmp(argv[0], "pwd") == 0)
 		return pwd();
 	if (ft_strcmp(argv[0], "env") == 0)
 		return env(envp);
+	if (ft_strcmp(argv[0], "cd") == 0)
+		return cd(fd, argv, envp);
 	return (-2);
 }
 

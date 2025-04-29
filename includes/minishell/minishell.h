@@ -30,5 +30,6 @@ char	*ft_getenv(const char *key, const char **envp)
 int		pwd(void);
 int		echo(int argc, char *argv[]);
 int		env(const char **envp);
+int		cd(int fd, char **argv, const char **envp);
 
 #endif // MINISHELL_H
