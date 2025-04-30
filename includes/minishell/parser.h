@@ -5,7 +5,8 @@
 
 typedef struct s_ast_node
 {
-	t_token				token;
+	t_token_id			id;
+	t_list				*args;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 }	t_ast_node;
