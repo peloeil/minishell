@@ -13,22 +13,7 @@ typedef enum
 	LESSAND, // <&
 	GREATAND, // >&
 	TOKEN,
-	WORD,
-	ASSIGNMENT_WORD,
-	NAME,
-	IO_NUMBER, // file descriptor number
-	PIPELINE,
 	COMMAND,
-	CMD_NAME,
-	CMD_WORD,
-	CMD_PREFIX,
-	CMD_SUFFIX,
-	REDIRECT_LIST,
-	IO_REDIRECT,
-	IO_FILE,
-	FILENAME,
-	IO_HERE,
-	HERE_END,
 	PARSE_ERROR,
 }	t_token_id;
 

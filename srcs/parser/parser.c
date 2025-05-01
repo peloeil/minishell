@@ -33,12 +33,13 @@ t_list	*search_redirect_token(t_list *start, t_list *end)
 	cur = start;
 	while (1)
 	{
-		if (((t_token *)cur->content)->id == LESS
-			|| ((t_token *)cur->content)->id == GREAT
-			|| ((t_token *)cur->content)->id == DLESS
-			|| ((t_token *)cur->content)->id == DGREAT
-			|| ((t_token *)cur->content)->id == LESSAND
-			|| ((t_token *)cur->content)->id == GREATAND)
+		id = ((t_token *)cur->content)->id;
+		if (id == LESS
+			|| id == GREAT
+			|| id == DLESS
+			|| id == DGREAT
+			|| id == LESSAND
+			|| id == GREATAND)
 			return (cur);
 		if (cur == end)
 			break ;
