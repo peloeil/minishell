@@ -15,26 +15,38 @@
 #include <libft/ft_stdio.h>
 #include <libft/libft.h>
 
-int echo(int argc, char *argv[])
+int calc_argc(char *argv[])
 {
-    int n_option;
     int i;
 
-    n_option = 0;
     i = 0;
-    while (i < argc)
-    {
-        if (ft_strncmp(argv[i], "-n", 2) == 0)
-            n_option = 1;
-        else
-        {
-            ft_printf("%s", argv[i]);
-            if (i < argc - 1)
-                ft_printf(" ");
-        }
-        i ++;
-    }
-    if (n_option != 1)
-        ft_printf("\n");
-    return (0);
+    while (argv[i])
+        i++;
+    return (i);
+}
+
+int echo(int fd, char *argv[])
+{
+	int n_option;
+	int argc;
+	int i;
+
+	n_option = 0;
+	argc = calc_argc(argv);
+	i = 1;
+	while (ft_strcmp(argv[i], "-n") == 0)
+	{
+		n_option = 1;
+		i++;
+	}
+	while (i < argc)
+	{
+		ft_dprintf(fd, "%s", argv[i]);
+		if (i < argc - 1)
+			ft_dprintf(fd, " ");
+		i++;
+	}
+	if (!n_option)
+		ft_dprintf(fd, "\n");
+	return (0);
 }

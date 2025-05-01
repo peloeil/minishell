@@ -36,7 +36,7 @@ char	*ft_getenv(const char *key, const char **envp)
 
 //builtin
 int		pwd(void);
-int		echo(int argc, char *argv[]);
+int		echo(int fd, char *argv[]);
 int 	export(int fd, char *argv[], t_minishell_envp *envp);
 
 #endif // MINISHELL_H
