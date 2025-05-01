@@ -28,7 +28,8 @@ t_ast_node	*parse_tokens(t_list *start, t_list *end)
 
 t_list	*search_redirect_token(t_list *start, t_list *end)
 {
-	t_list	*cur;
+	t_list		*cur;
+	t_token_id	id;
 
 	cur = start;
 	while (1)
@@ -64,6 +65,8 @@ static void	node_to_top(t_list *node, t_list *start)
 		tmp = cur->content;
 		cur->content = prev->content;
 		prev->content = tmp;
+		cur = prev;
+		prev = prev->prev;
 		if (cur == start)
 			break ;
 	}
