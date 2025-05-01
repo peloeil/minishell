@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/04/16 15:28:57 by sota             ###   ########.fr       */
+/*   Updated: 2025/04/30 11:51:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ char	*ft_getenv(const char *key, const char **envp)
 int		pwd(void);
 int		echo(int argc, char *argv[]);
 int 	export(int fd, char *argv[], t_minishell_envp *envp);
+int		env(int fd, char *argv[], t_minishell_envp *envp);
 
 #endif // MINISHELL_H
