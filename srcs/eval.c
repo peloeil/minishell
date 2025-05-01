@@ -12,6 +12,8 @@ int	handle_builtin_command(int fd, char **argv, t_minishell_envp *envp)
 		return pwd();
 	if (ft_strcmp(argv[0], "export") == 0)
 		return export(fd, argv, envp);
+	if (ft_strcmp(argv[0], "env") == 0)
+		return env(fd, envp);
 	return (-2);
 }
 
