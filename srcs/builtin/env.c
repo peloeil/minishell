@@ -23,10 +23,6 @@ int env(int fd, char **argv, t_minishell_envp *envp)
 
 	if (ft_str_new(&str) == -1)
 		return (1);
-	if (argv[1] != NULL) {
-		ft_dprintf(fd, "env: '%s': No such file or directory\n", argv[1]);
-		return (1);
-	}
 	while (envp != NULL)
 	{
 		add_double_quotes(fd, &str, envp->key, envp->value);
