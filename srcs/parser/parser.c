@@ -79,9 +79,8 @@ void	redirects_to_top(t_list *start, t_list *end)
 
 	redirect = search_redirect_token(start, end);
 	file = redirect->next;
-	if (redirect == start && file == end)
-		return ;
 	node_to_top(file, start);
+	redirect = search_redirect_token(start, end);
 	node_to_top(redirect, start);
 }
 
