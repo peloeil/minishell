@@ -56,20 +56,26 @@ void print_ast(t_ast_node *ast, int depth) {
     }
 }
 
+static void free_token(void *ptr) {
+    t_token *token = (t_token *)ptr;
+    free(token->str);
+    free(token);
+}
+
 static void free_ast(t_ast_node *ast) {
     if (ast->left != NULL) { free_ast(ast->left); }
     if (ast->right != NULL) { free_ast(ast->right); }
-    ft_list_clear(&ast->args, free);
+    ft_list_clear(&ast->args, free_token);
     free(ast);
 }
 
 static void test(const char *cmd) {
     t_list *start = tokenize_input(cmd);
-    t_list *end = start->prev;
 
-    t_ast_node *ast = parse_tokens(start, end);
+    t_ast_node *ast = parse_tokens(start, start->prev);
     ft_list_clear(&start, NULL);
 
+    printf("command: %s\n", cmd);
     print_ast(ast, 0);
     printf("\n");
     free_ast(ast);
@@ -90,20 +96,20 @@ int main(void) {
     test("echo hello world < file.txt > file2.txt");
     test("echo hello world < file.txt > file2.txt > file3.txt");
 
-	// quoted string
-	test("echo \"hello world\"");
-	test("echo 'hello world'");
+    // quoted string
+    test("echo \"hello world\"");
+    test("echo 'hello world'");
 
-	// environment variable
-	test("echo $HOME");
-	test("echo \"$HOME\"");
-	test("echo '$HOME'");
+    // environment variable
+    test("echo $HOME");
+    test("echo \"$HOME\"");
+    test("echo '$HOME'");
 
-	// parse error
-	test("echo hello world |");
-	test("echo hello world | | grep hello");
-	test("echo hello world | grep hello |");
-	test("echo hello world <");
-	test("echo hello world >");
+    // parse error
+    test("echo hello world |");
+    test("echo hello world | | grep hello");
+    test("echo hello world | grep hello |");
+    test("echo hello world <");
+    test("echo hello world >");
     return 0;
 }

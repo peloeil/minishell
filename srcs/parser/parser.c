@@ -21,6 +21,7 @@ t_ast_node	*parse_tokens(t_list *start, t_list *end)
 		return (parse_command(start, end));
 	}
 	ast->id = PIPE;
+	ft_list_push_back(&ast->args, ft_list_new(node->content));
 	ast->left = parse_command(start, node->prev);
 	ast->right = parse_tokens(node->next, end);
 	return (ast);
@@ -50,7 +51,7 @@ t_list	*search_redirect_token(t_list *start, t_list *end)
 }
 
 
-static void	node_to_top(t_list *node, t_list *start)
+static void	node_to_head(t_list *node, t_list *start)
 {
 	t_list	*cur;
 	t_list	*prev;
@@ -72,16 +73,16 @@ static void	node_to_top(t_list *node, t_list *start)
 	}
 }
 
-void	redirects_to_top(t_list *start, t_list *end)
+void	redirects_to_head(t_list *start, t_list *end)
 {
 	t_list	*redirect;
 	t_list	*file;
 
 	redirect = search_redirect_token(start, end);
 	file = redirect->next;
-	node_to_top(file, start);
+	node_to_head(file, start);
 	redirect = search_redirect_token(start, end);
-	node_to_top(redirect, start);
+	node_to_head(redirect, start);
 }
 
 t_ast_node	*parse_command(t_list *start, t_list *end)
@@ -92,7 +93,7 @@ t_ast_node	*parse_command(t_list *start, t_list *end)
 
 	ast = ft_calloc(1, sizeof(t_ast_node));
 	redirect = search_redirect_token(start, end);
-	if (redirect == NULL) // if no redirect
+	if (redirect == NULL)
 	{
 		ast->id = COMMAND;
 		cur = start;
@@ -110,8 +111,9 @@ t_ast_node	*parse_command(t_list *start, t_list *end)
 		ast->id = PARSE_ERROR;
 		return (ast);
 	}
-	redirects_to_top(start, end);
+	redirects_to_head(start, end);
 	ast->id = ((t_token *)start->content)->id;
+	ft_list_push_back(&ast->args, ft_list_new(start->content));
 	ast->left = ft_calloc(1, sizeof(t_ast_node));
 	ast->left->id = ((t_token *)start->next->content)->id;
 	ft_list_push_back(&ast->left->args, ft_list_new(start->next->content));
