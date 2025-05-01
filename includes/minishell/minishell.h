@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/01 10:23:21 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/01 10:50:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	add_double_quotes(int fd, t_string *str, const char *key, const char *value
 int		pwd(void);
 int		echo(int argc, char *argv[]);
 int 	export(int fd, char *argv[], t_minishell_envp *envp);
-int		env(int fd, char *argv[], t_minishell_envp *envp);
+int		env(int fd, t_minishell_envp *envp);
 
 
 #endif // MINISHELL_H

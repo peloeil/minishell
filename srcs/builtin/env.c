@@ -17,7 +17,7 @@
 # include <libft/std_string.h>
 # include <stdlib.h>
 
-int env(int fd, char **argv, t_minishell_envp *envp)
+int env(int fd, t_minishell_envp *envp)
 {
     t_string	str;
 
