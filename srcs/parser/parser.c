@@ -98,7 +98,7 @@ t_ast_node	*parse_command(t_list *start, t_list *end)
 		cur = start;
 		while (1)
 		{
-			ft_list_push_back(&ast->args, ft_list_new(start->content));
+			ft_list_push_back(&ast->args, ft_list_new(cur->content));
 			if (cur == end)
 				break ;
 			cur = cur->next;
