@@ -18,6 +18,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		free_strs.c \
 	) \
 	$(addprefix builtin/, \
+		utils.c \
 		pwd.c \
 		echo.c \
 		export.c \
