@@ -12,8 +12,10 @@
 
 # include <minishell/minishell.h>
 # include <stdlib.h>
+# include <libft/ft_string.h>
 # include <stdio.h>
 # include <unistd.h>
+
 # include <libft/ft_stdio.h>
 
 int count_argv(char **argv)
@@ -27,7 +29,38 @@ int count_argv(char **argv)
     return (count);
 }
 
-int cd(int fd, char **argv, const char **environ)
+char *minishell_getenv(const char *key, t_minishell_envp *envp)
+{
+	t_minishell_envp *current;
+
+	current = envp;
+	while (current != NULL)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
+}
+
+void	add_envp(const char *key, const char *value, t_minishell_envp *envp)
+{
+	t_minishell_envp *current;
+
+	current = envp;
+	while (current != NULL)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+		{
+			free(current->value);
+			current->value = ft_strdup(value);
+			return;
+		}
+		current = current->next;
+	}
+}
+
+int cd(int fd, char **argv, t_minishell_envp *envp)
 {
     char *home_path;
     char *old_path;
@@ -40,7 +73,7 @@ int cd(int fd, char **argv, const char **environ)
     }
     if (argv[1] == NULL)
     {
-        home_path = ft_getenv("HOME", environ);
+        home_path = minishell_getenv("HOME", envp);
         if (home_path == NULL)
         {
             ft_dprintf(fd, "cd: HOME not set\n");
@@ -57,11 +90,10 @@ int cd(int fd, char **argv, const char **environ)
         return (EXIT_FAILURE);
     }
     new_path = getcwd(NULL, 0);
-    setenv("OLDPWD", old_path, 1);
-    setenv("PWD", new_path, 1);
+	// t_minishell_envp にPWD,PLDPWDを追加する必要がある
+	add_envp("PWD", new_path, envp);
+	add_envp("OLDPWD", old_path, envp);
     ft_printf("old_path: %s\n", old_path);
     ft_printf("new_path: %s\n", new_path);
     return (EXIT_SUCCESS);
 }
-
-// old のfreeに失敗している

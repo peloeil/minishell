@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   eval.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/01 16:24:08 by marvin            #+#    #+#             */
+/*   Updated: 2025/05/01 16:24:08 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell/minishell.h>
 #include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
@@ -6,13 +18,13 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
-int	handle_builtin_command(char **argv, const char **envp)
+int	handle_builtin_command(char **argv, t_minishell_envp *envp)
 {
 	int fd = STDOUT_FILENO;
 	if (ft_strcmp(argv[0], "pwd") == 0)
 		return pwd();
-	if (ft_strcmp(argv[0], "env") == 0)
-		return env(envp);
+	// if (ft_strcmp(argv[0], "env") == 0)
+	// 	return env(envp);
 	if (ft_strcmp(argv[0], "cd") == 0)
 		return cd(fd, argv, envp);
 	return (-2);
@@ -43,15 +55,15 @@ int	handle_external_command(char **argv, const char **envp)
 	return (0);
 }
 
-int	eval_cmd(const char *cmd, const char **envp)
+int	eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
 {
-	int		status;
-	char	**argv;
+	int					status;
+	char				**argv;
 
 	argv = ft_split(cmd, ' ');
 	if (!argv)
 		return (-1);
-	status = handle_builtin_command(argv, envp);
+	status = handle_builtin_command(argv, minishell_envp);
 	if (status == -2)
 		status = handle_external_command(argv, envp);
 	free_strs((const char **)argv);
