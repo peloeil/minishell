@@ -57,7 +57,7 @@ int	main(int argc, char **argv, char **envp)
 				);
 		if (cmd_str == NULL)
 			break ;
-		eval_cmd(cmd_str, minishell_envp, (const char **)envp);
+		eval_cmd(cmd_str, minishell_envp);
 		free(cmd_str);
 	}
 	return (EXIT_SUCCESS);

@@ -25,13 +25,13 @@ typedef struct minishell_envp
 
 char	*wrap_readline(const char *prompt, const int is_interactive)
 		__attribute__((nonnull(1)));
-int		eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
+int		eval_cmd(const char *cmd, t_minishell_envp *minishell_envp)
 		__attribute__((nonnull(1, 2)));
-int		set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
+int		set_cmd_path(char **const path_ptr, const char *cmd, t_minishell_envp *envp)
 		__attribute__((nonnull(3)));
 void	free_strs(const char **strs)
 		__attribute__((nonnull(1)));
-char	*ft_getenv(const char *key, const char **envp)
+char	*ft_getenv(const char *key, t_minishell_envp *minishell_envp)
 		__attribute__((nonnull(1, 2)));
 
 //builtin

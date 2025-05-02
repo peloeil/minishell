@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/01 17:20:26 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/02 11:54:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
+int	set_cmd_path(char **const path_ptr, const char *cmd, t_minishell_envp *envp)
 {
 	char	*env_path;
 	char	**path_dirs;

@@ -30,7 +30,7 @@ int	handle_builtin_command(char **argv, t_minishell_envp *envp)
 	return (-2);
 }
 
-int	handle_external_command(char **argv, const char **envp)
+int	handle_external_command(char **argv, t_minishell_envp *envp)
 {
 	char	*cmd_path;
 	int		status;
@@ -55,7 +55,7 @@ int	handle_external_command(char **argv, const char **envp)
 	return (0);
 }
 
-int	eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **envp)
+int	eval_cmd(const char *cmd, t_minishell_envp *minishell_envp)
 {
 	int					status;
 	char				**argv;
@@ -65,7 +65,7 @@ int	eval_cmd(const char *cmd, t_minishell_envp *minishell_envp, const char **env
 		return (-1);
 	status = handle_builtin_command(argv, minishell_envp);
 	if (status == -2)
-		status = handle_external_command(argv, envp);
+		status = handle_external_command(argv, minishell_envp);
 	free_strs((const char **)argv);
 	return (status);
 }
