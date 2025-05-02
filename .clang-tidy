@@ -12,6 +12,7 @@ Checks: '
 
   misc-*,
   -misc-include-cleaner,
+  -misc-no-recursion,
 
   performance-*,
 
