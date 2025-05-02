@@ -7,3 +7,4 @@ result.log
 .vscode
 *.o
 *.exe
+venv
