@@ -9,16 +9,6 @@ static int	is_blank(char c)
 	return (c == ' ' || c == '\t');
 }
 
-static int	is_quote(char c)
-{
-	return (c == '\'' || c == '\"');
-}
-
-static int	is_dollar(char c)
-{
-	return (c == '$');
-}
-
 int	set_next_token(t_token *token, const char *input, size_t *index)
 {
 	token->id = TOKEN;
@@ -27,19 +17,17 @@ int	set_next_token(t_token *token, const char *input, size_t *index)
 		(*index)++;
 	if (input[*index] == '\0')
 		return (0);
-	if (maybe_part_of_operator(input[*index]))
+	if (identify_operator(input, *index) != TOKEN)
 	{
 		token->id = identify_operator(input, *index);
-		token->str = read_operator_string(input, *index, token->id);
+		token->str = read_operator(input, *index);
 	}
-	else if (is_quote(input[*index]))
-		token->str = read_quoted_string(input, *index);
-	else if (is_dollar(input[*index]))
-		token->str = read_expandable_string(input, *index);
 	else
-		token->str = read_unquoted_string(input, *index);
-	if (token->str == NULL) // syntax error
-		return (-1);
+	{
+		token->str = read_string(input, *index);
+		if (token->str == NULL) // syntax error
+			return (-1);
+	}
 	*index += ft_strlen(token->str);
 	return (0);
 }
