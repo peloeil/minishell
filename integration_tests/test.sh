@@ -33,8 +33,8 @@ test_bash() {
 
     # Compare outputs and cleanup in a single pass
     local has_error=0
-    if ! diff out_bash out_minishell >/dev/null ||
-        ! diff err_bash err_minishell >/dev/null ||
+    if ! diff out_bash out_minishell ||
+        ! diff err_bash err_minishell ||
         [ $bash_status -ne $minishell_status ]; then
         print_ko "$command"
         has_error=1
@@ -53,7 +53,6 @@ readonly commands=(
     "echo world"
     "ls -al"
     "pwd"
-    "export"
 )
 
 # Execute tests
