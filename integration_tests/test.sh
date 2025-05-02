@@ -22,8 +22,14 @@ test_bash() {
     echo "$command" | bash >out_bash 2>err_bash &
     local bash_pid=$!
 
+	mv out_bash /tmp/out_bash
+	mv err_bash /tmp/err_bash
+
     echo "$command" | ./minishell >out_minishell 2>err_minishell &
     local minishell_pid=$!
+
+	mv out_minishell /tmp/out_minishell
+	mv err_minishell /tmp/err_minishell
 
     # Wait for both processes to complete
     wait $bash_pid
@@ -33,8 +39,8 @@ test_bash() {
 
     # Compare outputs and cleanup in a single pass
     local has_error=0
-    if ! diff out_bash out_minishell ||
-        ! diff err_bash err_minishell ||
+    if ! diff /tmp/out_bash /tmp/out_minishell ||
+        ! diff /tmp/err_bash /tmp/err_minishell ||
         [ $bash_status -ne $minishell_status ]; then
         print_ko "$command"
         has_error=1
@@ -43,7 +49,7 @@ test_bash() {
     fi
 
     # Cleanup temporary files
-    rm -f out_{bash,minishell} err_{bash,minishell}
+    rm -f /tmp/out_{bash,minishell} /tmp/err_{bash,minishell}
     return $has_error
 }
 
