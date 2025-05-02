@@ -23,12 +23,9 @@ typedef struct
 	char		*str;
 }	t_token;
 
-int			maybe_part_of_operator(char c);
 t_token_id	identify_operator(const char *input, size_t index);
-char		*read_operator_string(const char *input, size_t index, t_token_id id);
-char		*read_quoted_string(const char *input, size_t index);
-char		*read_expandable_string(const char *input, size_t index);
-char		*read_unquoted_string(const char *input, size_t index);
+char		*read_operator(const char *input, size_t index);
+char		*read_string(const char *input, size_t index);
 t_list		*tokenize_input(const char *input);
 
 #endif // LEXER_H

@@ -111,5 +111,8 @@ int main(void) {
     test("echo hello world | grep hello |");
     test("echo hello world <");
     test("echo hello world >");
+
+    // corner cases
+    test("c'a't $USER_$USER_file.txt>file");
     return 0;
 }

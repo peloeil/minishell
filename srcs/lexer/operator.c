@@ -1,11 +1,6 @@
 #include <minishell/lexer.h>
 #include <libft/ft_string.h>
 
-int	maybe_part_of_operator(char c)
-{
-	return (c == '|' || c == '<' || c == '>' || c == '&');
-}
-
 t_token_id	identify_operator(const char *input, size_t index)
 {
 	if (ft_strncmp(input + index, "<<", 2) == 0)
@@ -25,10 +20,12 @@ t_token_id	identify_operator(const char *input, size_t index)
 	return (TOKEN);
 }
 
-char	*read_operator_string(const char *input, size_t index, t_token_id id)
+char	*read_operator(const char *input, size_t index)
 {
-	size_t	len;
+	size_t		len;
+	t_token_id	id;
 
+	id = identify_operator(input, index);
 	if (id == TOKEN)
 		return (NULL);
 	len = 1;

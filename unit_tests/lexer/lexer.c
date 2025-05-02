@@ -46,5 +46,6 @@ int main(void) {
     test("echo hello | grep hello | wc -l");
     test("echo hello | grep hello | wc -l > file.txt");
     test("echo hello | grep hello |");
+    test("c'a't $USER_$USER_file.txt>file");
     return 0;
 }
