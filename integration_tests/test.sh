@@ -18,14 +18,13 @@ test_bash() {
     local command="$1"
     local bash_status minishell_status
 
-    # Execute commands in parallel using background processes
-    echo "$command" | bash >out_bash 2>err_bash &
+    echo "$command" | bash >out_bash 2>err_bash
     local bash_pid=$!
 
 	mv out_bash /tmp/out_bash
 	mv err_bash /tmp/err_bash
 
-    echo "$command" | ./minishell >out_minishell 2>err_minishell &
+    echo "$command" | ./minishell >out_minishell 2>err_minishell
     local minishell_pid=$!
 
 	mv out_minishell /tmp/out_minishell
