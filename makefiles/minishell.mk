@@ -34,6 +34,9 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		parse_command.c \
 		search_token.c \
 	) \
+	$(addprefix expand/, \
+		expand.c \
+	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 
