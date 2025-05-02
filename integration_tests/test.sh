@@ -52,6 +52,7 @@ readonly commands=(
     "echo world"
     "ls -al"
     "pwd"
+    "export"
 )
 
 # Execute tests
