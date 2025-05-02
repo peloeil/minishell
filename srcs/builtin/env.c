@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:38:56 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/02 20:19:12 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/02 22:48:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	env(int fd, t_envp *envp)
 		return (1);
 	while (envp != NULL)
 	{
-		add_double_quotes(fd, &str, envp->key, envp->value);
+		if (envp->value != NULL)
+			make_str(0, &str, envp->key, envp->value);
 		envp = envp->next;
 	}
 	ft_dprintf(fd, "%s", str.str);

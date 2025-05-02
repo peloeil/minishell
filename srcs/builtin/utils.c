@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 09:03:16 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/02 20:22:11 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/02 22:49:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,20 @@
 #include <stdlib.h>
 #include <libft/ft_stdio.h>
 
-void	add_double_quotes(int fd, t_string *str, const char *key,
-	const char *value)
+void    make_str(int is_double, t_string *str, const char *key, const char *value)
 {
-	ft_str_push_str(str, key);
-	ft_str_push_str(str, "=\"");
-	ft_str_push_str(str, value);
-	ft_str_push_str(str, "\"\n");
-	ft_dprintf(fd, "%s", str->str);
+	if (is_double == 0)
+	{
+		ft_str_push_str(str, key);
+		ft_str_push_str(str, "=");
+		ft_str_push_str(str, value);
+		ft_str_push_str(str, "\n");
+		return ;
+	}
+    ft_str_push_str(str, key);
+    ft_str_push_str(str, "=\"");
+    ft_str_push_str(str, value);
+    ft_str_push_str(str, "\"\n");
 }
 
 void	print_sorted_env(int fd, t_envp *envp)
