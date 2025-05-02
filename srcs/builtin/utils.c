@@ -73,3 +73,39 @@ void	sort_envp(t_envp **head)
         }
     }
 }
+
+void	print_sorted_env(int fd, t_envp *envp)
+{
+	sort_envp(&envp);
+	while (envp != NULL)
+	{
+		ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
+		envp = envp->next;
+	}
+}
+
+void	sort_envp(t_envp **head)
+{
+	int		sorted;
+	t_envp	**curr;
+	t_envp	*tmp;
+
+	sorted = 0;
+	while (!sorted)
+	{
+		sorted = 1;
+		curr = head;
+		while ((*curr) && (*curr)->next)
+		{
+			if (ft_strcmp((*curr)->key, (*curr)->next->key) > 0)
+			{
+				tmp = (*curr)->next;
+				(*curr)->next = tmp->next;
+				tmp->next = *curr;
+				*curr = tmp;
+				sorted = 0;
+			}
+			curr = &(*curr)->next;
+		}
+	}
+}
