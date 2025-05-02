@@ -21,6 +21,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libreadline-dev
+          pip install norminette==3.3.55
 
       # Step 4: Build project components
       - name: Build Project

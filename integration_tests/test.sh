@@ -18,11 +18,10 @@ test_bash() {
     local command="$1"
     local bash_status minishell_status
 
-    # Execute commands in parallel using background processes
-    echo "$command" | bash >out_bash 2>err_bash &
+    echo "$command" | bash >/tmp/out_bash 2>/tmp/err_bash &
     local bash_pid=$!
 
-    echo "$command" | ./minishell >out_minishell 2>err_minishell &
+    echo "$command" | ./minishell >/tmp/out_minishell 2>/tmp/err_minishell &
     local minishell_pid=$!
 
     # Wait for both processes to complete
@@ -33,8 +32,8 @@ test_bash() {
 
     # Compare outputs and cleanup in a single pass
     local has_error=0
-    if ! diff out_bash out_minishell >/dev/null ||
-        ! diff err_bash err_minishell >/dev/null ||
+    if ! diff /tmp/out_bash /tmp/out_minishell ||
+        ! diff /tmp/err_bash /tmp/err_minishell ||
         [ $bash_status -ne $minishell_status ]; then
         print_ko "$command"
         has_error=1
@@ -43,7 +42,7 @@ test_bash() {
     fi
 
     # Cleanup temporary files
-    rm -f out_{bash,minishell} err_{bash,minishell}
+    rm -f /tmp/out_{bash,minishell} /tmp/err_{bash,minishell}
     return $has_error
 }
 
@@ -51,6 +50,8 @@ test_bash() {
 readonly commands=(
     "echo hello"
     "echo world"
+    "ls -al"
+    "pwd"
 )
 
 # Execute tests
