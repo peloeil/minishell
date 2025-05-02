@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:49:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 18:35:07 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/02 20:03:34 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,9 @@ static void	push_args(t_ast_node *ast, t_token_list *start, t_token_list *end)
 	cur = start;
 	while (1)
 	{
-		ft_list_push_back(&ast->args, ft_list_new(cur->content));
+		ft_list_push_back(
+			&ast->args,
+			ft_list_new(((t_token *)cur->content)->str));
 		if (cur == end)
 			break ;
 		cur = cur->next;

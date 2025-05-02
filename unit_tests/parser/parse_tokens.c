@@ -31,10 +31,9 @@ void print_ast(t_ast_node *ast, int depth) {
     if (ast->args != NULL) {
         print_indent(depth);
         printf("args: [");
-        t_token_list *cur = ast->args;
+        t_arg_list *cur = ast->args;
         while (1) {
-            char *str = ((t_token *)cur->content)->str;
-            printf("%s", str);
+            printf("%s", (char *)cur->content);
             if (cur->next != ast->args) {
                 printf(",");
             } else {
@@ -73,7 +72,7 @@ static void free_tokens(t_token_list *tokens, int parse_failed) {
     if (parse_failed) {
         ft_list_clear(&tokens, free_token);
     } else {
-        ft_list_clear(&tokens, NULL);
+        ft_list_clear(&tokens, free);
     }
 }
 
@@ -83,7 +82,7 @@ static void free_ast(t_ast_node *ast, int parse_failed) {
     if (parse_failed) {
         ft_list_clear(&ast->args, NULL);
     } else {
-        ft_list_clear(&ast->args, free_token);
+        ft_list_clear(&ast->args, free);
     }
     free(ast);
 }
