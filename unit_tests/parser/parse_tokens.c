@@ -1,4 +1,4 @@
-#include "minishell/lexer.h"
+#include <minishell/lexer.h>
 #include <minishell/parser.h>
 #include <stdio.h>
 #include <stdlib.h>
