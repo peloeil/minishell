@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:40:17 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 16:52:46 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/02 18:30:55 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include <libft/ft_stdlib.h>
 #include <stdlib.h>
 
-t_ast_node	*parse_tokens(t_list *start, t_list *end)
+t_ast_node	*parse_tokens(t_token_list *start, t_token_list *end)
 {
-	t_ast_node	*ast;
-	t_list		*node;
+	t_ast_node		*ast;
+	t_token_list	*node;
 
 	ast = ft_calloc(1, sizeof(t_ast_node));
 	node = search_token_from_left(PIPE, start, end);

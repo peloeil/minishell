@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:38:59 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 16:39:16 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/02 18:24:41 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ int	set_next_token(t_token *token, const char *input, size_t *index)
 	return (0);
 }
 
-t_list	*tokenize_input(const char *input)
+t_token_list	*tokenize_input(const char *input)
 {
-	size_t		index;
-	t_token		*token;
-	t_list		*tokens;
+	size_t			index;
+	t_token			*token;
+	t_token_list	*tokens;
 
 	tokens = NULL;
 	index = 0;

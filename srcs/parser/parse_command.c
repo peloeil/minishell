@@ -6,17 +6,19 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:49:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 16:58:27 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/02 18:35:07 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/parser.h>
 #include <libft/ft_stdlib.h>
 
-static t_list	*search_redirect_token(t_list *start, t_list *end)
+static t_token_list	*search_redirect_token(
+						t_token_list *start,
+						t_token_list *end)
 {
-	t_list		*cur;
-	t_token_id	id;
+	t_token_list	*cur;
+	t_token_id		id;
 
 	cur = start;
 	while (1)
@@ -36,11 +38,11 @@ static t_list	*search_redirect_token(t_list *start, t_list *end)
 	return (NULL);
 }
 
-static void	node_to_head(t_list *node, t_list *start)
+static void	node_to_head(t_token_list *node, t_token_list *start)
 {
-	t_list	*cur;
-	t_list	*prev;
-	void	*tmp;
+	t_token_list	*cur;
+	t_token_list	*prev;
+	void			*tmp;
 
 	if (node == start)
 		return ;
@@ -58,10 +60,10 @@ static void	node_to_head(t_list *node, t_list *start)
 	}
 }
 
-static void	redirects_to_head(t_list *start, t_list *end)
+static void	redirects_to_head(t_token_list *start, t_token_list *end)
 {
-	t_list	*redirect;
-	t_list	*file;
+	t_token_list	*redirect;
+	t_token_list	*file;
 
 	redirect = search_redirect_token(start, end);
 	file = redirect->next;
@@ -70,9 +72,9 @@ static void	redirects_to_head(t_list *start, t_list *end)
 	node_to_head(redirect, start);
 }
 
-static void	push_args(t_ast_node *ast, t_list *start, t_list *end)
+static void	push_args(t_ast_node *ast, t_token_list *start, t_token_list *end)
 {
-	t_list	*cur;
+	t_token_list	*cur;
 
 	cur = start;
 	while (1)
@@ -84,10 +86,10 @@ static void	push_args(t_ast_node *ast, t_list *start, t_list *end)
 	}
 }
 
-t_ast_node	*parse_command(t_list *start, t_list *end)
+t_ast_node	*parse_command(t_token_list *start, t_token_list *end)
 {
-	t_ast_node	*ast;
-	t_list		*redirect;
+	t_ast_node		*ast;
+	t_token_list	*redirect;
 
 	ast = ft_calloc(1, sizeof(t_ast_node));
 	redirect = search_redirect_token(start, end);
