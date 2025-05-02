@@ -1,33 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_command.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/02 16:49:51 by sota              #+#    #+#             */
+/*   Updated: 2025/05/02 16:58:27 by sota             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell/parser.h>
 #include <libft/ft_stdlib.h>
-#include <libft/std_string.h>
-#include <stdlib.h>
 
-t_ast_node	*parse_tokens(t_list *start, t_list *end)
-{
-	t_ast_node	*ast;
-	t_list		*node;
-
-	ast = ft_calloc(1, sizeof(t_ast_node));
-	node = search_token_from_left(PIPE, start, end);
-	if (node != NULL && (node == start || node == end))
-	{
-		ast->id = PARSE_ERROR;
-		return (ast);
-	}
-	if (node == NULL)
-	{
-		free(ast);
-		return (parse_command(start, end));
-	}
-	ast->id = PIPE;
-	ft_list_push_back(&ast->args, ft_list_new(node->content));
-	ast->left = parse_command(start, node->prev);
-	ast->right = parse_tokens(node->next, end);
-	return (ast);
-}
-
-t_list	*search_redirect_token(t_list *start, t_list *end)
+static t_list	*search_redirect_token(t_list *start, t_list *end)
 {
 	t_list		*cur;
 	t_token_id	id;
@@ -49,7 +35,6 @@ t_list	*search_redirect_token(t_list *start, t_list *end)
 	}
 	return (NULL);
 }
-
 
 static void	node_to_head(t_list *node, t_list *start)
 {
@@ -73,7 +58,7 @@ static void	node_to_head(t_list *node, t_list *start)
 	}
 }
 
-void	redirects_to_head(t_list *start, t_list *end)
+static void	redirects_to_head(t_list *start, t_list *end)
 {
 	t_list	*redirect;
 	t_list	*file;
@@ -85,25 +70,31 @@ void	redirects_to_head(t_list *start, t_list *end)
 	node_to_head(redirect, start);
 }
 
+static void	push_args(t_ast_node *ast, t_list *start, t_list *end)
+{
+	t_list	*cur;
+
+	cur = start;
+	while (1)
+	{
+		ft_list_push_back(&ast->args, ft_list_new(cur->content));
+		if (cur == end)
+			break ;
+		cur = cur->next;
+	}
+}
+
 t_ast_node	*parse_command(t_list *start, t_list *end)
 {
 	t_ast_node	*ast;
 	t_list		*redirect;
-	t_list		*cur;
 
 	ast = ft_calloc(1, sizeof(t_ast_node));
 	redirect = search_redirect_token(start, end);
 	if (redirect == NULL)
 	{
 		ast->id = COMMAND;
-		cur = start;
-		while (1)
-		{
-			ft_list_push_back(&ast->args, ft_list_new(cur->content));
-			if (cur == end)
-				break ;
-			cur = cur->next;
-		}
+		push_args(ast, start, end);
 		return (ast);
 	}
 	if (redirect == end)
@@ -113,11 +104,10 @@ t_ast_node	*parse_command(t_list *start, t_list *end)
 	}
 	redirects_to_head(start, end);
 	ast->id = ((t_token *)start->content)->id;
-	ft_list_push_back(&ast->args, ft_list_new(start->content));
+	push_args(ast, start, start);
 	ast->left = ft_calloc(1, sizeof(t_ast_node));
 	ast->left->id = ((t_token *)start->next->content)->id;
-	ft_list_push_back(&ast->left->args, ft_list_new(start->next->content));
-	ast->right = NULL;
+	push_args(ast->left, start->next, start->next);
 	if (start->next != end)
 		ast->right = parse_command(start->next->next, end);
 	return (ast);
