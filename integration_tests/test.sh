@@ -24,9 +24,6 @@ test_bash() {
     echo "$command" | ./minishell >/tmp/out_minishell 2>/tmp/err_minishell &
     local minishell_pid=$!
 
-	mv out_minishell /tmp/out_minishell
-	mv err_minishell /tmp/err_minishell
-
     # Wait for both processes to complete
     wait $bash_pid
     bash_status=$?
