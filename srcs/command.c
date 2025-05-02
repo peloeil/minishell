@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 20:14:49 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/03 00:38:06 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	try_paths(char **const path_ptr, const char *cmd, char **path_dirs)
 	return (-1);
 }
 
-int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
+int	set_cmd_path(char **const path_ptr, const char *cmd, const t_envp *envp)
 {
 	char	*env_path;
 	char	**path_dirs;
