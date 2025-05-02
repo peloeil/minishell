@@ -51,6 +51,9 @@ test_bash() {
 readonly commands=(
     "echo hello"
     "echo world"
+    "ls -al"
+    "pwd"
+    "export"
 )
 
 # Execute tests
