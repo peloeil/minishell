@@ -5,12 +5,6 @@
 
 typedef enum
 {
-	TOKEN,
-	WORD,
-	ASSIGNMENT_WORD,
-	NAME,
-	NEWLINE, // \n
-	IO_NUMBER, // file descriptor number
 	PIPE, // |
 	LESS, // <
 	GREAT, // >
@@ -18,6 +12,9 @@ typedef enum
 	DGREAT, // >>
 	LESSAND, // <&
 	GREATAND, // >&
+	TOKEN,
+	COMMAND,
+	PARSE_ERROR,
 }	t_token_id;
 
 typedef struct
