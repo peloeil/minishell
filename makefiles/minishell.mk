@@ -27,12 +27,11 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	$(addprefix lexer/, \
 		lexer.c \
 		operator.c \
-		quoted.c \
-		expandable.c \
-		unquoted.c \
+		non_operator.c \
 	) \
 	$(addprefix parser/, \
-		parser.c \
+		parse_tokens.c \
+		parse_command.c \
 		search_token.c \
 	) \
 )
