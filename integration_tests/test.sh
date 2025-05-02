@@ -18,17 +18,11 @@ test_bash() {
     local command="$1"
     local bash_status minishell_status
 
-    echo "$command" | bash >out_bash 2>err_bash
+    echo "$command" | bash >/tmp/out_bash 2>/tmp/err_bash &
     local bash_pid=$!
 
-	mv out_bash /tmp/out_bash
-	mv err_bash /tmp/err_bash
-
-    echo "$command" | ./minishell >out_minishell 2>err_minishell
+    echo "$command" | ./minishell >/tmp/out_minishell 2>/tmp/err_minishell &
     local minishell_pid=$!
-
-	mv out_minishell /tmp/out_minishell
-	mv err_minishell /tmp/err_minishell
 
     # Wait for both processes to complete
     wait $bash_pid
