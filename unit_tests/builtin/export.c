@@ -39,7 +39,7 @@ char *bash_builtin(const char *cmd_name, char **args) {
     return buffer.str;
 }
 
-char *my_builtin(int (*builtin)(int, char **, t_minishell_envp *), char **args, t_minishell_envp *envp) {
+char *my_builtin(int (*builtin)(int, char **, t_envp *), char **args, t_envp *envp) {
     int pipefd[2];
     pipe(pipefd);
 
@@ -68,7 +68,7 @@ static size_t next_len(const char *str, size_t start) {
     return len;
 }
 
-static void test(char **args, t_minishell_envp *envp) {
+static void test(char **args, t_envp *envp) {
     char *expected = bash_builtin("export", args);
     char *actual = my_builtin(export, args, envp);
 
@@ -87,9 +87,9 @@ static void test(char **args, t_minishell_envp *envp) {
     if (cmp != 0) { exit(1); }
 }
 
-t_minishell_envp *make_minishell_envp(char **envp) {
-    t_minishell_envp *minishell_envp;
-    t_minishell_envp *head;
+t_envp *make_minishell_envp(char **envp) {
+    t_envp *minishell_envp;
+    t_envp *head;
     char *delimiter_pos;
     int i;
 
@@ -97,7 +97,7 @@ t_minishell_envp *make_minishell_envp(char **envp) {
     head = NULL;
     i = 0;
     while (envp[i]) {
-        minishell_envp = malloc(sizeof(t_minishell_envp));
+        minishell_envp = malloc(sizeof(t_envp));
         if (!minishell_envp) return (NULL);
         delimiter_pos = ft_strchr(envp[i], '=');
         minishell_envp->key = ft_substr(envp[i], 0, delimiter_pos - envp[i]);
@@ -121,7 +121,7 @@ int main(int argc, char **argv, char **envp) {
         { "a=b", "c=d", NULL },
     };
 
-    t_minishell_envp *ms_envp = make_minishell_envp(envp);
+    t_envp *ms_envp = make_minishell_envp(envp);
 
     int ntests = sizeof(args_array) / sizeof(args_array[0]);
     for (int i = 0; i < ntests; i++) {

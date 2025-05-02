@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/04/10 13:56:42 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/02 20:14:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
+static int	try_paths(char **const path_ptr, const char *cmd, char **path_dirs)
 {
-	char	*env_path;
-	char	**path_dirs;
 	size_t	i;
 
-	env_path = ft_getenv("PATH", envp);
-	if (env_path == NULL)
-		return (-1);
-	path_dirs = ft_split(env_path, ':');
-	if (path_dirs == NULL)
-		return (-1);
 	i = 0;
 	while (path_dirs[i] != NULL)
 	{
@@ -40,9 +32,25 @@ int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
 			i++;
 			continue ;
 		}
-		break ;
+		return (0);
 		i++;
 	}
+	return (-1);
+}
+
+int	set_cmd_path(char **const path_ptr, const char *cmd, const char **envp)
+{
+	char	*env_path;
+	char	**path_dirs;
+	int		result;
+
+	env_path = ft_getenv("PATH", envp);
+	if (env_path == NULL)
+		return (-1);
+	path_dirs = ft_split(env_path, ':');
+	if (path_dirs == NULL)
+		return (-1);
+	result = try_paths(path_ptr, cmd, path_dirs);
 	free_strs((const char **)path_dirs);
-	return (0);
+	return (result);
 }

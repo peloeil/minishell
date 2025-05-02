@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/04/30 01:10:00 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/02 20:19:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,43 +16,27 @@
 #include <libft/ft_string.h>
 #include <string.h>
 
-void	sort_envp(t_minishell_envp **head)
+t_envp	*create_new_node(char *key, char *value)
 {
-	int					sorted;
-	t_minishell_envp	**curr;
+	t_envp	*new_node;
 
-	sorted = 0;
-	while (!sorted)
-	{
-		sorted = 1;
-		curr = head;
-		while ((*curr) && (*curr)->next)
-		{
-			if (ft_strcmp((*curr)->key, (*curr)->next->key) > 0)
-			{
-				t_minishell_envp *tmp = (*curr)->next;
-				(*curr)->next = tmp->next;
-				tmp->next = *curr;
-				*curr = tmp;
-				sorted = 0;
-			}
-			curr = &(*curr)->next;
-		}
-	}
+	new_node = malloc(sizeof(t_envp));
+	if (!new_node)
+		return (NULL);
+	new_node->key = key;
+	if (value != NULL)
+		new_node->value = value;
+	else
+		new_node->value = ft_strdup("");
+	new_node->exported = 1;
+	new_node->next = NULL;
+	return (new_node);
 }
 
-void	print_sorted_env(int fd, t_minishell_envp *envp)
+void	register_env_with_value(t_envp *envp, char *key, char *value)
 {
-	sort_envp(&envp);
-	while (envp != NULL)
-	{
-		ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
-		envp = envp->next;
-	}
-}
+	t_envp	*new_node;
 
-void	register_env_with_value(t_minishell_envp *envp, char *key, char *value)
-{
 	while (envp != NULL)
 	{
 		if (ft_strcmp(envp->key, key) == 0)
@@ -63,41 +47,35 @@ void	register_env_with_value(t_minishell_envp *envp, char *key, char *value)
 			return ;
 		}
 		if (envp->next == NULL)
-			break;
+			break ;
 		envp = envp->next;
 	}
-	t_minishell_envp *new_node = malloc(sizeof(t_minishell_envp));
+	new_node = create_new_node(key, value);
 	if (!new_node)
 	{
 		free(key);
 		free(value);
 		return ;
 	}
-	new_node->key = key;
-	new_node->value = value;
-	new_node->exported = 1;
-	new_node->next = NULL;
 	envp->next = new_node;
 }
 
-void	register_env_without_value(t_minishell_envp *envp, char *key)
+void	register_env_without_value(t_envp *envp, char *key)
 {
+	t_envp	*new_node;
+
 	while (envp->next != NULL)
 		envp = envp->next;
-	t_minishell_envp *new_node = malloc(sizeof(t_minishell_envp));
+	new_node = create_new_node(key, NULL);
 	if (!new_node)
 	{
 		free(key);
 		return ;
 	}
-	new_node->key = key;
-	new_node->value = ft_strdup("");
-	new_node->exported = 1;
-	new_node->next = NULL;
 	envp->next = new_node;
 }
 
-void	register_env(t_minishell_envp *envp, char *str)
+void	register_env(t_envp *envp, char *str)
 {
 	char	*key;
 	char	*value;
@@ -123,7 +101,7 @@ void	register_env(t_minishell_envp *envp, char *str)
 	register_env_with_value(envp, key, value);
 }
 
-int	export(int fd, char *argv[], t_minishell_envp *envp)
+int	export(int fd, char *argv[], t_envp *envp)
 {
 	if (argv[1] == NULL)
 		print_sorted_env(fd, envp);

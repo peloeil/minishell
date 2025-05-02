@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/04/26 17:49:43 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/02 20:22:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
 
-t_minishell_envp	*make_minishell_envp(char **envp)
+t_envp	*make_minishell_envp(char **envp)
 {
-	t_minishell_envp	*minishell_envp;
-	t_minishell_envp	*head;
-	char				*delimiter_pos;
-	int					i;
+	t_envp	*minishell_envp;
+	t_envp	*head;
+	char	*delimiter_pos;
+	int		i;
 
 	minishell_envp = NULL;
 	head = NULL;
 	i = 0;
 	while (envp[i])
 	{
-		minishell_envp = malloc(sizeof(t_minishell_envp));
+		minishell_envp = malloc(sizeof(t_envp));
 		if (!minishell_envp)
 			return (NULL);
 		delimiter_pos = ft_strchr(envp[i], '=');
@@ -44,9 +44,9 @@ t_minishell_envp	*make_minishell_envp(char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char				*cmd_str;
-	t_minishell_envp	*minishell_envp;
-	int					fd;
+	char	*cmd_str;
+	t_envp	*minishell_envp;
+	int		fd;
 
 	(void)argc;
 	(void)argv;

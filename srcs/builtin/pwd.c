@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonuma <yonuma@student.42.fr>              #+#  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-16 05:26:30 by yonuma            #+#    #+#             */
-/*   Updated: 2025-04-16 05:26:30 by yonuma           ###   ########.fr       */
+/*   Created: 2025/04/16 05:26:30 by yonuma            #+#    #+#             */
+/*   Updated: 2025/05/02 20:10:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 #include <string.h>
 #include <libft/ft_stdio.h>
 
-int pwd(void)
+int	pwd(void)
 {
-    char	*cwd;
+	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
