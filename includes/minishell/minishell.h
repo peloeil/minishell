@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 22:48:41 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/03 20:08:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ char	*ft_getenv(const char *key, const char **envp)
 
 //builtin
 
-void	make_str(int is_double, t_string *str, const char *key, const char *value);
+void	make_str(int is_double, t_string *str, const char *key,
+			const char *value);
 int		pwd(void);
 int		echo(int argc, char *argv[]);
 int		export(int fd, char *argv[], t_envp *envp);

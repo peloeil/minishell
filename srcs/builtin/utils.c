@@ -16,7 +16,8 @@
 #include <stdlib.h>
 #include <libft/ft_stdio.h>
 
-void    make_str(int is_double, t_string *str, const char *key, const char *value)
+void	make_str(int is_double, t_string *str,
+	const char *key, const char *value)
 {
 	if (is_double == 0)
 	{
@@ -26,10 +27,10 @@ void    make_str(int is_double, t_string *str, const char *key, const char *valu
 		ft_str_push_str(str, "\n");
 		return ;
 	}
-    ft_str_push_str(str, key);
-    ft_str_push_str(str, "=\"");
-    ft_str_push_str(str, value);
-    ft_str_push_str(str, "\"\n");
+	ft_str_push_str(str, key);
+	ft_str_push_str(str, "=\"");
+	ft_str_push_str(str, value);
+	ft_str_push_str(str, "\"\n");
 }
 
 void	print_sorted_env(int fd, t_envp *envp)
@@ -45,35 +46,41 @@ void	print_sorted_env(int fd, t_envp *envp)
 	}
 }
 
+void	swap_envp_nodes(t_envp *curr)
+{
+	char	*tmp_key;
+	char	*tmp_value;
+	int		tmp_i;
+
+	tmp_key = curr->key;
+	tmp_value = curr->value;
+	tmp_i = curr->exported;
+	curr->key = curr->next->key;
+	curr->value = curr->next->value;
+	curr->exported = curr->next->exported;
+	curr->next->key = tmp_key;
+	curr->next->value = tmp_value;
+	curr->next->exported = tmp_i;
+}
+
 void	sort_envp(t_envp **head)
 {
 	int		sorted;
 	t_envp	*curr;
-	char	*tmp_key;
-	char	*tmp_value;
-	int		tmp_i;
 
 	sorted = 0;
 	while (!sorted)
 	{
 		sorted = 1;
 		curr = *head;
-    	while (curr && curr->next)
+		while (curr && curr->next)
 		{
 			if (ft_strcmp(curr->key, curr->next->key) > 0)
-            {
-                tmp_key = curr->key;
-                tmp_value = curr->value;
-				tmp_i = curr->exported;
-                curr->key = curr->next->key;
-                curr->value = curr->next->value;
-				curr->exported = curr->next->exported;
-				curr->next->exported = tmp_i;
-                curr->next->key = tmp_key;
-                curr->next->value = tmp_value;
-                sorted = 0;
-            }
-            curr = curr->next;
-        }
-    }
+			{
+				swap_envp_nodes(curr);
+				sorted = 0;
+			}
+			curr = curr->next;
+		}
+	}
 }
