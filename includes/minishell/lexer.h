@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:41 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 16:38:32 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/02 18:34:28 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define LEXER_H
 
 # include <libft/ft_list.h>
+
+typedef t_list	t_token_list;
 
 typedef enum e_token_id
 {
@@ -35,9 +37,9 @@ typedef struct s_token
 	char		*str;
 }	t_token;
 
-t_token_id	identify_operator(const char *input, size_t index);
-char		*read_operator(const char *input, size_t index);
-char		*read_string(const char *input, size_t index);
-t_list		*tokenize_input(const char *input);
+t_token_id		identify_operator(const char *input, size_t index);
+char			*read_operator(const char *input, size_t index);
+char			*read_string(const char *input, size_t index);
+t_token_list	*tokenize_input(const char *input);
 
 #endif // LEXER_H
