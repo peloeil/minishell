@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:38:56 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/02 22:48:04 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/03 11:55:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ int	env(int fd, t_envp *envp)
 		return (1);
 	while (envp != NULL)
 	{
-		if (envp->value != NULL)
+		if (envp->exported == 1)
 			make_str(0, &str, envp->key, envp->value);
 		envp = envp->next;
 	}
+	// (void)fd;
 	ft_dprintf(fd, "%s", str.str);
 	return (0);
 }

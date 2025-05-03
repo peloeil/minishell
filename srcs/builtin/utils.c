@@ -37,7 +37,10 @@ void	print_sorted_env(int fd, t_envp *envp)
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
-		ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
+		if (envp->exported == 0)
+			ft_dprintf(fd, "declare -x %s\n", envp->key);
+		else if (envp->exported == 1)
+			ft_dprintf(fd, "declare -x %s=%s\n", envp->key, envp->value);
 		envp = envp->next;
 	}
 }
@@ -48,6 +51,7 @@ void	sort_envp(t_envp **head)
 	t_envp	*curr;
 	char	*tmp_key;
 	char	*tmp_value;
+	int		tmp_i;
 
 	sorted = 0;
 	while (!sorted)
@@ -60,8 +64,11 @@ void	sort_envp(t_envp **head)
             {
                 tmp_key = curr->key;
                 tmp_value = curr->value;
+				tmp_i = curr->exported;
                 curr->key = curr->next->key;
                 curr->value = curr->next->value;
+				curr->exported = curr->next->exported;
+				curr->next->exported = tmp_i;
                 curr->next->key = tmp_key;
                 curr->next->value = tmp_value;
                 sorted = 0;
