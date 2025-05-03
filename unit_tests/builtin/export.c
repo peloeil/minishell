@@ -110,6 +110,16 @@ t_envp *make_minishell_envp(char **envp) {
     return (head);
 }
 
+void free_minishell_envp(t_envp *envp) {
+    while (envp != NULL) {
+        t_envp *next = envp->next;
+        free(envp->key);
+        free(envp->value);
+        free(envp);
+        envp = next;
+    }
+}
+
 int main(int argc, char **argv, char **envp) {
     (void)argc;
     (void)argv;
@@ -128,5 +138,6 @@ int main(int argc, char **argv, char **envp) {
         test(args_array[i], ms_envp);
     }
 
+    free_minishell_envp(ms_envp);
     return 0;
 }
