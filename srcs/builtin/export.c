@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/02 20:19:04 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/03 11:49:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <libft/ft_string.h>
 #include <string.h>
 
-t_envp	*create_new_node(char *key, char *value)
+t_envp	*create_new_node(char *key, char *value, int exported)
 {
 	t_envp	*new_node;
 
@@ -28,7 +28,7 @@ t_envp	*create_new_node(char *key, char *value)
 		new_node->value = value;
 	else
 		new_node->value = ft_strdup("");
-	new_node->exported = 1;
+	new_node->exported = exported;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -50,7 +50,7 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 			break ;
 		envp = envp->next;
 	}
-	new_node = create_new_node(key, value);
+	new_node = create_new_node(key, value, 1);
 	if (!new_node)
 	{
 		free(key);
@@ -66,7 +66,7 @@ void	register_env_without_value(t_envp *envp, char *key)
 
 	while (envp->next != NULL)
 		envp = envp->next;
-	new_node = create_new_node(key, NULL);
+	new_node = create_new_node(key, NULL, 0);
 	if (!new_node)
 	{
 		free(key);
