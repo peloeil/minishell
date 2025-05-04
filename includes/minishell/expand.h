@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_getenv.c                                        :+:      :+:    :+:   */
+/*   expand.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 22:18:58 by sota              #+#    #+#             */
-/*   Updated: 2025/05/03 00:55:12 by sota             ###   ########.fr       */
+/*   Created: 2025/05/02 17:53:51 by sota              #+#    #+#             */
+/*   Updated: 2025/05/04 17:35:06 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <libft/ft_string.h>
+#ifndef EXPAND_H
+# define EXPAND_H
 
-char	*ft_getenv(const char *key, const t_envp *envp)
-{
-	char	*value;
+# include <minishell/minishell.h>
+# include <minishell/parser.h>
 
-	value = NULL;
-	while (envp != NULL)
-	{
-		if (ft_strcmp(key, envp->key) == 0)
-		{
-			value = envp->value;
-			break ;
-		}
-		envp = envp->next;
-	}
-	return (value);
-}
+int		push_expanded_str(
+			t_string *new,
+			char *str,
+			size_t *index,
+			const t_envp *envp);
+int		expand_variables(t_ast_node *ast, const t_envp *envp);
+
+#endif // EXPAND_H

@@ -13,6 +13,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	) \
 	$(addprefix env/, \
 		ft_getenv.c \
+		envp.c \
 	) \
 	$(addprefix error/, \
 		free_strs.c \
@@ -33,6 +34,10 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		parse_tokens.c \
 		parse_command.c \
 		search_token.c \
+	) \
+	$(addprefix expand/, \
+		expand.c \
+		read_variable.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))

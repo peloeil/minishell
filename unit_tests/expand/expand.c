@@ -1,3 +1,5 @@
+#include <libft/ft_string.h>
+#include <minishell/expand.h>
 #include <minishell/lexer.h>
 #include <minishell/parser.h>
 #include <stdio.h>
@@ -87,52 +89,82 @@ static void free_ast(t_ast_node *ast, int parse_failed) {
     free(ast);
 }
 
-static void test(const char *cmd) {
+t_envp *make_envp(char **envp) {
+    t_envp *minishell_envp;
+    t_envp *head;
+    char *delimiter_pos;
+    int i;
+
+    minishell_envp = NULL;
+    head = NULL;
+    i = 0;
+    while (envp[i]) {
+        minishell_envp = malloc(sizeof(t_envp));
+        if (!minishell_envp) return (NULL);
+        delimiter_pos = ft_strchr(envp[i], '=');
+        minishell_envp->key = ft_substr(envp[i], 0, delimiter_pos - envp[i]);
+        minishell_envp->value = ft_strdup(delimiter_pos + 1);
+        minishell_envp->exported = 1;
+        minishell_envp->next = head;
+        head = minishell_envp;
+        i++;
+    }
+    return (head);
+}
+
+void free_envp(const t_envp *envp) {
+    while (1) {
+        t_envp *tmp = envp->next;
+        free(envp->key);
+        free(envp->value);
+        free((void *)envp);
+        envp = tmp;
+        if (envp == NULL) { break; }
+    }
+}
+
+static void test(const char *cmd, const t_envp *envp) {
     t_token_list *start = tokenize_input(cmd);
 
     t_ast_node *ast = parse_tokens(start, start->prev);
 
-    printf("command: %s\n", cmd);
-    print_ast(ast, 0);
-    printf("\n");
-
     int parse_failed = check_parse_error(ast);
     free_tokens(start, parse_failed);
+    if (parse_failed) {
+        free_ast(ast, parse_failed);
+        return;
+    }
+
+    expand_variables(ast, envp);
+    printf("expanded variables:\n");
+    printf("command: %s\n", cmd);
+    print_ast(ast, 1);
+    printf("\n");
+
+    // split_field(ast, ft_getenv("IFS", envp));
+    // printf("splitted field:\n");
+    // printf("command: %s\n", cmd);
+    // print_ast(ast, 1);
+    // printf("\n");
+
     free_ast(ast, parse_failed);
 }
 
-int main(void) {
+int main(int argc, char **argv, char **envp) {
+    (void)argc;
+    (void)argv;
+    const t_envp *env = make_envp(envp);
+
     printf("\n");
 
-    // pipe
-    test("echo hello world");
-    test("echo hello world | grep hello");
-    test("echo hello world | grep hello | wc -l");
+    test("echo $HOME_sota", env);
+    test("echo \"$HOME\"", env);
+    test("echo '$HOME'", env);
 
-    // redirect
-    test("echo hello world > file.txt");
-    test("echo hello world < file.txt");
-    test("echo hello world < file.txt > file2.txt");
-    test("echo hello world < file.txt > file2.txt");
-    test("echo hello world < file.txt > file2.txt > file3.txt");
+    test("c'a't $USER_$USER_file.txt>file", env);
+    test("echo \"$HOME\"_value > file", env);
+    test("echo ''", env);
 
-    // quoted string
-    test("echo \"hello world\"");
-    test("echo 'hello world'");
-
-    // environment variable
-    test("echo $HOME");
-    test("echo \"$HOME\"");
-    test("echo '$HOME'");
-
-    // parse error
-    test("echo hello world |");
-    test("echo hello world | | grep hello");
-    test("echo hello world | grep hello |");
-    test("echo hello world <");
-    test("echo hello world >");
-
-    // corner cases
-    test("c'a't $USER_$USER_file.txt>file");
+    free_envp(env);
     return 0;
 }
