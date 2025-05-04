@@ -136,15 +136,13 @@ static void test(const char *cmd, const t_envp *envp) {
     }
 
     expand_variables(ast, envp);
-
-    printf("before split:\n");
+    printf("expanded variables:\n");
     printf("command: %s\n", cmd);
     print_ast(ast, 1);
     printf("\n");
 
     // split_field(ast, ft_getenv("IFS", envp));
-    //
-    // printf("after split:\n");
+    // printf("splitted field:\n");
     // printf("command: %s\n", cmd);
     // print_ast(ast, 1);
     // printf("\n");
@@ -164,7 +162,8 @@ int main(int argc, char **argv, char **envp) {
     test("echo '$HOME'", env);
 
     test("c'a't $USER_$USER_file.txt>file", env);
-	test("echo \"$HOME\"_value > file", env);
+    test("echo \"$HOME\"_value > file", env);
+    test("echo ''", env);
 
     free_envp(env);
     return 0;

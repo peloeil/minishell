@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:55:00 by sota              #+#    #+#             */
-/*   Updated: 2025/05/04 18:32:35 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/04 22:46:56 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,28 +27,44 @@ static int	dollar_as_prefix(const char *str, size_t index)
 	return (1);
 }
 
+static int	change_quote_state(char *quote_char, const char *str, size_t *index)
+{
+	if ((str[*index] == '\'' && (*quote_char == 0 || *quote_char == '\''))
+		|| (str[*index] == '\"' && (*quote_char == 0 || *quote_char == '\"')))
+	{
+		if (*quote_char == 0)
+			*quote_char = str[*index];
+		else
+			*quote_char = 0;
+		(*index)++;
+		return (1);
+	}
+	return (0);
+}
+
 static int	expand_arg(t_arg_list *arg, const t_envp *envp)
 {
-	int			expandable;
+	char		quote_char;
 	size_t		index;
 	char		*str;
 	t_string	new;
 	int			cond;
 
-	expandable = 1;
+	quote_char = 0;
 	index = 0;
 	str = (char *)arg->content;
 	if (ft_str_new(&new) == -1)
 		return (-1);
 	while (str[index] != '\0')
 	{
-		cond = (expandable && dollar_as_prefix(str, index));
+		if (change_quote_state(&quote_char, str, &index))
+			continue ;
+		cond = ((quote_char == 0 || quote_char == '\"')
+				&& dollar_as_prefix(str, index));
 		if (cond && push_expanded_str(&new, str, &index, envp) == -1)
 			return (-1);
-		if (!cond && ft_str_push(&new, str[index]) == -1)
+		if (!cond && ft_str_push(&new, str[index++]) == -1)
 			return (-1);
-		if (!cond)
-			expandable ^= (str[index++] == '\'');
 	}
 	free(str);
 	arg->content = new.str;
