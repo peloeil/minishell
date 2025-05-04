@@ -127,6 +127,7 @@ static void test(const char *cmd, const t_envp *envp) {
     t_token_list *start = tokenize_input(cmd);
 
     t_ast_node *ast = parse_tokens(start, start->prev);
+
     int parse_failed = check_parse_error(ast);
     free_tokens(start, parse_failed);
     if (parse_failed) {
@@ -136,9 +137,17 @@ static void test(const char *cmd, const t_envp *envp) {
 
     expand_variables(ast, envp);
 
+    printf("before split:\n");
     printf("command: %s\n", cmd);
-    print_ast(ast, 0);
+    print_ast(ast, 1);
     printf("\n");
+
+    // split_field(ast, ft_getenv("IFS", envp));
+    //
+    // printf("after split:\n");
+    // printf("command: %s\n", cmd);
+    // print_ast(ast, 1);
+    // printf("\n");
 
     free_ast(ast, parse_failed);
 }
@@ -150,36 +159,12 @@ int main(int argc, char **argv, char **envp) {
 
     printf("\n");
 
-    // pipe
-    test("echo hello world", env);
-    test("echo hello world | grep hello", env);
-    test("echo hello world | grep hello | wc -l", env);
-
-    // redirect
-    test("echo hello world > file.txt", env);
-    test("echo hello world < file.txt", env);
-    test("echo hello world < file.txt > file2.txt", env);
-    test("echo hello world < file.txt > file2.txt", env);
-    test("echo hello world < file.txt > file2.txt > file3.txt", env);
-
-    // quoted string
-    test("echo \"hello world\"", env);
-    test("echo 'hello world'", env);
-
-    // environment variable
-    test("echo $HOME", env);
+    test("echo $HOME_sota", env);
     test("echo \"$HOME\"", env);
     test("echo '$HOME'", env);
 
-    // parse error
-    test("echo hello world |", env);
-    test("echo hello world | | grep hello", env);
-    test("echo hello world | grep hello |", env);
-    test("echo hello world <", env);
-    test("echo hello world >", env);
-
-    // corner cases
     test("c'a't $USER_$USER_file.txt>file", env);
+	test("echo \"$HOME\"_value > file", env);
 
     free_envp(env);
     return 0;
