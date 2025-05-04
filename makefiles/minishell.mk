@@ -37,6 +37,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	) \
 	$(addprefix expand/, \
 		expand.c \
+		read_variable.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
