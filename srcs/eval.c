@@ -6,11 +6,15 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/03 00:35:08 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/06 15:53:54 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
+#include <minishell/lexer.h>
+#include <minishell/parser.h>
+#include <minishell/expand.h>
+#include <minishell/execute.h>
 #include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
 #include <unistd.h>
@@ -56,15 +60,26 @@ int	handle_external_command(char **argv, const t_envp *envp)
 
 int	eval_cmd(const char *cmd, t_envp *ms_envp)
 {
-	int		status;
-	char	**argv;
+	t_token_list	*tokens;
+	t_ast_node		*ast;
+	int				parse_failed;
+	int				status;
 
-	argv = ft_split(cmd, ' ');
-	if (argv == NULL)
+	tokens = tokenize_input(cmd);
+	ast = parse_tokens(tokens, tokens->prev);
+	parse_failed = check_parse_error(ast);
+	free_tokens(tokens, parse_failed);
+	if (parse_failed)
+	{
+		free_ast(ast, parse_failed);
 		return (-1);
-	status = handle_builtin_command(argv, ms_envp);
-	if (status == -2)
-		status = handle_external_command(argv, ms_envp);
-	free_strs((const char **)argv);
+	}
+	if (expand_variables(ast, ms_envp) == -1)
+	{
+		free_ast(ast, parse_failed);
+		return (-1);
+	}
+	status = execute_ast(ast, ms_envp);
+	free_ast(ast, parse_failed);
 	return (status);
 }
