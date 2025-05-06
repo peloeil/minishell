@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/06 15:53:54 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/06 17:29:21 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,20 @@ int	eval_cmd(const char *cmd, t_envp *ms_envp)
 	t_ast_node		*ast;
 	int				parse_failed;
 	int				status;
+	int				fds[2];
 
 	tokens = tokenize_input(cmd);
 	ast = parse_tokens(tokens, tokens->prev);
 	parse_failed = check_parse_error(ast);
 	free_tokens(tokens, parse_failed);
-	if (parse_failed)
+	if (parse_failed || expand_variables(ast, ms_envp) == -1)
 	{
 		free_ast(ast, parse_failed);
 		return (-1);
 	}
-	if (expand_variables(ast, ms_envp) == -1)
-	{
-		free_ast(ast, parse_failed);
-		return (-1);
-	}
-	status = execute_ast(ast, ms_envp);
+	fds[READ_FD] = STDIN_FILENO;
+	fds[WRITE_FD] = STDOUT_FILENO;
+	status = execute_ast(ast, fds);
 	free_ast(ast, parse_failed);
 	return (status);
 }
