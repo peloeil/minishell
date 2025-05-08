@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 21:12:55 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 23:33:54 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	child_process(
 		int out_fd,
 		t_envp *ms_envp);
 int	parent_process(pid_t pid, int in_fd, int out_fd);
-int	make_argv(char ***argv, t_arg_list *args, t_envp *envp);
+int	make_argv(char ***argv, t_arg_list *args);
 int	make_envp(char ***envp, t_envp *ms_envp);
 int	execute_ast(t_ast_node *ast, int *fds, t_envp *envp);
 

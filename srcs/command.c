@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 20:44:48 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 23:30:33 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ static int	try_paths(char **const path_ptr, const char *cmd, char **path_dirs)
 
 int	set_cmd_path(char **const path_ptr, const char *cmd, const t_envp *envp)
 {
-	char	*env_path;
+	char	*path;
 	char	**path_dirs;
 	int		result;
 
-	env_path = ft_getenv("PATH", envp);
-	if (env_path == NULL)
+	path = ft_getenv("PATH", envp);
+	if (path == NULL)
 		return (-1);
-	path_dirs = ft_split(env_path, ':');
+	path_dirs = ft_split(path, ':');
 	if (path_dirs == NULL)
 		return (-1);
 	result = try_paths(path_ptr, cmd, path_dirs);

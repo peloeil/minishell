@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:23:41 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 21:19:56 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 23:38:50 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <minishell/execute.h>
 #include <libft/ft_string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 static int	set_child_fds(int in_fd, int out_fd)
 {
@@ -45,11 +46,18 @@ int	child_process(
 
 	if (set_child_fds(in_fd, out_fd) == -1)
 		return (-1);
-	if (make_argv(&argv, args, ms_envp) == -1)
+	if (make_argv(&argv, args) == -1)
 		return (-1);
 	if (make_envp(&envp, ms_envp) == -1)
 	{
 		free_strs(argv);
+		return (-1);
+	}
+	free(argv[0]);
+	if (set_cmd_path(&argv[0], args->content, ms_envp) == -1)
+	{
+		free_strs(argv);
+		free_strs(envp);
 		return (-1);
 	}
 	execve(argv[0], argv, envp);
@@ -57,4 +65,3 @@ int	child_process(
 	free_strs(envp);
 	return (-1);
 }
-

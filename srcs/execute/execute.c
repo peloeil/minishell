@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 21:26:44 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 23:43:29 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	execute_builtin(t_arg_list *args, int in_fd, int out_fd, t_envp *ms_e
 	char	**envp;
 
 	(void)in_fd;
-	if (make_argv(&argv, args, ms_envp) == -1)
+	if (make_argv(&argv, args) == -1)
 		return (-1);
 	if (make_envp(&envp, ms_envp) == -1)
 	{
@@ -89,7 +89,7 @@ static int	execute_command(
 	pid_t	pid;
 
 	if (is_builtin(args->content))
-		return (execute_builtin(args->content, in_fd, out_fd, envp));
+		return (execute_builtin(args, in_fd, out_fd, envp));
 	pid = fork();
 	if (pid == -1)
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:11:31 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 21:33:11 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 23:35:10 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <libft/ft_stdio.h>
 #include <stdlib.h>
 
-int	make_argv(char ***argv, t_arg_list *args, t_envp *envp)
+int	make_argv(char ***argv, t_arg_list *args)
 {
 	size_t		i;
 	t_arg_list	*cur;
@@ -40,9 +40,6 @@ int	make_argv(char ***argv, t_arg_list *args, t_envp *envp)
 			break ;
 	}
 	(*argv)[i] = NULL;
-	free((*argv)[0]);
-	if (set_cmd_path(*argv, args->content, envp) == -1)
-		return (-1);
 	return (0);
 }
 
