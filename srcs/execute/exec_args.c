@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:11:31 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 23:35:10 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 23:53:53 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	make_envp(char ***envp, t_envp *ms_envp)
 	i = 0;
 	while (ms_envp != NULL)
 	{
-		if (ft_asprintf(&(*envp)[i], "%s=%s", ms_envp->key, ms_envp->value) == -1)
+		if (ft_asprintf(*envp + i, "%s=%s", ms_envp->key, ms_envp->value) == -1)
 		{
 			free_strs(*envp);
 			return (-1);

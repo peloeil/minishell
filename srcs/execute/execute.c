@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 23:43:29 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 23:53:44 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static int	execute_builtin(t_arg_list *args, int in_fd, int out_fd, t_envp *ms_e
 {
 	char	**argv;
 	char	**envp;
+	int		status;
 
 	(void)in_fd;
 	if (make_argv(&argv, args) == -1)
@@ -70,14 +71,16 @@ static int	execute_builtin(t_arg_list *args, int in_fd, int out_fd, t_envp *ms_e
 		return (-1);
 	}
 	if (ft_strcmp(args->content, "pwd") == 0)
-		return (pwd());
+		status = pwd();
 	if (ft_strcmp(args->content, "echo") == 0)
-		return (echo(out_fd, args->content));
+		status = echo(out_fd, argv);
 	if (ft_strcmp(args->content, "export") == 0)
-		return (export(out_fd, args->next->content, ms_envp));
+		status = export(out_fd, argv, ms_envp);
 	if (ft_strcmp(args->content, "env") == 0)
-		return (env(out_fd, ms_envp));
-	return (-1);
+		status = env(out_fd, ms_envp);
+	free_strs(argv);
+	free_strs(envp);
+	return (status);
 }
 
 static int	execute_command(
