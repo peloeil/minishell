@@ -6,13 +6,13 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 20:59:03 by sota              #+#    #+#             */
-/*   Updated: 2025/03/12 21:01:00 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 18:44:41 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-void	free_strs(const char **strs)
+void	free_strs(char **strs)
 {
 	size_t	i;
 

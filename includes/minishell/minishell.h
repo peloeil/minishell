@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/06 15:49:33 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/08 18:45:00 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_getenv(const char *key, const t_envp *envp)
 t_envp	*make_ms_envp(char **envp)
 		__attribute__((nonnull(1)));
 
-void	free_strs(const char **strs)
+void	free_strs(char **strs)
 		__attribute__((nonnull(1)));
 void	free_ms_envp(t_envp *env)
 		__attribute__((nonnull(1)));
