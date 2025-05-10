@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:24:32 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 22:48:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ int	is_builtin(char *cmd)
 		return (3);
 	if (ft_strcmp(cmd, "pwd") == 0)
 		return (4);
+	if (ft_strcmp(cmd, "cd") == 0)
+		return (5);
+	if (ft_strcmp(cmd, "unset") == 0)
+		return (6);
 	return (0);
 }
 
@@ -47,6 +51,10 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 		state->status = export(state->iofd[OUTFD_INDEX], argv, ms_envp);
 	if (ft_strcmp(args->content, "env") == 0)
 		state->status = env(state->iofd[OUTFD_INDEX], ms_envp);
+	if (ft_strcmp(args->content, "cd") == 0)
+		state->status = cd(argv, ms_envp);
+	if (ft_strcmp(args->content, "unset") == 0)
+		state->status = unset(argv, &ms_envp);
 	free_strs(argv);
 	free_strs(envp);
 	return (0);
