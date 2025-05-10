@@ -102,7 +102,7 @@ t_envp *make_minishell_envp(char **envp) {
         delimiter_pos = ft_strchr(envp[i], '=');
         minishell_envp->key = ft_substr(envp[i], 0, delimiter_pos - envp[i]);
         minishell_envp->value = ft_strdup(delimiter_pos + 1);
-        minishell_envp->exported = 1;
+        minishell_envp->exported = 0x00000001;
         minishell_envp->next = head;
         head = minishell_envp;
         i++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:49:48 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 20:17:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <libft/std_string.h>
 
 # define PROMPT "minishell$ "
+# define FLAG_EXPORT 0b00000001
+# define FLAG_UNSET 0b00000100
 
 typedef struct s_envp
 {
@@ -57,7 +59,9 @@ void	make_str(int is_double, t_string *str, const char *key,
 int		pwd(void);
 int		echo(int argc, char *argv[]);
 int		export(int fd, char *argv[], t_envp *envp);
+int		unset(char *argv[], t_envp **envp);
 int		env(int fd, t_envp *envp);
+int		cd(char *argv[], t_envp *envp);
 
 // builtin/utils.c
 void	print_sorted_env(int fd, t_envp *envp);
@@ -66,4 +70,5 @@ void	add_double_quotes(int fd,
 			const char *key,
 			const char *value);
 void	sort_envp(t_envp **head);
+int		count_argv(char **argv);
 #endif // MINISHELL_H

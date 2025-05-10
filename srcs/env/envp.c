@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:08:58 by sota              #+#    #+#             */
-/*   Updated: 2025/05/03 00:25:37 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/06 14:36:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_envp	*make_ms_envp(char **envp)
 		key_len = ft_strchr(envp[i], '=') - envp[i];
 		env->key = ft_strndup(envp[i], key_len);
 		env->value = ft_strdup(envp[i] + key_len + 1);
-		env->exported = 1;
+		env->exported = 0x00000001;
 		env->next = next;
 		next = env;
 		i++;

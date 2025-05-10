@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/03 11:49:27 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/10 19:33:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,33 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 
 void	register_env_without_value(t_envp *envp, char *key)
 {
-	t_envp	*new_node;
+	t_envp	*curr;
+	t_envp 	*new_node;
 
-	while (envp->next != NULL)
-		envp = envp->next;
-	new_node = create_new_node(key, NULL, 0);
+	curr = envp;
+	while (curr != NULL)
+	{
+		if (ft_strcmp(curr->key, key) == 0)
+		{
+			if (curr->exported & FLAG_UNSET)
+			{
+				curr->exported &= ~FLAG_UNSET;
+				curr->exported |= FLAG_EXPORT;
+			}
+			free(key);
+			return ; 
+		}
+		if (curr->next == NULL)
+			break ;
+		curr = curr->next;
+	}
+	new_node = create_new_node(key, NULL, FLAG_EXPORT);
 	if (!new_node)
 	{
 		free(key);
-		return ;
+		return;
 	}
-	envp->next = new_node;
+	curr->next = new_node;
 }
 
 void	register_env(t_envp *envp, char *str)

@@ -26,7 +26,9 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		pwd.c \
 		echo.c \
 		export.c \
+		cd.c \
 		env.c \
+		unset.c \
 	) \
 	$(addprefix lexer/, \
 		lexer.c \
