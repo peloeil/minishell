@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_strs.c                                        :+:      :+:    :+:   */
+/*   close.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 20:59:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 18:44:41 by sota             ###   ########.fr       */
+/*   Created: 2025/05/10 15:37:52 by sota              #+#    #+#             */
+/*   Updated: 2025/05/10 16:01:01 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
 
-void	free_strs(char **strs)
+int	wrap_close(int *fd, int afterfd)
 {
-	size_t	i;
-
-	i = 0;
-	while (strs[i] != NULL)
-		free((void *)strs[i++]);
-	free((void *)strs);
+	if (*fd == afterfd)
+		return (0);
+	close(*fd);
+	*fd = afterfd;
+	return (0);
 }

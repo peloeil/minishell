@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:58:12 by sota              #+#    #+#             */
-/*   Updated: 2025/03/11 17:58:13 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 17:35:27 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-char	*wrap_readline(const char *prompt, const int is_interactive)
+char	*wrap_readline(const char *prompt)
 {
 	int		saved_stdout;
 	int		saved_stderr;
 	int		dev_null;
 	char	*res;
 
-	if (is_interactive)
+	if (isatty(STDIN_FILENO) && isatty(STDERR_FILENO))
 		return (readline(prompt));
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stderr = dup(STDERR_FILENO);
