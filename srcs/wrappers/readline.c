@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:58:12 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:49:21 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 17:35:27 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char	*wrap_readline(const char *prompt)
 	int		saved_stderr;
 	int		dev_null;
 	char	*res;
-
 
 	if (isatty(STDIN_FILENO) && isatty(STDERR_FILENO))
 		return (readline(prompt));

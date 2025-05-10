@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:17:31 by sota              #+#    #+#             */
-/*   Updated: 2025/05/06 15:49:57 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 17:35:43 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,3 @@ void	free_tokens(t_token_list *tokens, int parse_failed)
 	else
 		ft_list_clear(&tokens, free);
 }
-

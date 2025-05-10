@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:55:29 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 17:36:18 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
-
 
 static int	execute_command(t_arg_list *args, t_proc_state *state, t_envp *envp)
 {

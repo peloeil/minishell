@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/10 16:40:37 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 17:39:45 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,8 @@ int	eval_cmd(const char *cmd, t_envp *envp)
 		return (-1);
 	}
 	free_ast(ast, parse_failed);
-	if (wait_children(&state) == -1)
-		return (-1);
-	if (update_exit_status(state.status, envp) == -1)
+	if (wait_children(&state) == -1
+		|| update_exit_status(state.status, envp) == -1)
 		return (-1);
 	return (0);
 }

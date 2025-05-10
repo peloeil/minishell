@@ -6,13 +6,34 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:26:05 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 17:45:46 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/execute.h>
 #include <fcntl.h>
 #include <unistd.h>
+
+static int	close_old_fds(t_proc_state *state, int fd)
+{
+	if (fd == STDIN_FILENO)
+	{
+		if (state->iofd[INFD_INDEX] == state->pipefd[READ_PIPE])
+		{
+			wrap_close(&state->iofd[INFD_INDEX], STDIN_FILENO);
+			wrap_close(&state->pipefd[READ_PIPE], STDIN_FILENO);
+		}
+	}
+	else
+	{
+		if (state->iofd[OUTFD_INDEX] == state->pipefd[WRITE_PIPE])
+		{
+			wrap_close(&state->iofd[OUTFD_INDEX], STDOUT_FILENO);
+			wrap_close(&state->pipefd[WRITE_PIPE], STDOUT_FILENO);
+		}
+	}
+	return (0);
+}
 
 int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
 {
@@ -23,11 +44,7 @@ int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
 		fd = open(file, O_RDONLY);
 		if (fd == -1)
 			return (-1);
-		if (state->iofd[INFD_INDEX] == state->pipefd[READ_PIPE])
-		{
-			wrap_close(&state->iofd[INFD_INDEX], STDIN_FILENO);
-			wrap_close(&state->pipefd[READ_PIPE], STDIN_FILENO);
-		}
+		close_old_fds(state, STDIN_FILENO);
 		state->iofd[INFD_INDEX] = fd;
 		return (0);
 	}
@@ -37,11 +54,7 @@ int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 		return (-1);
-	if (state->iofd[OUTFD_INDEX] == state->pipefd[WRITE_PIPE])
-	{
-		wrap_close(&state->iofd[OUTFD_INDEX], STDOUT_FILENO);
-		wrap_close(&state->pipefd[WRITE_PIPE], STDOUT_FILENO);
-	}
+	close_old_fds(state, STDIN_FILENO);
 	state->iofd[OUTFD_INDEX] = fd;
 	return (0);
 }
