@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 18:45:00 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 16:49:48 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ typedef struct s_envp
 	struct s_envp	*next;
 }	t_envp;
 
-char	*wrap_readline(const char *prompt, const int is_interactive)
+char	*wrap_readline(const char *prompt)
 		__attribute__((nonnull(1)));
+int		wrap_close(int *fd, int is_infd);
 int		eval_cmd(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));
 int		set_cmd_path(char **const path_ptr, const char *cmd, const t_envp *envp)

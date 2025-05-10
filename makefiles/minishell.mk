@@ -10,6 +10,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	command.c \
 	$(addprefix wrappers/, \
 		readline.c \
+		close.c \
 	) \
 	$(addprefix env/, \
 		ft_getenv.c \
@@ -42,10 +43,11 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		read_variable.c \
 	) \
 	$(addprefix execute/, \
-		execute.c \
-		exec_args.c \
+		builtin.c \
 		child.c \
-		parent.c \
+		exec_args.c \
+		execute.c \
+		fd.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))

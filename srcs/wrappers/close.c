@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parent.c                                           :+:      :+:    :+:   */
+/*   close.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 20:26:12 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 21:16:42 by sota             ###   ########.fr       */
+/*   Created: 2025/05/10 15:37:52 by sota              #+#    #+#             */
+/*   Updated: 2025/05/10 16:01:01 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <unistd.h>
 
-static int	set_parent_fds(int in_fd, int out_fd)
+int	wrap_close(int *fd, int afterfd)
 {
-	(void)in_fd;
-	(void)out_fd;
+	if (*fd == afterfd)
+		return (0);
+	close(*fd);
+	*fd = afterfd;
 	return (0);
-}
-
-int	parent_process(pid_t pid, int in_fd, int out_fd)
-{
-	int	status;
-
-	if (set_parent_fds(in_fd, out_fd) == -1)
-		return (-1);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 21:11:31 by sota              #+#    #+#             */
-/*   Updated: 2025/05/08 23:53:53 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 16:18:55 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	make_argv(char ***argv, t_arg_list *args)
 		if ((*argv)[i] == NULL)
 		{
 			free_strs(*argv);
+			*argv = NULL;
 			return (-1);
 		}
 		i++;
@@ -69,6 +70,7 @@ int	make_envp(char ***envp, t_envp *ms_envp)
 		if (ft_asprintf(*envp + i, "%s=%s", ms_envp->key, ms_envp->value) == -1)
 		{
 			free_strs(*envp);
+			*envp = NULL;
 			return (-1);
 		}
 		i++;

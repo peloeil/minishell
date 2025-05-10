@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/05/03 00:28:01 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 16:49:29 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	ms_envp = make_ms_envp(envp);
 	while (1)
 	{
-		cmd_str = wrap_readline(
-				PROMPT, isatty(STDIN_FILENO) && isatty(STDERR_FILENO)
-				);
+		cmd_str = wrap_readline(PROMPT);
 		if (cmd_str == NULL)
 			break ;
 		eval_cmd(cmd_str, ms_envp);
