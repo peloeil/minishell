@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:38:59 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 18:24:41 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/11 01:09:22 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_token_list	*tokenize_input(const char *input)
 		if (set_next_token(token, input, &index) == -1)
 		{
 			ft_printf("syntax error\n");
-			exit(EXIT_FAILURE);
+			return (NULL);
 		}
 		if (token->str == NULL)
 		{

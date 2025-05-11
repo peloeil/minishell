@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:23:41 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:20:48 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/11 15:30:54 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ int	child_process(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 		free_strs(envp);
 		return (-1);
 	}
-	free(argv[0]);
-	failed |= (set_cmd_path(&argv[0], args->content, ms_envp) == -1);
+	failed |= (set_command_path(&argv[0], args->content, ms_envp) == -1);
 	if (!failed)
 		execve(argv[0], argv, envp);
 	free_strs(argv);

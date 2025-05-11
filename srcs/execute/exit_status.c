@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   exit_status.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:24:07 by sota             ###   ########.fr       */
+/*   Created: 2025/05/11 01:03:28 by sota              #+#    #+#             */
+/*   Updated: 2025/05/11 01:12:52 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <minishell/execute.h>
 #include <libft/ft_stdio.h>
-#include <libft/ft_string.h>
 
-int	main(int argc, char **argv, char **envp)
+int	update_exit_status(t_exit_status status, t_envp *envp)
 {
-	char	*cmd_str;
-	t_envp	*ms_envp;
+	char	*argv[3];
+	char	str[20];
 
-	(void)argc;
-	(void)argv;
-	ms_envp = make_ms_envp(envp);
-	while (1)
-	{
-		cmd_str = wrap_readline(PROMPT);
-		if (cmd_str == NULL)
-			break ;
-		if (eval_cmd(cmd_str, ms_envp) == -1)
-			break ;
-		free(cmd_str);
-	}
-	free_ms_envp(ms_envp);
-	return (EXIT_SUCCESS);
+	if (ft_sprintf(str, "?=%d", (int)status) == -1)
+		return (-1);
+	argv[0] = "export";
+	argv[1] = str;
+	argv[2] = NULL;
+	if (export(0, argv, envp) == -1)
+		return (-1);
+	return (0);
 }

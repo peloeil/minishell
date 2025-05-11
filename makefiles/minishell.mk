@@ -52,6 +52,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		exec_args.c \
 		execute.c \
 		fd.c \
+		exit_status.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))

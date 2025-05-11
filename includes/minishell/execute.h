@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:37:44 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/11 15:08:21 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@
 typedef enum e_exit_status
 {
 	STATUS_SUCCESS = 0,
-	STATUS_FAILURE = 1,
+	STATUS_ERRORS = 1,
+	STATUS_NOT_EXECUTABLE = 126,
+	STATUS_CMD_NOT_FOUND = 127,
+	STATUS_INVALID_EXIT = 128,
+	STATUS_SIGINT = STATUS_INVALID_EXIT + 2,
+	STATUS_SIGQUIT = STATUS_INVALID_EXIT + 3,
 }	t_exit_status;
 
 typedef struct s_proc_state
@@ -46,5 +51,6 @@ int	is_builtin(char *cmd);
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp);
 int	child_process(t_arg_list *args, t_proc_state *state, t_envp *ms_envp);
 int	execute_ast(t_ast_node *ast, t_proc_state *state, t_envp *envp);
+int	update_exit_status(t_exit_status status, t_envp *envp);
 
 #endif // EXECUTE_H

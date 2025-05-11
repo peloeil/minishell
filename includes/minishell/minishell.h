@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 20:17:36 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/14 21:19:52 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ char	*wrap_readline(const char *prompt)
 int		wrap_close(int *fd, int is_infd);
 int		eval_cmd(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));
-int		set_cmd_path(char **const path_ptr, const char *cmd, const t_envp *envp)
-		__attribute__((nonnull(3)));
+int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
+		__attribute__((nonnull(2, 3)));
 char	*ft_getenv(const char *key, const t_envp *envp)
 		__attribute__((nonnull(1)));
 t_envp	*make_ms_envp(char **envp)

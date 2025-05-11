@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/10 20:16:54 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/14 21:23:13 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,6 @@ static void	init_proc_state(t_proc_state *state)
 	state->iofd[OUTFD_INDEX] = STDOUT_FILENO;
 }
 
-static int	update_exit_status(t_exit_status status, t_envp *envp)
-{
-	char	*argv[3];
-	char	str[20];
-
-	if (ft_sprintf(str, "?=%d", (int)status) == -1)
-		return (-1);
-	argv[0] = "export";
-	argv[1] = str;
-	argv[2] = NULL;
-	if (export(0, argv, envp) == -1)
-		return (-1);
-	return (0);
-}
-
 int	wait_children(t_proc_state *state)
 {
 	pid_t	pid;
@@ -63,7 +48,7 @@ int	wait_children(t_proc_state *state)
 		else if (WIFSIGNALED(status))
 			state->status = WTERMSIG(status);
 		else
-			state->status = STATUS_FAILURE;
+			state->status = STATUS_ERRORS;
 	}
 	return (0);
 }
@@ -96,3 +81,4 @@ int	eval_cmd(const char *cmd, t_envp *envp)
 		return (-1);
 	return (0);
 }
+>>>>>>> 7ad9c9a (feat: add exit status and path search error handling)
