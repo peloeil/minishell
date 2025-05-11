@@ -30,7 +30,7 @@ t_envp	*make_ms_envp(char **envp)
 		key_len = ft_strchr(envp[i], '=') - envp[i];
 		env->key = ft_strndup(envp[i], key_len);
 		env->value = ft_strdup(envp[i] + key_len + 1);
-		env->exported = 0x00000001;
+		env->exported = FLAG_EXPORT;
 		env->next = next;
 		next = env;
 		i++;

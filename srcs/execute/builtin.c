@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 22:48:04 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/11 20:49:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/parser.h>
 #include <minishell/execute.h>
 #include <libft/ft_string.h>
+#include <libft/ft_stdio.h>
 
 int	is_builtin(char *cmd)
 {

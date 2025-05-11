@@ -25,7 +25,7 @@ int	env(int fd, t_envp *envp)
 		return (1);
 	while (envp != NULL)
 	{
-		if (!(envp->exported & FLAG_UNSET))
+		if (envp->exported & FLAG_EXPORT)
 			make_str(0, &str, envp->key, envp->value);
 		envp = envp->next;
 	}

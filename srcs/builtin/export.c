@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/10 19:33:10 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/11 21:16:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 			break ;
 		envp = envp->next;
 	}
-	new_node = create_new_node(key, value, 1);
+	new_node = create_new_node(key, value, FLAG_EXPORT);
 	if (!new_node)
 	{
 		free(key);
@@ -82,7 +82,7 @@ void	register_env_without_value(t_envp *envp, char *key)
 			break ;
 		curr = curr->next;
 	}
-	new_node = create_new_node(key, NULL, FLAG_EXPORT);
+	new_node = create_new_node(key, NULL, 0);
 	if (!new_node)
 	{
 		free(key);
@@ -119,7 +119,7 @@ void	register_env(t_envp *envp, char *str)
 
 int	export(int fd, char *argv[], t_envp *envp)
 {
-	if (argv[1] == NULL)
+	if (argv[1] == NULL) // TODO: argv が終わるまでずっと見る
 		print_sorted_env(fd, envp);
 	else
 		register_env(envp, argv[1]);
