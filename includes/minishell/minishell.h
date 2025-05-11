@@ -35,7 +35,7 @@ typedef struct s_envp
 
 char	*wrap_readline(const char *prompt)
 		__attribute__((nonnull(1)));
-int		wrap_close(int *fd, int is_infd);
+int		wrap_close(int *fd, int afterfd);
 int		eval_cmd(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));
 int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
@@ -47,14 +47,16 @@ t_envp	*make_ms_envp(char **envp)
 
 void	free_strs(char **strs)
 		__attribute__((nonnull(1)));
-void	free_ms_envp(t_envp *env)
-		__attribute__((nonnull(1)));
+void	free_ms_envp(t_envp *env);
+void	free_token(void *ptr);
 void	free_tokens(t_token_list *tokens, int parse_failed)
 		__attribute__((nonnull(1)));
 void	free_ast(t_ast_node *ast, int status)
 		__attribute__((nonnull(1)));
 int		check_parse_error(t_ast_node *ast)
 		__attribute__((nonnull(1)));
+int		error_return(const char *name, const char *msg)
+		__attribute__((nonnull(1, 2)));
 
 //builtin
 

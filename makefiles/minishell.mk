@@ -20,6 +20,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		free_strs.c \
 		lexer.c \
 		parser.c \
+		execute.c \
 	) \
 	$(addprefix builtin/, \
 		utils.c \
