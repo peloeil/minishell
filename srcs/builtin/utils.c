@@ -16,6 +16,16 @@
 #include <stdlib.h>
 #include <libft/ft_stdio.h>
 
+int	count_argv(char **argv)
+{
+	int	count;
+
+	count = 0;
+	while (argv[count] != NULL)
+		count++;
+	return (count);
+}
+
 void	make_str(int is_double, t_string *str,
 	const char *key, const char *value)
 {

@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <stdlib.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
+#include <minishell/minishell.h>
+#include <stdlib.h>
 #include <string.h>
 
 t_envp	*create_new_node(char *key, char *value, int exported)
@@ -63,7 +63,7 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 void	register_env_without_value(t_envp *envp, char *key)
 {
 	t_envp	*curr;
-	t_envp 	*new_node;
+	t_envp	*new_node;
 
 	curr = envp;
 	while (curr != NULL)
@@ -76,7 +76,7 @@ void	register_env_without_value(t_envp *envp, char *key)
 				curr->exported |= FLAG_EXPORT;
 			}
 			free(key);
-			return ; 
+			return ;
 		}
 		if (curr->next == NULL)
 			break ;
@@ -86,7 +86,7 @@ void	register_env_without_value(t_envp *envp, char *key)
 	if (!new_node)
 	{
 		free(key);
-		return;
+		return ;
 	}
 	curr->next = new_node;
 }

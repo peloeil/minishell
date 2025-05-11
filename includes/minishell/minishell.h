@@ -64,6 +64,7 @@ int		env(int fd, t_envp *envp);
 int		cd(char *argv[], t_envp *envp);
 
 // builtin/utils.c
+t_envp	*create_new_node(char *key, char *value, int exported);
 void	print_sorted_env(int fd, t_envp *envp);
 void	add_double_quotes(int fd,
 			t_string *str,

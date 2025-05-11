@@ -10,38 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft/ft_string.h>
 #include <minishell/minishell.h>
 #include <stdlib.h>
-#include <libft/ft_string.h>
 
-int unset(char **argv, t_envp **envp)
+static void	remove_env_key(t_envp **envp, const char *key)
 {
-	int		i;
 	t_envp	*current;
 	t_envp	*prev;
+
+	current = *envp;
+	prev = NULL;
+	while (current != NULL && ft_strcmp(current->key, key) != 0)
+	{
+		prev = current;
+		current = current->next;
+	}
+	if (current != NULL)
+	{
+		if (prev != NULL)
+			prev->next = current->next;
+		else
+			*envp = current->next;
+		free(current->key);
+		free(current->value);
+		free(current);
+	}
+}
+
+int	unset(char **argv, t_envp **envp)
+{
+	int	i;
 
 	if (count_argv(argv) < 2)
 		return (0);
 	i = 1;
 	while (argv[i] != NULL)
 	{
-		current = *envp;
-		prev = NULL;
-		while (current != NULL && ft_strcmp(current->key, argv[i]) != 0)
-		{
-			prev = current;
-			current = current->next;
-		}
-		if (current != NULL)
-		{
-			if (prev != NULL)
-				prev->next = current->next;
-			else
-				*envp = current->next;
-			free(current->key);
-			free(current->value);
-			free(current);
-		}
+		remove_env_key(envp, argv[i]);
 		i++;
 	}
 	return (0);
