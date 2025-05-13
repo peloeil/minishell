@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/13 16:05:45 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/13 19:30:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	update_pwd_and_oldpwd(t_envp *envp, char *old_path)
 		if (pwd_flags == FLAG_UNSET)
 			add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
 		else
-			add_envp_with_flag("PWD", new_path, envp, pwd_flags);
+			add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
 	}
 	free(new_path);
 }
