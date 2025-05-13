@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/11 16:55:15 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/13 16:05:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,28 +82,39 @@ void	update_pwd_and_oldpwd(t_envp *envp, char *old_path)
 {
 	char	*new_path;
 	char	*pwd_value;
-	int		has_pwd;
+	char	*old_value;
 	int		pwd_flags;
+	int		old_flags;
 
 	new_path = getcwd(NULL, 0);
 	pwd_value = ft_getenv("PWD", envp);
-	has_pwd = (pwd_value != NULL);
-	if (!has_pwd)
+	old_value = ft_getenv("OLDPWD", envp);
+	pwd_flags = get_env_flags("PWD", envp);
+	old_flags = get_env_flags("OLDPWD", envp);
+	if (!pwd_value)
 	{
 		add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
 		add_envp_with_flag("OLDPWD", "", envp, FLAG_EXPORT);
 	}
+	else if (!old_value)
+	{
+		add_envp_with_flag("OLDPWD", old_path, envp, FLAG_UNSET);
+		add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
+	}
 	else
 	{
-		pwd_flags = get_env_flags("PWD", envp);
-		add_envp_with_flag("OLDPWD", old_path, envp, FLAG_EXPORT);
-		if (pwd_flags == -1)
-			add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
+		if (old_flags == FLAG_UNSET)
+			add_envp_with_flag("OLDPWD", old_path, envp, FLAG_UNSET);
 		else
-			update_env_value("PWD", new_path, envp);
+			add_envp_with_flag("OLDPWD", old_path, envp, old_flags);
+		if (pwd_flags == FLAG_UNSET)
+			add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
+		else
+			add_envp_with_flag("PWD", new_path, envp, pwd_flags);
 	}
 	free(new_path);
 }
+
 
 int	no_such(char *path, char *old_path)
 {

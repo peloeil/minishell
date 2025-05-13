@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:05:06 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/06 11:05:06 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/13 12:42:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	remove_env_key(t_envp **envp, const char *key)
 {
 	t_envp	*current;
 	t_envp	*prev;
+	t_envp	*next_node;
 
 	current = *envp;
 	prev = NULL;
@@ -28,10 +29,11 @@ static void	remove_env_key(t_envp **envp, const char *key)
 	}
 	if (current != NULL)
 	{
+		next_node = current->next;
 		if (prev != NULL)
-			prev->next = current->next;
+			prev->next = next_node;
 		else
-			*envp = current->next;
+			*envp = next_node;
 		free(current->key);
 		free(current->value);
 		free(current);

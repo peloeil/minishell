@@ -35,6 +35,12 @@ t_envp	*make_ms_envp(char **envp)
 		next = env;
 		i++;
 	}
+	env = (t_envp *)malloc(sizeof(t_envp));
+	env->key = ft_strdup("OLDPWD");
+	env->value = ft_strdup("");
+	env->exported = 0;
+	env->next = next;
+	next = env;
 	return (env);
 }
 

@@ -49,7 +49,7 @@ void	print_sorted_env(int fd, t_envp *envp)
 	while (envp != NULL)
 	{
 		if (envp->exported & FLAG_UNSET)
-			continue;
+			envp = envp->next;
 		else if ((envp->exported & FLAG_EXPORT) && ft_strcmp(envp->key, "_") != 0)
 			ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
 		else if (!(envp->exported & FLAG_EXPORT))
