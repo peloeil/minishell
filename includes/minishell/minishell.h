@@ -63,6 +63,7 @@ int		export(int fd, char *argv[], t_envp *envp);
 int		unset(char *argv[], t_envp **envp);
 int		env(int fd, t_envp *envp);
 int		cd(char *argv[], t_envp *envp);
+int		builtin_exit(int fd, char *argv[]);
 
 // builtin/utils.c
 t_envp	*create_new_node(char *key, char *value, int exported);

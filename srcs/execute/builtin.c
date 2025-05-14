@@ -29,6 +29,8 @@ int	is_builtin(char *cmd)
 		return (5);
 	if (ft_strcmp(cmd, "unset") == 0)
 		return (6);
+	if (ft_strcmp(cmd, "exit") == 0)
+		return (7);
 	return (0);
 }
 
@@ -56,6 +58,8 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 		state->status = cd(argv, ms_envp);
 	if (ft_strcmp(args->content, "unset") == 0)
 		state->status = unset(argv, &ms_envp);
+	if (ft_strcmp(args->content, "exit") == 0)
+		state->status = builtin_exit(state->iofd[OUTFD_INDEX], argv);
 	free_strs(argv);
 	free_strs(envp);
 	return (0);
