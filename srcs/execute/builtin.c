@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:27:16 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 04:22:53 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,43 +34,30 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	check_argv_envp(t_arg_list *args, char ***argv, t_envp *ms_envp,
-		char ***envp)
-{
-	if (make_argv(argv, args) == -1)
-		return (-1);
-	if (make_envp(envp, ms_envp) == -1)
-	{
-		free_strs(*argv);
-		return (-1);
-	}
-	return (0);
-}
-
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 {
 	char			**argv;
 	char			**envp;
 	t_exit_status	status;
+	int				index;
+	int				(*builtin_func[8])(int, char **, t_envp **);
 
-	argv = NULL;
+	builtin_func[1] = echo;
+	builtin_func[2] = env;
+	builtin_func[3] = export;
+	builtin_func[4] = pwd;
+	builtin_func[5] = cd;
+	builtin_func[6] = unset;
+	builtin_func[7] = builtin_exit;
 	envp = NULL;
-	if (check_argv_envp(args, &argv, ms_envp, &envp) == -1)
+	if (make_argv(&argv, args) == -1 || make_envp(&envp, ms_envp) == -1)
+	{
+		free_strs(argv);
+		free_strs(envp);
 		return (-1);
-	if (ft_strcmp(args->content, "pwd") == 0)
-		status = pwd(state->iofd[OUTFD_INDEX]);
-	if (ft_strcmp(args->content, "echo") == 0)
-		status = echo(state->iofd[OUTFD_INDEX], argv);
-	if (ft_strcmp(args->content, "export") == 0)
-		status = export(state->iofd[OUTFD_INDEX], argv, ms_envp);
-	if (ft_strcmp(args->content, "env") == 0)
-		status = env(state->iofd[OUTFD_INDEX], ms_envp);
-	if (ft_strcmp(args->content, "cd") == 0)
-		status = cd(argv, ms_envp);
-	if (ft_strcmp(args->content, "unset") == 0)
-		status = unset(argv, &ms_envp);
-	if (ft_strcmp(args->content, "exit") == 0)
-		status = builtin_exit(state->iofd[OUTFD_INDEX], argv, ms_envp);
+	}
+	index = is_builtin(args->content);
+	status = builtin_func[index](state->iofd[OUTFD_INDEX], argv, &ms_envp);
 	free_strs(argv);
 	free_strs(envp);
 	return (update_exit_status(status, ms_envp));

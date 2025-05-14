@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:05:06 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/13 12:42:40 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/15 04:02:22 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,11 @@ static void	remove_env_key(t_envp **envp, const char *key)
 	}
 }
 
-int	unset(char **argv, t_envp **envp)
+int	unset(int fd, char **argv, t_envp **envp)
 {
 	int	i;
 
+	(void)fd;
 	if (count_argv(argv) < 2)
 		return (0);
 	i = 1;

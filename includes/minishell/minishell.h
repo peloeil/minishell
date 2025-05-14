@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 00:14:07 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 04:02:50 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ int		error_return(const char *name, const char *msg)
 
 void	make_str(int is_double, t_string *str, const char *key,
 			const char *value);
-int		pwd(int fd);
-int		echo(int fd, char *argv[]);
-int		export(int fd, char *argv[], t_envp *envp);
-int		unset(char *argv[], t_envp **envp);
-int		env(int fd, t_envp *envp);
-int		cd(char *argv[], t_envp *envp);
-int		builtin_exit(int fd, char *argv[], t_envp *envp);
+int		echo(int fd, char **argv, t_envp **envp);
+int		env(int fd, char **argv, t_envp **envp);
+int		export(int fd, char **argv, t_envp **envp);
+int		pwd(int fd, char **argv, t_envp **envp);
+int		cd(int fd, char **argv, t_envp **envp);
+int		unset(int fd, char **argv, t_envp **envp);
+int		builtin_exit(int fd, char **argv, t_envp **envp);
 
 // cd_utils
 void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags);

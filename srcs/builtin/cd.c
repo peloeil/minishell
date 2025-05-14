@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/13 19:30:09 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/15 04:01:20 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,21 +96,22 @@ int	resolve_cd_target(char **argv, t_envp *envp, char **out_path)
 	return (EXIT_SUCCESS);
 }
 
-int	cd(char **argv, t_envp *envp)
+int	cd(int fd, char **argv, t_envp **envp)
 {
 	char	*old_path;
 	char	*new_path;
 	int		result;
 
+	(void)fd;
 	old_path = NULL;
 	new_path = NULL;
-	result = resolve_cd_target(argv, envp, &new_path);
+	result = resolve_cd_target(argv, *envp, &new_path);
 	if (result != EXIT_SUCCESS)
 		return (result);
 	old_path = getcwd(NULL, 0);
 	if (no_such(new_path, old_path) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
-	update_pwd_and_oldpwd(envp, old_path);
+	update_pwd_and_oldpwd(*envp, old_path);
 	free(old_path);
 	free(new_path);
 	return (EXIT_SUCCESS);

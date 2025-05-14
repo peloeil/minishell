@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 01:03:28 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 02:04:23 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 04:05:01 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	update_exit_status(t_exit_status status, t_envp *envp)
 	argv[0] = "export";
 	argv[1] = str;
 	argv[2] = NULL;
-	if (export(0, argv, envp) == -1)
+	if (export(0, argv, &envp) == -1)
 		return (-1);
 	return (status);
 }

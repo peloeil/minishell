@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/11 21:16:14 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/15 03:56:23 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,11 @@ void	register_env(t_envp *envp, char *str)
 	register_env_with_value(envp, key, value);
 }
 
-int	export(int fd, char *argv[], t_envp *envp)
+int	export(int fd, char **argv, t_envp **envp)
 {
 	if (argv[1] == NULL) // TODO: argv が終わるまでずっと見る
-		print_sorted_env(fd, envp);
+		print_sorted_env(fd, *envp);
 	else
-		register_env(envp, argv[1]);
+		register_env(*envp, argv[1]);
 	return (0);
 }
