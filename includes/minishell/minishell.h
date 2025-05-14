@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:29:09 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 21:29:58 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <minishell/lexer.h>
 # include <minishell/parser.h>
 # include <libft/std_string.h>
+# include <sys/stat.h>
 
 # define PROMPT "minishell$ "
 # define NUMERIC "numeric argument required"
@@ -34,13 +35,12 @@ typedef struct s_envp
 }	t_envp;
 
 // wrappers
-int		wrap_access(const char *path, int mode)
-		__attribute__((nonnull(1)));
 char	*wrap_readline(const char *prompt)
 		__attribute__((nonnull(1)));
 int		wrap_close(int *fd, int afterfd);
 int		wrap_dup2(int oldfd, int newfd);
 int		wrap_fork(void);
+int		wrap_stat(const char *path, struct stat *statbuf);
 
 int		eval_cmd(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));

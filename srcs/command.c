@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 16:26:01 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 17:50:49 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,33 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/stat.h>
+
+static int is_not_executable(const char *cmd, struct stat statbuf)
+{
+	if (S_ISDIR(statbuf.st_mode))
+	{
+		error_return(cmd, strerror(EISDIR));
+		return (1);
+	}
+	if (statbuf.st_mode & S_IXUSR)
+		return (0);
+	if (statbuf.st_mode & S_IXGRP)
+		return (0);
+	if (statbuf.st_mode & S_IXOTH)
+		return (0);
+	error_return(cmd, strerror(EACCES));
+	return (1);
+}
 
 int	set_absolute_path(char **const pathptr, const char *cmd, t_envp *envp)
 {
-	char	*path;
+	char		*path;
+	struct stat	statbuf;
 
-	if (wrap_access(cmd, F_OK) == -1 && errno == ENOENT)
-		return (update_exit_status(STATUS_NOT_EXECUTABLE, envp));
-	if (wrap_access(cmd, X_OK) == -1 && errno == EACCES)
+	if (wrap_stat(cmd, &statbuf) == -1)
+		return (-1);
+	if (is_not_executable(cmd, statbuf))
 		return (update_exit_status(STATUS_NOT_EXECUTABLE, envp));
 	path = ft_strdup(cmd);
 	if (path == NULL)

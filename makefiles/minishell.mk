@@ -9,11 +9,11 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	eval.c \
 	command.c \
 	$(addprefix wrappers/, \
-		readline.c \
-		access.c \
 		close.c \
 		dup2.c \
 		fork.c \
+		stat.c \
+		readline.c \
 	) \
 	$(addprefix env/, \
 		ft_getenv.c \
