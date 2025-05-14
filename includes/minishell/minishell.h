@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:29:58 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 21:30:19 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		__attribute__((nonnull(2, 3)));
 char	*ft_getenv(const char *key, const t_envp *envp)
 		__attribute__((nonnull(1)));
-t_envp	*make_ms_envp(char **envp)
-		__attribute__((nonnull(1)));
+int		make_ms_envp(t_envp **ms_envp, char **envp)
+		__attribute__((nonnull(2)));
 
 void	free_strs(char **strs)
 		__attribute__((nonnull(1)));

@@ -3,51 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:08:58 by sota              #+#    #+#             */
-/*   Updated: 2025/05/06 14:36:19 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/14 21:35:59 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
+#include <minishell/execute.h>
 #include <libft/ft_string.h>
+#include <libft/ft_stdlib.h>
 #include <stdlib.h>
 
-t_envp	*make_oldpwd(t_envp *env, t_envp *next)
+static int	ms_envp_push(t_envp **ms_envp, char *node)
 {
-	env = (t_envp *)malloc(sizeof(t_envp));
-	env->key = ft_strdup("OLDPWD");
-	env->value = ft_strdup("");
-	env->exported = 0;
-	env->next = next;
-	next = env;
-	return (env);
+	t_envp	*new_node;
+	size_t	key_len;
+
+	new_node = (t_envp *)ft_calloc(1, sizeof(t_envp));
+	if (new_node == NULL)
+		return (-1);
+	key_len = ft_strchr(node, '=') - node;
+	new_node->key = ft_strndup(node, key_len);
+	new_node->value = ft_strdup(node + key_len + 1);
+	if (new_node->key == NULL || new_node->value == NULL)
+	{
+		free(new_node->key);
+		free(new_node->value);
+		free(new_node);
+		return (-1);
+	}
+	new_node->exported = 1;
+	new_node->next = *ms_envp;
+	*ms_envp = new_node;
+	return (0);
 }
 
-t_envp	*make_ms_envp(char **envp)
+int	make_ms_envp(t_envp **ms_envp, char **envp)
 {
 	size_t	i;
-	size_t	key_len;
-	t_envp	*env;
-	t_envp	*next;
 
-	env = NULL;
-	next = NULL;
+	*ms_envp = NULL;
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		env = (t_envp *)malloc(sizeof(t_envp));
-		key_len = ft_strchr(envp[i], '=') - envp[i];
-		env->key = ft_strndup(envp[i], key_len);
-		env->value = ft_strdup(envp[i] + key_len + 1);
-		env->exported = FLAG_EXPORT;
-		env->next = next;
-		next = env;
+		if (ms_envp_push(ms_envp, envp[i]) == -1)
+		{
+			free_ms_envp(*ms_envp);
+			return (-1);
+		}
 		i++;
 	}
-	env = make_oldpwd(env, next);
-	return (env);
+	if (ms_envp_push(ms_envp, "OLDPWD=") == -1
+		|| update_exit_status(STATUS_SUCCESS, *ms_envp) == -1)
+	{
+		free_ms_envp(*ms_envp);
+		return (-1);
+	}
+	return (0);
 }
 
 void	free_ms_envp(t_envp *env)

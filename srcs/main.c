@@ -6,33 +6,38 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:29:29 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 21:36:12 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
+#include <minishell/execute.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
+#include <libft/ft_stdlib.h>
 
 int	main(int argc, char **argv, char **envp)
 {
+	int		status;
 	char	*cmd_str;
 	t_envp	*ms_envp;
 
 	(void)argc;
 	(void)argv;
-	ms_envp = make_ms_envp(envp);
+	if (make_ms_envp(&ms_envp, envp) == -1)
+		return (EXIT_FAILURE);
 	while (1)
 	{
 		cmd_str = wrap_readline(PROMPT);
 		if (cmd_str == NULL)
 			break ;
-		eval_cmd(cmd_str, ms_envp);
+		if (eval_cmd(cmd_str, ms_envp) == -1)
+			update_exit_status(STATUS_ERRORS, ms_envp);
 		free(cmd_str);
 	}
-	ft_printf("exit\n");
+	status = ft_atoi(ft_getenv("?", ms_envp));
 	free_ms_envp(ms_envp);
-	return (EXIT_SUCCESS);
+	return (status);
 }
