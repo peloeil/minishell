@@ -12,6 +12,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		readline.c \
 		access.c \
 		close.c \
+		dup2.c \
 	) \
 	$(addprefix env/, \
 		ft_getenv.c \
