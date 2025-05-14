@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 17:50:49 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 17:56:14 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-static int is_not_executable(const char *cmd, struct stat statbuf)
+static int	is_not_executable(const char *cmd, struct stat statbuf)
 {
 	if (S_ISDIR(statbuf.st_mode))
 	{
