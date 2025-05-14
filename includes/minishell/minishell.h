@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:30:19 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 00:14:07 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,9 @@ void	free_strs(char **strs)
 		__attribute__((nonnull(1)));
 void	free_ms_envp(t_envp *env);
 void	free_token(void *ptr);
-void	free_tokens(t_token_list *tokens, int parse_failed)
-		__attribute__((nonnull(1)));
-void	free_ast(t_ast_node *ast, int status)
-		__attribute__((nonnull(1)));
-int		check_parse_error(t_ast_node *ast)
+void	free_tokens(t_token_list *tokens);
+void	free_ast(t_ast_node *ast);
+int		found_parse_error(t_ast_node *ast)
 		__attribute__((nonnull(1)));
 int		error_return(const char *name, const char *msg)
 		__attribute__((nonnull(1, 2)));

@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:01 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 19:51:39 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:22:45 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,20 @@ t_token_list	*search_token_from_right(
 					t_token_id id,
 					t_token_list *start,
 					t_token_list *end);
-t_ast_node		*parse_tokens(t_token_list *start, t_token_list *end);
-t_ast_node		*parse_command(t_token_list *start, t_token_list *end);
+t_token_list	*search_redirect_token(
+					t_token_list *start,
+					t_token_list *end);
+int				parse_command(
+					t_ast_node **ast,
+					t_token_list *start,
+					t_token_list *end);
+int				parse_tokens(
+					t_ast_node **ast,
+					t_token_list *start,
+					t_token_list *end);
+int				ast_push_args(
+					t_arg_list **args,
+					t_token_list *start,
+					t_token_list *end);
 
 #endif // PARSER_H

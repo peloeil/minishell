@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/13 18:25:23 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 03:00:34 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,16 @@ int	set_parent_fds(t_proc_state *state);
 int	set_child_fds(t_proc_state *state);
 int	is_builtin(char *cmd);
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp);
-int	child_process(t_arg_list *args, t_proc_state *state, t_envp *ms_envp);
-int	execute_ast(t_ast_node *ast, t_proc_state *state, t_envp *envp);
+int	execute_ast(
+		t_ast_node *ast,
+		t_proc_state *state,
+		t_envp *envp,
+		t_ast_node *top);
+int	child_process(
+		t_arg_list *args,
+		t_proc_state *state,
+		t_envp *ms_envp,
+		t_ast_node *top);
 int	update_exit_status(t_exit_status status, t_envp *envp);
 
 #endif // EXECUTE_H

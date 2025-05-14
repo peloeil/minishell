@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:00:46 by sota              #+#    #+#             */
-/*   Updated: 2025/05/04 17:41:45 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:57:29 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static char	*read_variable_key(char *str, size_t index)
 
 	if (ft_isdigit(str[++index]))
 		return (NULL);
+	if (ft_strcmp(str + index, "?") == 0)
+		return (ft_strdup("?"));
 	if (ft_str_new(&key) == -1)
 		return (NULL);
 	while (1)
@@ -52,13 +54,14 @@ static char	*read_variable_value(char *key, const t_envp *envp)
 }
 
 int	push_expanded_str(
-				t_string *new,
+				t_string *after,
 				char *str,
 				size_t *index,
 				const t_envp *envp)
 {
 	char	*key;
 	char	*value;
+	int		failed;
 
 	key = read_variable_key(str, *index);
 	if (key == NULL)
@@ -69,14 +72,10 @@ int	push_expanded_str(
 		free(key);
 		return (-1);
 	}
-	if (ft_str_push_str(new, value) == -1)
-	{
-		free(key);
-		free(value);
-		return (-1);
-	}
-	*index += 1 + ft_strlen(key);
+	failed = (ft_str_push_str(after, value) == -1);
+	if (!failed)
+		*index += 1 + ft_strlen(key);
 	free(key);
 	free(value);
-	return (0);
+	return (-failed);
 }

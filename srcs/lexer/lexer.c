@@ -6,10 +6,11 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:38:59 by sota              #+#    #+#             */
-/*   Updated: 2025/05/11 01:09:22 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:44:44 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minishell/minishell.h>
 #include <minishell/lexer.h>
 #include <libft/ft_string.h>
 #include <libft/ft_list.h>
@@ -35,37 +36,38 @@ int	set_next_token(t_token *token, const char *input, size_t *index)
 		token->str = read_operator(input, *index);
 	}
 	else
-	{
 		token->str = read_string(input, *index);
-		if (token->str == NULL)
-			return (-1);
-	}
+	if (token->str == NULL)
+		return (-1);
 	*index += ft_strlen(token->str);
 	return (0);
 }
 
-t_token_list	*tokenize_input(const char *input)
+int	tokenize_input(t_token_list **tokens, const char *cmd)
 {
-	size_t			index;
-	t_token			*token;
-	t_token_list	*tokens;
+	size_t			idx;
+	t_token			*tkn;
+	t_token_list	*cur;
 
-	tokens = NULL;
-	index = 0;
+	*tokens = NULL;
+	idx = 0;
 	while (1)
 	{
-		token = (t_token *)malloc(sizeof(t_token));
-		if (set_next_token(token, input, &index) == -1)
+		tkn = (t_token *)malloc(sizeof(t_token));
+		cur = ft_list_new(tkn);
+		if (tkn == NULL || cur == NULL || set_next_token(tkn, cmd, &idx) == -1)
 		{
-			ft_printf("syntax error\n");
-			return (NULL);
+			free_token(tkn);
+			free_tokens(*tokens);
+			free(cur);
+			return (-1);
 		}
-		if (token->str == NULL)
+		if (tkn->str == NULL)
 		{
-			free(token);
+			free(tkn);
 			break ;
 		}
-		ft_list_push_back(&tokens, ft_list_new(token));
+		ft_list_push_back(tokens, cur);
 	}
-	return (tokens);
+	return (0);
 }

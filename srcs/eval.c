@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/14 21:25:38 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 02:39:53 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,25 +61,20 @@ int	eval_cmd(const char *cmd, t_envp *envp)
 	t_token_list	*tokens;
 	t_ast_node		*ast;
 	t_proc_state	state;
-	int				parse_failed;
+	int				failed;
 
-	tokens = tokenize_input(cmd);
-	ast = parse_tokens(tokens, tokens->prev);
-	parse_failed = check_parse_error(ast);
-	free_tokens(tokens, parse_failed);
-	if (parse_failed || expand_variables(ast, envp) == -1)
-	{
-		free_ast(ast, parse_failed);
+	if (tokenize_input(&tokens, cmd) == -1)
 		return (-1);
-	}
+	failed = (parse_tokens(&ast, tokens, tokens->prev) == -1);
+	free_tokens(tokens);
+	if (failed)
+		return (-1);
 	init_proc_state(&state);
-	if (execute_ast(ast, &state, envp) == -1)
-	{
-		free_ast(ast, parse_failed);
-		return (-1);
-	}
-	free_ast(ast, parse_failed);
-	if (wait_children(&state, envp) == -1)
+	failed = (found_parse_error(ast) == -1
+			|| expand_variables(ast, envp) == -1
+			|| execute_ast(ast, &state, envp, ast) == -1);
+	free_ast(ast);
+	if (failed || wait_children(&state, envp) == -1)
 		return (-1);
 	return (0);
 }

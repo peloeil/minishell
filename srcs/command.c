@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 18:01:03 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 02:56:15 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,16 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
+
+static int	file_exists(const char *cmd)
+{
+	if (access(cmd, F_OK) == -1 && errno == ENOENT)
+	{
+		error_return(cmd, strerror(ENOENT));
+		return (0);
+	}
+	return (1);
+}
 
 static int	is_not_executable(const char *cmd, struct stat statbuf)
 {
@@ -37,15 +47,17 @@ static int	is_not_executable(const char *cmd, struct stat statbuf)
 	return (1);
 }
 
-int	set_absolute_path(char **const pathptr, const char *cmd, t_envp *envp)
+static int	set_absolute_path(char **const pathptr, const char *cmd)
 {
 	char		*path;
 	struct stat	statbuf;
 
+	if (!file_exists(cmd))
+		return (STATUS_NOT_EXECUTABLE);
 	if (wrap_stat(cmd, &statbuf) == -1)
 		return (-1);
 	if (is_not_executable(cmd, statbuf))
-		return (update_exit_status(STATUS_NOT_EXECUTABLE, envp));
+		return (STATUS_NOT_EXECUTABLE);
 	path = ft_strdup(cmd);
 	if (path == NULL)
 		return (-1);
@@ -54,7 +66,7 @@ int	set_absolute_path(char **const pathptr, const char *cmd, t_envp *envp)
 	return (0);
 }
 
-char	*search_file(const char *cmd, char **dirs, int mode)
+static char	*search_file(const char *cmd, char **dirs, int mode)
 {
 	size_t	i;
 	char	*file;
@@ -88,12 +100,10 @@ int	set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 	char	*file;
 
 	if (ft_strchr(cmd, '/') != NULL)
-		return (set_absolute_path(pathptr, cmd, envp));
+		return (set_absolute_path(pathptr, cmd));
 	path = ft_getenv("PATH", envp);
-	if (path == NULL)
-		return (-1);
 	dirs = ft_split(path, ':');
-	if (dirs == NULL)
+	if (path == NULL || dirs == NULL)
 		return (-1);
 	file = search_file(cmd, dirs, X_OK);
 	if (file != NULL)
@@ -103,9 +113,10 @@ int	set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		*pathptr = file;
 		return (0);
 	}
-	free(file);
 	file = search_file(cmd, dirs, F_OK);
-	free(file);
 	free_strs(dirs);
-	return (update_exit_status(STATUS_CMD_NOT_FOUND, envp));
+	if (file == NULL)
+		return (STATUS_CMD_NOT_FOUND);
+	free(file);
+	return (STATUS_NOT_EXECUTABLE);
 }

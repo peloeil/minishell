@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:17:31 by sota              #+#    #+#             */
-/*   Updated: 2025/05/11 17:34:14 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:08:00 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,13 @@ void	free_token(void *ptr)
 	t_token	*token;
 
 	token = (t_token *)ptr;
+	if (token == NULL)
+		return ;
 	free(token->str);
 	free(token);
 }
 
-void	free_tokens(t_token_list *tokens, int parse_failed)
+void	free_tokens(t_token_list *tokens)
 {
-	if (parse_failed)
-		ft_list_clear(&tokens, free_token);
-	else
-		ft_list_clear(&tokens, free);
+	ft_list_clear(&tokens, free_token);
 }

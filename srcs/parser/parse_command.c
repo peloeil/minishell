@@ -6,37 +6,15 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:49:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 20:03:34 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:39:06 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minishell/minishell.h>
 #include <minishell/parser.h>
 #include <libft/ft_stdlib.h>
-
-static t_token_list	*search_redirect_token(
-						t_token_list *start,
-						t_token_list *end)
-{
-	t_token_list	*cur;
-	t_token_id		id;
-
-	cur = start;
-	while (1)
-	{
-		id = ((t_token *)cur->content)->id;
-		if (id == LESS
-			|| id == GREAT
-			|| id == DLESS
-			|| id == DGREAT
-			|| id == LESSAND
-			|| id == GREATAND)
-			return (cur);
-		if (cur == end)
-			break ;
-		cur = cur->next;
-	}
-	return (NULL);
-}
+#include <libft/ft_string.h>
+#include <stdlib.h>
 
 static void	node_to_head(t_token_list *node, t_token_list *start)
 {
@@ -72,47 +50,72 @@ static void	redirects_to_head(t_token_list *start, t_token_list *end)
 	node_to_head(redirect, start);
 }
 
-static void	push_args(t_ast_node *ast, t_token_list *start, t_token_list *end)
+int	ast_push_args(t_arg_list **args, t_token_list *start, t_token_list *end)
 {
 	t_token_list	*cur;
+	char			*str;
+	t_arg_list		*arg;
 
 	cur = start;
 	while (1)
 	{
-		ft_list_push_back(
-			&ast->args,
-			ft_list_new(((t_token *)cur->content)->str));
+		str = ft_strdup(((t_token *)cur->content)->str);
+		arg = ft_list_new(str);
+		if (str == NULL || arg == NULL)
+		{
+			free(str);
+			free(arg);
+			ft_list_clear(args, free);
+			return (-1);
+		}
+		ft_list_push_back(args, arg);
 		if (cur == end)
 			break ;
 		cur = cur->next;
 	}
+	return (0);
 }
 
-t_ast_node	*parse_command(t_token_list *start, t_token_list *end)
+static int	setup_redirect_ast(t_ast_node *ast, t_token_list *start)
 {
-	t_ast_node		*ast;
+	t_token_list	*redirect;
+	t_token_list	*file;
+
+	redirect = start;
+	file = start->next;
+	ast->id = ((t_token *)redirect->content)->id;
+	ast->left = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
+	if (ast->left == NULL
+		|| ast_push_args(&ast->args, redirect, redirect) == -1
+		|| ast_push_args(&ast->left->args, file, file) == -1)
+		return (-1);
+	ast->left->id = ((t_token *)file->content)->id;
+	return (0);
+}
+
+int	parse_command(t_ast_node **ast, t_token_list *start, t_token_list *end)
+{
 	t_token_list	*redirect;
 
-	ast = ft_calloc(1, sizeof(t_ast_node));
+	*ast = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
+	if (*ast == NULL)
+		return (-1);
 	redirect = search_redirect_token(start, end);
+	(*ast)->id = PARSE_ERROR;
+	if (redirect == end)
+		return (0);
 	if (redirect == NULL)
 	{
-		ast->id = COMMAND;
-		push_args(ast, start, end);
-		return (ast);
-	}
-	if (redirect == end)
-	{
-		ast->id = PARSE_ERROR;
-		return (ast);
+		(*ast)->id = COMMAND;
+		return (ast_push_args(&(*ast)->args, start, end));
 	}
 	redirects_to_head(start, end);
-	ast->id = ((t_token *)start->content)->id;
-	push_args(ast, start, start);
-	ast->left = ft_calloc(1, sizeof(t_ast_node));
-	ast->left->id = ((t_token *)start->next->content)->id;
-	push_args(ast->left, start->next, start->next);
+	if (setup_redirect_ast(*ast, start) == -1)
+	{
+		free_ast(*ast);
+		return (-1);
+	}
 	if (start->next != end)
-		ast->right = parse_command(start->next->next, end);
-	return (ast);
+		return (parse_command(&(*ast)->right, start->next->next, end));
+	return (0);
 }

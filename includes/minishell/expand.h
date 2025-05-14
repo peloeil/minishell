@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:53:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/04 17:35:06 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:51:35 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <minishell/parser.h>
 
 int		push_expanded_str(
-			t_string *new,
+			t_string *after,
 			char *str,
 			size_t *index,
 			const t_envp *envp);
