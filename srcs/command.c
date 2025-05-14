@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 15:23:21 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 16:26:01 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@
 #include <libft/ft_stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 
 int	set_absolute_path(char **const pathptr, const char *cmd, t_envp *envp)
 {
 	char	*path;
 
-	if (wrap_access(cmd, F_OK) == -1 && errno == EACCES)
+	if (wrap_access(cmd, F_OK) == -1 && errno == ENOENT)
 		return (update_exit_status(STATUS_NOT_EXECUTABLE, envp));
 	if (wrap_access(cmd, X_OK) == -1 && errno == EACCES)
 		return (update_exit_status(STATUS_NOT_EXECUTABLE, envp));
@@ -44,8 +45,12 @@ char	*search_file(const char *cmd, char **dirs, int mode)
 	{
 		if (ft_asprintf(&file, "%s/%s", dirs[i], cmd) == -1)
 			return (NULL);
-		if (wrap_access(file, mode) == 0)
+		if (access(file, mode) == 0)
+		{
+			if (mode == F_OK)
+				error_return(file, strerror(EACCES));
 			return (file);
+		}
 		free(file);
 		i++;
 	}

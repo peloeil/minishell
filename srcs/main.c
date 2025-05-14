@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:27:35 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 21:29:29 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int	main(int argc, char **argv, char **envp)
 		cmd_str = wrap_readline(PROMPT);
 		if (cmd_str == NULL)
 			break ;
-		if (eval_cmd(cmd_str, ms_envp) == -1)
-			break ;
+		eval_cmd(cmd_str, ms_envp);
 		free(cmd_str);
 	}
 	ft_printf("exit\n");
