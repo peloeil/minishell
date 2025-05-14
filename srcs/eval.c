@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/14 21:23:13 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 21:25:38 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,33 +24,36 @@ static void	init_proc_state(t_proc_state *state)
 {
 	state->pid = 0;
 	state->nproc = 0;
-	state->status = STATUS_SUCCESS;
 	state->pipefd[READ_PIPE] = STDIN_FILENO;
 	state->pipefd[WRITE_PIPE] = STDOUT_FILENO;
 	state->iofd[INFD_INDEX] = STDIN_FILENO;
 	state->iofd[OUTFD_INDEX] = STDOUT_FILENO;
 }
 
-int	wait_children(t_proc_state *state)
+int	wait_children(t_proc_state *state, t_envp *envp)
 {
-	pid_t	pid;
-	int		status;
+	pid_t			pid;
+	int				wstatus;
+	t_exit_status	exit_status;
 
+	if (state->nproc == 0)
+		return (0);
+	exit_status = 0;
 	while (state->nproc--)
 	{
-		pid = wait(&status);
+		pid = wait(&wstatus);
 		if (pid == -1)
 			return (-1);
 		if (pid != state->pid)
 			continue ;
-		if (WIFEXITED(status))
-			state->status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			state->status = WTERMSIG(status);
+		if (WIFEXITED(wstatus))
+			exit_status = WEXITSTATUS(wstatus);
+		else if (WIFSIGNALED(wstatus))
+			exit_status = STATUS_INVALID_EXIT + WTERMSIG(wstatus);
 		else
-			state->status = STATUS_ERRORS;
+			exit_status = STATUS_ERRORS;
 	}
-	return (0);
+	return (update_exit_status(exit_status, envp));
 }
 
 int	eval_cmd(const char *cmd, t_envp *envp)
@@ -76,9 +79,7 @@ int	eval_cmd(const char *cmd, t_envp *envp)
 		return (-1);
 	}
 	free_ast(ast, parse_failed);
-	if (wait_children(&state) == -1
-		|| update_exit_status(state.status, envp) == -1)
+	if (wait_children(&state, envp) == -1)
 		return (-1);
 	return (0);
 }
->>>>>>> 7ad9c9a (feat: add exit status and path search error handling)

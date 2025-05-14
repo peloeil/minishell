@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 17:45:46 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/13 17:46:45 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
 {
 	int	fd;
 
+	fd = -1;
 	if (id == LESS || id == LESSAND)
 	{
 		fd = open(file, O_RDONLY);

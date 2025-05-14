@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/11 15:08:21 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/13 18:25:23 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_proc_state
 {
 	pid_t			pid;
 	size_t			nproc;
-	t_exit_status	status;
 	int				pipefd[2];
 	int				iofd[2];
 }	t_proc_state;

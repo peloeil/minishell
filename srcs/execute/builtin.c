@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 20:51:16 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/14 21:27:16 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,29 @@ int	check_argv_envp(t_arg_list *args, char ***argv, t_envp *ms_envp,
 
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 {
-	char	**argv;
-	char	**envp;
+	char			**argv;
+	char			**envp;
+	t_exit_status	status;
 
 	argv = NULL;
 	envp = NULL;
 	if (check_argv_envp(args, &argv, ms_envp, &envp) == -1)
 		return (-1);
 	if (ft_strcmp(args->content, "pwd") == 0)
-		state->status = pwd(state->iofd[OUTFD_INDEX]);
+		status = pwd(state->iofd[OUTFD_INDEX]);
 	if (ft_strcmp(args->content, "echo") == 0)
-		state->status = echo(state->iofd[OUTFD_INDEX], argv);
+		status = echo(state->iofd[OUTFD_INDEX], argv);
 	if (ft_strcmp(args->content, "export") == 0)
-		state->status = export(state->iofd[OUTFD_INDEX], argv, ms_envp);
+		status = export(state->iofd[OUTFD_INDEX], argv, ms_envp);
 	if (ft_strcmp(args->content, "env") == 0)
-		state->status = env(state->iofd[OUTFD_INDEX], ms_envp);
+		status = env(state->iofd[OUTFD_INDEX], ms_envp);
 	if (ft_strcmp(args->content, "cd") == 0)
-		state->status = cd(argv, ms_envp);
+		status = cd(argv, ms_envp);
 	if (ft_strcmp(args->content, "unset") == 0)
-		state->status = unset(argv, &ms_envp);
+		status = unset(argv, &ms_envp);
 	if (ft_strcmp(args->content, "exit") == 0)
-		state->status = builtin_exit(state->iofd[OUTFD_INDEX], argv, ms_envp);
+		status = builtin_exit(state->iofd[OUTFD_INDEX], argv, ms_envp);
 	free_strs(argv);
 	free_strs(envp);
-	return (0);
+	return (update_exit_status(status, ms_envp));
 }

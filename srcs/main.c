@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 21:24:07 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 21:27:35 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		free(cmd_str);
 	}
+	ft_printf("exit\n");
 	free_ms_envp(ms_envp);
 	return (EXIT_SUCCESS);
 }
