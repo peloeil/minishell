@@ -6,10 +6,11 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 17:36:18 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 15:58:26 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minishell/minishell.h>
 #include <minishell/parser.h>
 #include <minishell/execute.h>
 #include <libft/ft_string.h>
@@ -21,8 +22,8 @@ static int	execute_command(t_arg_list *args, t_proc_state *state, t_envp *envp)
 {
 	if (is_builtin(args->content))
 		return (execute_builtin(args, state, envp));
-	state->pid = fork();
 	state->nproc++;
+	state->pid = wrap_fork();
 	if (state->pid == -1)
 		return (-1);
 	if (state->pid == 0)
