@@ -10,6 +10,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	command.c \
 	$(addprefix wrappers/, \
 		readline.c \
+		access.c \
 		close.c \
 	) \
 	$(addprefix env/, \

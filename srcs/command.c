@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/11 15:38:20 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 15:23:21 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 #include <libft/ft_stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
 
 int	set_absolute_path(char **const pathptr, const char *cmd, t_envp *envp)
 {
 	char	*path;
 
-	if (access(cmd, F_OK) == -1)
+	if (wrap_access(cmd, F_OK) == -1 && errno == EACCES)
 		return (update_exit_status(STATUS_NOT_EXECUTABLE, envp));
-	if (access(cmd, X_OK) == -1)
+	if (wrap_access(cmd, X_OK) == -1 && errno == EACCES)
 		return (update_exit_status(STATUS_NOT_EXECUTABLE, envp));
 	path = ft_strdup(cmd);
 	if (path == NULL)
@@ -43,7 +44,7 @@ char	*search_file(const char *cmd, char **dirs, int mode)
 	{
 		if (ft_asprintf(&file, "%s/%s", dirs[i], cmd) == -1)
 			return (NULL);
-		if (access(file, mode) == 0)
+		if (wrap_access(file, mode) == 0)
 			return (file);
 		free(file);
 		i++;
@@ -65,7 +66,7 @@ int	set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 	dirs = ft_split(path, ':');
 	if (dirs == NULL)
 		return (-1);
-	file = search_file(cmd, dirs, F_OK | X_OK);
+	file = search_file(cmd, dirs, X_OK);
 	if (file != NULL)
 	{
 		free_strs(dirs);
