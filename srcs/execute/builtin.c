@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:24:32 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 20:51:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/parser.h>
-#include <minishell/execute.h>
+#include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
+#include <minishell/execute.h>
+#include <minishell/parser.h>
 
 int	is_builtin(char *cmd)
 {
@@ -24,6 +25,25 @@ int	is_builtin(char *cmd)
 		return (3);
 	if (ft_strcmp(cmd, "pwd") == 0)
 		return (4);
+	if (ft_strcmp(cmd, "cd") == 0)
+		return (5);
+	if (ft_strcmp(cmd, "unset") == 0)
+		return (6);
+	if (ft_strcmp(cmd, "exit") == 0)
+		return (7);
+	return (0);
+}
+
+int	check_argv_envp(t_arg_list *args, char ***argv, t_envp *ms_envp,
+		char ***envp)
+{
+	if (make_argv(argv, args) == -1)
+		return (-1);
+	if (make_envp(envp, ms_envp) == -1)
+	{
+		free_strs(*argv);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -32,21 +52,24 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 	char	**argv;
 	char	**envp;
 
-	if (make_argv(&argv, args) == -1)
+	argv = NULL;
+	envp = NULL;
+	if (check_argv_envp(args, &argv, ms_envp, &envp) == -1)
 		return (-1);
-	if (make_envp(&envp, ms_envp) == -1)
-	{
-		free_strs(argv);
-		return (-1);
-	}
 	if (ft_strcmp(args->content, "pwd") == 0)
-		state->status = pwd();
+		state->status = pwd(state->iofd[OUTFD_INDEX]);
 	if (ft_strcmp(args->content, "echo") == 0)
 		state->status = echo(state->iofd[OUTFD_INDEX], argv);
 	if (ft_strcmp(args->content, "export") == 0)
 		state->status = export(state->iofd[OUTFD_INDEX], argv, ms_envp);
 	if (ft_strcmp(args->content, "env") == 0)
 		state->status = env(state->iofd[OUTFD_INDEX], ms_envp);
+	if (ft_strcmp(args->content, "cd") == 0)
+		state->status = cd(argv, ms_envp);
+	if (ft_strcmp(args->content, "unset") == 0)
+		state->status = unset(argv, &ms_envp);
+	if (ft_strcmp(args->content, "exit") == 0)
+		state->status = builtin_exit(state->iofd[OUTFD_INDEX], argv, ms_envp);
 	free_strs(argv);
 	free_strs(envp);
 	return (0);

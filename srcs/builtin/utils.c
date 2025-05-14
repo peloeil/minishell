@@ -16,6 +16,16 @@
 #include <stdlib.h>
 #include <libft/ft_stdio.h>
 
+int	count_argv(char **argv)
+{
+	int	count;
+
+	count = 0;
+	while (argv[count] != NULL)
+		count++;
+	return (count);
+}
+
 void	make_str(int is_double, t_string *str,
 	const char *key, const char *value)
 {
@@ -38,10 +48,13 @@ void	print_sorted_env(int fd, t_envp *envp)
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
-		if (envp->exported == 0)
-			ft_dprintf(fd, "declare -x %s\n", envp->key);
-		else if (envp->exported == 1 && ft_strcmp(envp->key, "_") != 0)
+		if (envp->exported & (FLAG_UNSET | FLAG_SPECIAL))
+			envp = envp->next;
+		else if ((envp->exported & FLAG_EXPORT)
+			&& ft_strcmp(envp->key, "_") != 0)
 			ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
+		else if (!(envp->exported & FLAG_EXPORT))
+			ft_dprintf(fd, "declare -x %s\n", envp->key);
 		envp = envp->next;
 	}
 }

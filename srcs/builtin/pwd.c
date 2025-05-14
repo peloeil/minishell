@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 05:26:30 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/03 12:48:40 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/14 20:50:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <string.h>
 #include <libft/ft_stdio.h>
 
-int	pwd(void)
+int	pwd(int fd)
 {
 	char	*cwd;
 
@@ -26,7 +26,7 @@ int	pwd(void)
 		perror("getcwd");
 		return (1);
 	}
-	ft_printf("%s\n", cwd);
+	ft_dprintf(fd, "%s\n", cwd);
 	free(cwd);
 	return (0);
 }

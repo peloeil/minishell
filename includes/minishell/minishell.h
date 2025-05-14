@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:49:48 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/10 20:17:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 # include <libft/std_string.h>
 
 # define PROMPT "minishell$ "
+# define NUMERIC "numeric argument required"
+# define TOO_MANY "-minishell: exit: too many arguments"
+# define FLAG_EXPORT 0b00000001
+# define FLAG_VALUE 0b00000010
+# define FLAG_UNSET 0b00000100
+# define FLAG_SPECIAL 0b00001000
 
 typedef struct s_envp
 {
@@ -54,16 +60,27 @@ int		check_parse_error(t_ast_node *ast)
 
 void	make_str(int is_double, t_string *str, const char *key,
 			const char *value);
-int		pwd(void);
-int		echo(int argc, char *argv[]);
+int		pwd(int fd);
+int		echo(int fd, char *argv[]);
 int		export(int fd, char *argv[], t_envp *envp);
+int		unset(char *argv[], t_envp **envp);
 int		env(int fd, t_envp *envp);
+int		cd(char *argv[], t_envp *envp);
+int		builtin_exit(int fd, char *argv[], t_envp *envp);
+
+// cd_utils
+void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags);
+void	update_env_value(const char *key, const char *value, t_envp *envp);
+int		get_env_flags(const char *key, t_envp *envp);
 
 // builtin/utils.c
+t_envp	*create_new_node(char *key, char *value, int exported);
 void	print_sorted_env(int fd, t_envp *envp);
 void	add_double_quotes(int fd,
 			t_string *str,
 			const char *key,
 			const char *value);
 void	sort_envp(t_envp **head);
+int		count_argv(char **argv);
+
 #endif // MINISHELL_H

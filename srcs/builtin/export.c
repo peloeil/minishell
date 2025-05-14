@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/03 11:49:27 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/11 21:16:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <stdlib.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
+#include <minishell/minishell.h>
+#include <stdlib.h>
 #include <string.h>
 
 t_envp	*create_new_node(char *key, char *value, int exported)
@@ -37,20 +37,19 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 {
 	t_envp	*new_node;
 
-	while (envp != NULL)
-	{
-		if (ft_strcmp(envp->key, key) == 0)
-		{
-			free(envp->value);
-			envp->value = value;
-			free(key);
-			return ;
-		}
-		if (envp->next == NULL)
-			break ;
+	while (envp->next && ft_strcmp(envp->key, key) != 0)
 		envp = envp->next;
+	if (ft_strcmp(envp->key, key) == 0)
+	{
+		free(envp->value);
+		envp->value = value;
+		free(key);
+		return ;
 	}
-	new_node = create_new_node(key, value, 1);
+	if (ft_strcmp(key, "?") == 0)
+		new_node = create_new_node(key, value, FLAG_SPECIAL);
+	else
+		create_new_node(key, value, FLAG_EXPORT);
 	if (!new_node)
 	{
 		free(key);
@@ -62,17 +61,30 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 
 void	register_env_without_value(t_envp *envp, char *key)
 {
+	t_envp	*curr;
 	t_envp	*new_node;
 
-	while (envp->next != NULL)
-		envp = envp->next;
+	curr = envp;
+	while (curr != NULL)
+	{
+		if (ft_strcmp(curr->key, key) == 0)
+		{
+			if (curr->exported & FLAG_UNSET)
+				curr->exported = (curr->exported & ~FLAG_UNSET) | FLAG_EXPORT;
+			free(key);
+			return ;
+		}
+		if (curr->next == NULL)
+			break ;
+		curr = curr->next;
+	}
 	new_node = create_new_node(key, NULL, 0);
 	if (!new_node)
 	{
 		free(key);
 		return ;
 	}
-	envp->next = new_node;
+	curr->next = new_node;
 }
 
 void	register_env(t_envp *envp, char *str)
@@ -103,7 +115,7 @@ void	register_env(t_envp *envp, char *str)
 
 int	export(int fd, char *argv[], t_envp *envp)
 {
-	if (argv[1] == NULL)
+	if (argv[1] == NULL) // TODO: argv が終わるまでずっと見る
 		print_sorted_env(fd, envp);
 	else
 		register_env(envp, argv[1]);
