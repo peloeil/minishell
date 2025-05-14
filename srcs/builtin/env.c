@@ -30,5 +30,6 @@ int	env(int fd, t_envp *envp)
 		envp = envp->next;
 	}
 	ft_dprintf(fd, "%s", str.str);
+	free(str.str);
 	return (0);
 }
