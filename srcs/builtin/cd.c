@@ -115,7 +115,6 @@ void	update_pwd_and_oldpwd(t_envp *envp, char *old_path)
 	free(new_path);
 }
 
-
 int	no_such(char *path, char *old_path)
 {
 	if (chdir(path) == -1)

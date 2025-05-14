@@ -50,7 +50,10 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 			break ;
 		envp = envp->next;
 	}
-	new_node = create_new_node(key, value, FLAG_EXPORT);
+	if (ft_strcmp(key, "?") == 0)
+		new_node = create_new_node(key, value, FLAG_SPECIAL);
+	else
+		create_new_node(key, value, FLAG_EXPORT);
 	if (!new_node)
 	{
 		free(key);
@@ -71,10 +74,7 @@ void	register_env_without_value(t_envp *envp, char *key)
 		if (ft_strcmp(curr->key, key) == 0)
 		{
 			if (curr->exported & FLAG_UNSET)
-			{
-				curr->exported &= ~FLAG_UNSET;
-				curr->exported |= FLAG_EXPORT;
-			}
+				curr->exported = (curr->exported & ~FLAG_UNSET) | FLAG_EXPORT;
 			free(key);
 			return ;
 		}

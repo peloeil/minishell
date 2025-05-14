@@ -48,8 +48,9 @@ int	builtin_exit(int fd, char *argv[])
 		exit(0);
 	if (!is_numeric_argument(argv[1]))
 	{
-		ft_dprintf(fd, "-minishell: exit: %s: numeric argument required\n", argv[1]);
-		exit(255);
+		ft_dprintf(fd, "-minishell: exit: %s: \
+			numeric argument required\n", argv[1]);
+		exit(2);
 	}
 	if (argc > 2)
 	{

@@ -21,6 +21,7 @@
 # define FLAG_EXPORT 0b00000001
 # define FLAG_VALUE 0b00000010
 # define FLAG_UNSET 0b00000100
+# define FLAG_SPECIAL 0b00001000
 
 typedef struct s_envp
 {

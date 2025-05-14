@@ -32,7 +32,7 @@ int	echo(int fd, char *argv[])
 		{
 			ft_dprintf(fd, "%s", argv[i]);
 			if (i < argc - 1)
-				ft_dprintf(fd," ");
+				ft_dprintf(fd, " ");
 		}
 		i ++;
 	}
