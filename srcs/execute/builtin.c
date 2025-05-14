@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/11 20:49:23 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/14 20:51:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 	if (check_argv_envp(args, &argv, ms_envp, &envp) == -1)
 		return (-1);
 	if (ft_strcmp(args->content, "pwd") == 0)
-		state->status = pwd();
+		state->status = pwd(state->iofd[OUTFD_INDEX]);
 	if (ft_strcmp(args->content, "echo") == 0)
 		state->status = echo(state->iofd[OUTFD_INDEX], argv);
 	if (ft_strcmp(args->content, "export") == 0)

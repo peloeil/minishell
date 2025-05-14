@@ -60,7 +60,7 @@ int		check_parse_error(t_ast_node *ast)
 
 void	make_str(int is_double, t_string *str, const char *key,
 			const char *value);
-int		pwd(void);
+int		pwd(int fd);
 int		echo(int fd, char *argv[]);
 int		export(int fd, char *argv[], t_envp *envp);
 int		unset(char *argv[], t_envp **envp);
