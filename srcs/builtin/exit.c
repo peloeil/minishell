@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft/ft_string.h>
-#include <minishell/minishell.h>
-#include <libft/ft_stdio.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <libft/ft_ctype.h>
+#include <libft/ft_stdio.h>
 #include <libft/ft_stdlib.h>
+#include <libft/ft_string.h>
 #include <limits.h>
+#include <minishell/minishell.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 long	is_numeric_argument(const char *str)
 {
@@ -55,24 +55,23 @@ long	ft_atoilong(const char *str)
 			flow = LONG_MIN;
 	while (ft_isdigit(str[i]))
 	{
-		if (__builtin_mul_overflow(res, 10, &res)
-			|| (flow > 0 && __builtin_add_overflow(res, str[i] - '0', &res))
-			|| (flow < 0 && __builtin_sub_overflow(res, str[i] - '0', &res)))
-				return (-1);
+		if (__builtin_mul_overflow(res, 10, &res) || (flow > 0
+				&& __builtin_add_overflow(res, str[i] - '0', &res)) || (flow < 0
+				&& __builtin_sub_overflow(res, str[i] - '0', &res)))
+			return (-1);
 		i++;
 	}
 	return (res);
 }
 
-
 int	builtin_exit(int fd, char *argv[], t_envp *envp)
 {
 	int		argc;
 	int		status;
-	// char	*value;
-	(void)envp;
 	long	test;
 
+	// char	*value;
+	(void)envp;
 	argc = count_argv(argv);
 	if (argc >= 2)
 		test = ft_atoilong(argv[1]);
@@ -81,14 +80,14 @@ int	builtin_exit(int fd, char *argv[], t_envp *envp)
 	if (argc == 1)
 	{
 		ft_printf("終了ステータスは？をみる\n");
-		return 2;
+		return (2);
 	}
 	// argv[1]が数字以外の場合と、数字がLONG_MAX＋１以上
 	if (!is_numeric_argument(argv[1]) || test == -1)
 	{
 		ft_dprintf(fd, "-minishell: exit: %s: %s\n", argv[1], NUMERIC);
 		ft_printf("終了ステータス：２\n");
-		return 2;
+		return (2);
 		// exit(2);
 	}
 	// argv[1]が数字 ∧ 長い場合
@@ -101,5 +100,5 @@ int	builtin_exit(int fd, char *argv[], t_envp *envp)
 	status = ft_atoi(argv[1]);
 	ft_printf("終了ステータス: %d\n", status & 0xFF);
 	// exit(status & 0xFF);
-	return 0;
+	return (0);
 }

@@ -68,6 +68,11 @@ int		env(int fd, t_envp *envp);
 int		cd(char *argv[], t_envp *envp);
 int		builtin_exit(int fd, char *argv[], t_envp *envp);
 
+// cd_utils
+void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags);
+void	update_env_value(const char *key, const char *value, t_envp *envp);
+int		get_env_flags(const char *key, t_envp *envp);
+
 // builtin/utils.c
 t_envp	*create_new_node(char *key, char *value, int exported);
 void	print_sorted_env(int fd, t_envp *envp);

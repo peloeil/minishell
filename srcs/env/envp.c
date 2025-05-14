@@ -14,6 +14,17 @@
 #include <libft/ft_string.h>
 #include <stdlib.h>
 
+t_envp	*make_oldpwd(t_envp *env, t_envp *next)
+{
+	env = (t_envp *)malloc(sizeof(t_envp));
+	env->key = ft_strdup("OLDPWD");
+	env->value = ft_strdup("");
+	env->exported = 0;
+	env->next = next;
+	next = env;
+	return (env);
+}
+
 t_envp	*make_ms_envp(char **envp)
 {
 	size_t	i;
@@ -35,12 +46,7 @@ t_envp	*make_ms_envp(char **envp)
 		next = env;
 		i++;
 	}
-	env = (t_envp *)malloc(sizeof(t_envp));
-	env->key = ft_strdup("OLDPWD");
-	env->value = ft_strdup("");
-	env->exported = 0;
-	env->next = next;
-	next = env;
+	env = make_oldpwd(env, next);
 	return (env);
 }
 

@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/parser.h>
-#include <minishell/execute.h>
-#include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
+#include <minishell/execute.h>
+#include <minishell/parser.h>
 
 int	is_builtin(char *cmd)
 {
@@ -34,18 +34,28 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+int	check_argv_envp(t_arg_list *args, char ***argv, t_envp *ms_envp,
+		char ***envp)
+{
+	if (make_argv(argv, args) == -1)
+		return (-1);
+	if (make_envp(envp, ms_envp) == -1)
+	{
+		free_strs(*argv);
+		return (-1);
+	}
+	return (0);
+}
+
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 {
 	char	**argv;
 	char	**envp;
 
-	if (make_argv(&argv, args) == -1)
+	argv = NULL;
+	envp = NULL;
+	if (check_argv_envp(args, &argv, ms_envp, &envp) == -1)
 		return (-1);
-	if (make_envp(&envp, ms_envp) == -1)
-	{
-		free_strs(argv);
-		return (-1);
-	}
 	if (ft_strcmp(args->content, "pwd") == 0)
 		state->status = pwd();
 	if (ft_strcmp(args->content, "echo") == 0)

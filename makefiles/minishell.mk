@@ -27,6 +27,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		echo.c \
 		export.c \
 		cd.c \
+		cd_utils.c \
 		env.c \
 		unset.c \
 		exit.c \

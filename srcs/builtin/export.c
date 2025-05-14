@@ -37,18 +37,14 @@ void	register_env_with_value(t_envp *envp, char *key, char *value)
 {
 	t_envp	*new_node;
 
-	while (envp != NULL)
-	{
-		if (ft_strcmp(envp->key, key) == 0)
-		{
-			free(envp->value);
-			envp->value = value;
-			free(key);
-			return ;
-		}
-		if (envp->next == NULL)
-			break ;
+	while (envp->next && ft_strcmp(envp->key, key) != 0)
 		envp = envp->next;
+	if (ft_strcmp(envp->key, key) == 0)
+	{
+		free(envp->value);
+		envp->value = value;
+		free(key);
+		return ;
 	}
 	if (ft_strcmp(key, "?") == 0)
 		new_node = create_new_node(key, value, FLAG_SPECIAL);
