@@ -59,7 +59,7 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 	if (ft_strcmp(args->content, "unset") == 0)
 		state->status = unset(argv, &ms_envp);
 	if (ft_strcmp(args->content, "exit") == 0)
-		state->status = builtin_exit(state->iofd[OUTFD_INDEX], argv);
+		state->status = builtin_exit(state->iofd[OUTFD_INDEX], argv, ms_envp);
 	free_strs(argv);
 	free_strs(envp);
 	return (0);

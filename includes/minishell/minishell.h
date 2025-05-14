@@ -18,6 +18,8 @@
 # include <libft/std_string.h>
 
 # define PROMPT "minishell$ "
+# define NUMERIC "numeric argument required"
+# define TOO_MANY "-minishell: exit: too many arguments"
 # define FLAG_EXPORT 0b00000001
 # define FLAG_VALUE 0b00000010
 # define FLAG_UNSET 0b00000100
@@ -64,7 +66,7 @@ int		export(int fd, char *argv[], t_envp *envp);
 int		unset(char *argv[], t_envp **envp);
 int		env(int fd, t_envp *envp);
 int		cd(char *argv[], t_envp *envp);
-int		builtin_exit(int fd, char *argv[]);
+int		builtin_exit(int fd, char *argv[], t_envp *envp);
 
 // builtin/utils.c
 t_envp	*create_new_node(char *key, char *value, int exported);
@@ -75,4 +77,5 @@ void	add_double_quotes(int fd,
 			const char *value);
 void	sort_envp(t_envp **head);
 int		count_argv(char **argv);
+
 #endif // MINISHELL_H

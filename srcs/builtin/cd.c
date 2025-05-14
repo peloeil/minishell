@@ -78,19 +78,32 @@ int	get_env_flags(const char *key, t_envp *envp)
 	return (-1);
 }
 
+void	update_pwd_and_oldpwd2(char *new_path, char *old_path, t_envp *envp)
+{
+	int	pwd_flags;
+	int	old_flags;
+
+	pwd_flags = get_env_flags("PWD", envp);
+	old_flags = get_env_flags("OLDPWD", envp);
+	if (old_flags == FLAG_UNSET)
+		add_envp_with_flag("OLDPWD", old_path, envp, FLAG_UNSET);
+	else
+		add_envp_with_flag("OLDPWD", old_path, envp, old_flags);
+	if (pwd_flags == FLAG_UNSET)
+		add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
+	else
+		add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
+}
+
 void	update_pwd_and_oldpwd(t_envp *envp, char *old_path)
 {
 	char	*new_path;
 	char	*pwd_value;
 	char	*old_value;
-	int		pwd_flags;
-	int		old_flags;
 
 	new_path = getcwd(NULL, 0);
 	pwd_value = ft_getenv("PWD", envp);
 	old_value = ft_getenv("OLDPWD", envp);
-	pwd_flags = get_env_flags("PWD", envp);
-	old_flags = get_env_flags("OLDPWD", envp);
 	if (!pwd_value)
 	{
 		add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
@@ -102,16 +115,7 @@ void	update_pwd_and_oldpwd(t_envp *envp, char *old_path)
 		add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
 	}
 	else
-	{
-		if (old_flags == FLAG_UNSET)
-			add_envp_with_flag("OLDPWD", old_path, envp, FLAG_UNSET);
-		else
-			add_envp_with_flag("OLDPWD", old_path, envp, old_flags);
-		if (pwd_flags == FLAG_UNSET)
-			add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
-		else
-			add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
-	}
+		update_pwd_and_oldpwd2(new_path, old_path, envp);
 	free(new_path);
 }
 
