@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 17:56:14 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 18:01:03 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ char	*search_file(const char *cmd, char **dirs, int mode)
 		free(file);
 		i++;
 	}
+	if (mode == F_OK)
+	{
+		error_return(cmd, "command not found");
+		return (NULL);
+	}
 	return (NULL);
 }
 
@@ -98,7 +103,9 @@ int	set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		*pathptr = file;
 		return (0);
 	}
+	free(file);
 	file = search_file(cmd, dirs, F_OK);
+	free(file);
 	free_strs(dirs);
 	return (update_exit_status(STATUS_CMD_NOT_FOUND, envp));
 }
