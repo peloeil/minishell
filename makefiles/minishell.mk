@@ -12,6 +12,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		close.c \
 		dup2.c \
 		fork.c \
+		pipe.c \
 		stat.c \
 		readline.c \
 	) \
