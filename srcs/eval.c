@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/15 02:39:53 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 23:04:08 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 #include <minishell/parser.h>
 #include <minishell/expand.h>
 #include <minishell/execute.h>
-#include <libft/ft_string.h>
-#include <libft/ft_stdio.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <stdlib.h>
 
 static void	init_proc_state(t_proc_state *state)
 {
@@ -63,7 +62,9 @@ int	eval_cmd(const char *cmd, t_envp *envp)
 	t_proc_state	state;
 	int				failed;
 
-	if (tokenize_input(&tokens, cmd) == -1)
+	failed = (tokenize_input(&tokens, cmd) == -1);
+	free((void *)cmd);
+	if (failed)
 		return (-1);
 	failed = (parse_tokens(&ast, tokens, tokens->prev) == -1);
 	free_tokens(tokens);
