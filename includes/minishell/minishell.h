@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 04:02:50 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 05:13:53 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int		wrap_close(int *fd, int afterfd);
 int		wrap_dup2(int oldfd, int newfd);
 int		wrap_fork(void);
 int		wrap_stat(const char *path, struct stat *statbuf);
+int		wrap_pipe(int *pipefd);
 
 int		eval_cmd(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));

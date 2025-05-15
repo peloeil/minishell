@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 02:59:06 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 12:18:12 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	execute_pipe(
 				t_envp *envp,
 				t_ast_node *top)
 {
-	if (pipe(state->pipefd) == -1)
+	if (wrap_pipe(state->pipefd) == -1)
 		return (-1);
 	state->iofd[OUTFD_INDEX] = state->pipefd[WRITE_PIPE];
 	execute_nopipe(ast->left, state, envp, top);
