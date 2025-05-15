@@ -37,7 +37,7 @@ int	main(int argc, char **argv, char **envp)
 		cmd_str = wrap_readline(PROMPT);
 		if (cmd_str == NULL)
 			break ;
-		if (eval_cmd(cmd_str, ms_envp) == -1)
+		if (evaluate_command(cmd_str, ms_envp) == -1)
 			update_exit_status(STATUS_ERRORS, ms_envp);
 		add_history(cmd_str);
 	}

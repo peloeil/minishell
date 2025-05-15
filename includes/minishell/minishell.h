@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 05:13:53 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 23:04:08 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		wrap_fork(void);
 int		wrap_stat(const char *path, struct stat *statbuf);
 int		wrap_pipe(int *pipefd);
 
-int		eval_cmd(const char *cmd, t_envp *ms_envp)
+int		evaluate_command(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));
 int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		__attribute__((nonnull(2, 3)));

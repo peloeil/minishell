@@ -55,7 +55,7 @@ int	wait_children(t_proc_state *state, t_envp *envp)
 	return (update_exit_status(exit_status, envp));
 }
 
-int	eval_cmd(const char *cmd, t_envp *envp)
+int	evaluate_command(const char *cmd, t_envp *envp)
 {
 	t_token_list	*tokens;
 	t_ast_node		*ast;
