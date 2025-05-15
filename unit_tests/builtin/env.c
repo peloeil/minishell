@@ -1,3 +1,4 @@
+#include "test_builtin.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -75,8 +76,16 @@ int compare_outputs_line_by_line(const char *a, const char *b) {
     int i = 0, j = 0, line_num = 1;
 
     while (i < a_count && j < b_count) {
-        if (is_ignore_line(a_lines[i])) { i++; line_num++; continue; }
-        if (is_ignore_line(b_lines[j])) { j++; line_num++; continue; }
+        if (is_ignore_line(a_lines[i])) {
+            i++;
+            line_num++;
+            continue;
+        }
+        if (is_ignore_line(b_lines[j])) {
+            j++;
+            line_num++;
+            continue;
+        }
 
         if (strcmp(a_lines[i], b_lines[j]) != 0) {
             printf("❌ 行 %d が一致しません\n", line_num);
@@ -104,9 +113,9 @@ int compare_outputs_line_by_line(const char *a, const char *b) {
 }
 
 // テスト関数：env単体出力を比較
-int test_env_no_args() {
+int test_env_no_args(t_envp *envp) {
     char *expected = get_full_output("env");
-    char *actual = get_full_output("echo env | ./minishell");
+    char *actual = my_builtin(env, NULL, &envp);
 
     if (!expected || !actual) {
         fprintf(stderr, "出力取得に失敗しました\n");
@@ -129,15 +138,19 @@ int test_env_no_args() {
     return result;
 }
 
-int main() {
-    int failed = 0;
+int main(int argc, char **argv, char **envp) {
+    (void)argc;
+    (void)argv;
+
+    t_envp *ms_envp;
+    make_ms_envp(&ms_envp, envp);
+
     printf("🔍 Running env tests...\n");
-    failed += test_env_no_args();
 
-    if (failed == 0)
-        printf("🎉 All tests passed!\n");
-    else
-        printf("❗ %d test(s) failed.\n", failed);
+    int failed = test_env_no_args(ms_envp);
+    if (failed == 0) printf("🎉 All tests passed!\n");
+    else printf("❗ %d test(s) failed.\n", failed);
 
+    free_ms_envp(ms_envp);
     return failed;
 }
