@@ -1,7 +1,7 @@
+#include <minishell/minishell.h>
 #include <minishell/lexer.h>
 #include <minishell/parser.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 static char *token_name(t_token_id id) {
     if (id == TOKEN) { return "TOKEN"; }
@@ -55,50 +55,19 @@ void print_ast(t_ast_node *ast, int depth) {
     }
 }
 
-static int check_parse_error(t_ast_node *ast) {
-    if (ast->id == PARSE_ERROR) { return 1; }
-    if (ast->left != NULL && check_parse_error(ast->left)) { return 1; }
-    if (ast->right != NULL && check_parse_error(ast->right)) { return 1; }
-    return 0;
-}
-
-static void free_token(void *ptr) {
-    t_token *token = (t_token *)ptr;
-    free(token->str);
-    free(token);
-}
-
-static void free_tokens(t_token_list *tokens, int parse_failed) {
-    if (parse_failed) {
-        ft_list_clear(&tokens, free_token);
-    } else {
-        ft_list_clear(&tokens, free);
-    }
-}
-
-static void free_ast(t_ast_node *ast, int parse_failed) {
-    if (ast->left != NULL) { free_ast(ast->left, parse_failed); }
-    if (ast->right != NULL) { free_ast(ast->right, parse_failed); }
-    if (parse_failed) {
-        ft_list_clear(&ast->args, NULL);
-    } else {
-        ft_list_clear(&ast->args, free);
-    }
-    free(ast);
-}
-
 static void test(const char *cmd) {
-    t_token_list *start = tokenize_input(cmd);
+    t_token_list *start;
+    tokenize_input(&start, cmd);
 
-    t_ast_node *ast = parse_tokens(start, start->prev);
+    t_ast_node *ast;
+    parse_tokens(&ast, start, start->prev);
+    free_tokens(start);
 
     printf("command: %s\n", cmd);
     print_ast(ast, 0);
     printf("\n");
 
-    int parse_failed = check_parse_error(ast);
-    free_tokens(start, parse_failed);
-    free_ast(ast, parse_failed);
+    free_ast(ast);
 }
 
 int main(void) {
