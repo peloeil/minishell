@@ -29,13 +29,14 @@ int main(int argc, char **argv, char **envp) {
     (void)argc;
     (void)argv;
 
-    t_envp *env = make_ms_envp(envp);
+    t_envp *ms_envp;
+    make_ms_envp(&ms_envp, envp);
 
-    test("PATH", env);
-    test("XDG_CONFIG_HOME", env);
-    test("USER", env);
-    test("KEY", env);
+    test("PATH", ms_envp);
+    test("XDG_CONFIG_HOME", ms_envp);
+    test("USER", ms_envp);
+    test("KEY", ms_envp);
 
-    free_ms_envp((t_envp *)env);
+    free_ms_envp(ms_envp);
     return 0;
 }
