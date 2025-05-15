@@ -13,7 +13,7 @@ static size_t next_len(const char *str, size_t start) {
 }
 
 static void test(char **argv, t_envp **envp) {
-    char *expected = bash_builtin("export", argv, envp);
+    char *expected = bash_builtin("export", argv + 1, envp);
     char *actual = my_builtin(export, argv, envp);
 
     int cmp = 0;
@@ -40,10 +40,10 @@ int main(int argc, char **argv, char **envp) {
     (void)argv;
 
     char *args_array[][MAX_NARGS + 1] = {
-        { NULL },
-        { "a", NULL },
-        { "a=b", NULL },
-        { "a=b", "c=d", NULL },
+        { "argv[0]", NULL },
+        { "argv[0]", "a", NULL },
+        { "argv[0]", "a=b", NULL },
+        { "argv[0]", "a=b", "c=d", NULL },
     };
 
     t_envp *ms_envp;
