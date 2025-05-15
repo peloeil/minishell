@@ -12,18 +12,25 @@
 
 #include <minishell/minishell.h>
 #include <minishell/execute.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <readline/history.h>
 
+static int	initial_setup(t_envp **ms_envp, char **envp)
+{
+	if (make_ms_envp(ms_envp, envp) == -1)
+		return (-1);
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	int		status;
 	char	*cmd_str;
 	t_envp	*ms_envp;
 
 	(void)argc;
 	(void)argv;
-	if (make_ms_envp(&ms_envp, envp) == -1)
+	if (initial_setup(&ms_envp, envp) == -1)
 		return (STATUS_ERRORS);
 	while (1)
 	{
@@ -34,7 +41,5 @@ int	main(int argc, char **argv, char **envp)
 			update_exit_status(STATUS_ERRORS, ms_envp);
 		add_history(cmd_str);
 	}
-	status = ft_atoi(ft_getenv("?", ms_envp));
-	free_ms_envp(ms_envp);
-	return (status);
+	builtin_exit(STDOUT_FILENO, NULL, &ms_envp);
 }
