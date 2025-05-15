@@ -13,7 +13,7 @@ static t_string make_cmd_string(const char *cmd_name, char **args) {
     t_string cmd;
     ft_str_from(&cmd, "bash -c 'builtin ");
     ft_str_push_str(&cmd, cmd_name);
-    for (int i = 0; args[i] != NULL; i++) {
+    for (int i = 0; args != NULL && args[i] != NULL; i++) {
         ft_str_push(&cmd, ' ');
         ft_str_push_str(&cmd, args[i]);
     }
