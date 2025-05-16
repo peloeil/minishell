@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/16 16:12:53 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/17 01:26:03 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,14 @@ typedef struct s_proc_state
 
 int	make_argv(char ***argv, t_arg_list *args);
 int	make_envp(char ***envp, t_envp *ms_envp);
-int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state);
+int	set_redirect_fd(
+		t_token_id id,
+		char *file,
+		t_proc_state *state,
+		t_envp *envp);
 int	set_parent_fds(t_proc_state *state);
 int	set_child_fds(t_proc_state *state);
-int	open_heredoc(const char *delimeter, t_proc_state *state);
+int	open_heredoc(const char *delimeter, t_envp *envp);
 int	is_builtin(char *cmd);
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp);
 int	execute_ast(

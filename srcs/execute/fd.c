@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/16 15:53:50 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/17 01:25:36 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ static int	close_old_fds(t_proc_state *state, int fd)
 	return (0);
 }
 
-int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
+int	set_redirect_fd(
+		t_token_id id,
+		char *file,
+		t_proc_state *state,
+		t_envp *envp)
 {
 	int	fd;
 	int	oldfd;
@@ -46,7 +50,7 @@ int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
 	if (id == LESS)
 		fd = wrap_open(file, O_RDONLY);
 	if (id == DLESS)
-		fd = open_heredoc(file, state);
+		fd = open_heredoc(file, envp);
 	if (id == GREAT || id == DGREAT)
 		oldfd = STDOUT_FILENO;
 	if (id == GREAT)
