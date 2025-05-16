@@ -13,7 +13,9 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		dup2.c \
 		fork.c \
 		pipe.c \
+		open.c \
 		stat.c \
+		unlink.c \
 		readline.c \
 	) \
 	$(addprefix env/, \
@@ -58,6 +60,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		execute.c \
 		fd.c \
 		exit_status.c \
+		heredoc.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))

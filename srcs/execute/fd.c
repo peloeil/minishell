@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 15:55:11 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/16 15:53:50 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,24 @@ static int	close_old_fds(t_proc_state *state, int fd)
 int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
 {
 	int	fd;
+	int	oldfd;
 
 	fd = -1;
-	if (id == LESS || id == LESSAND)
-	{
-		fd = open(file, O_RDONLY);
-		if (fd == -1)
-			return (-1);
-		close_old_fds(state, STDIN_FILENO);
-		state->iofd[INFD_INDEX] = fd;
-		return (0);
-	}
-	if (id == GREAT || id == GREATAND)
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	oldfd = STDIN_FILENO;
+	if (id == LESS)
+		fd = wrap_open(file, O_RDONLY);
+	if (id == DLESS)
+		fd = open_heredoc(file, state);
+	if (id == GREAT || id == DGREAT)
+		oldfd = STDOUT_FILENO;
+	if (id == GREAT)
+		fd = wrap_open(file, O_WRONLY | O_CREAT | O_TRUNC);
 	if (id == DGREAT)
-		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = wrap_open(file, O_WRONLY | O_CREAT | O_APPEND);
 	if (fd == -1)
 		return (-1);
-	close_old_fds(state, STDIN_FILENO);
-	state->iofd[OUTFD_INDEX] = fd;
+	close_old_fds(state, oldfd);
+	state->iofd[oldfd] = fd;
 	return (0);
 }
 

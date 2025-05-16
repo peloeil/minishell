@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.h                                           :+:      :+:    :+:   */
+/*   unlink.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 17:53:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/16 21:54:41 by sota             ###   ########.fr       */
+/*   Created: 2025/05/16 18:12:06 by sota              #+#    #+#             */
+/*   Updated: 2025/05/16 18:13:27 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXPAND_H
-# define EXPAND_H
+#include <minishell/minishell.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
-# include <minishell/minishell.h>
-# include <minishell/parser.h>
+int	wrap_unlink(const char *path)
+{
+	int	ret;
 
-int		push_expanded_str(
-			t_string *after,
-			char *str,
-			size_t *index,
-			const t_envp *envp);
-int		expand_arg(t_arg_list *arg, const t_envp *envp);
-int		expand_variables(t_ast_node *ast, const t_envp *envp);
-
-#endif // EXPAND_H
+	ret = unlink(path);
+	if (ret == -1)
+		return (error_return("unlink", strerror(errno)));
+	return (0);
+}

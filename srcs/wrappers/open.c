@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.h                                           :+:      :+:    :+:   */
+/*   open.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 17:53:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/16 21:54:41 by sota             ###   ########.fr       */
+/*   Created: 2025/05/16 15:51:25 by sota              #+#    #+#             */
+/*   Updated: 2025/05/16 23:14:12 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXPAND_H
-# define EXPAND_H
+#include <minishell/minishell.h>
+#include <fcntl.h>
+#include <string.h>
+#include <errno.h>
 
-# include <minishell/minishell.h>
-# include <minishell/parser.h>
+int	wrap_open(const char *file, int flag)
+{
+	int	fd;
 
-int		push_expanded_str(
-			t_string *after,
-			char *str,
-			size_t *index,
-			const t_envp *envp);
-int		expand_arg(t_arg_list *arg, const t_envp *envp);
-int		expand_variables(t_ast_node *ast, const t_envp *envp);
-
-#endif // EXPAND_H
+	if ((flag & O_WRONLY) || (flag & O_RDWR))
+		fd = open(file, flag, 0644);
+	else
+		fd = open(file, flag);
+	if (fd == -1)
+		return (error_return(file, strerror(errno)));
+	return (fd);
+}
