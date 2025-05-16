@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/15 23:04:08 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/16 15:02:32 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	evaluate_command(const char *cmd, t_envp *envp)
 			|| expand_variables(ast, envp) == -1
 			|| execute_ast(ast, &state, envp, ast) == -1);
 	free_ast(ast);
-	if (failed || wait_children(&state, envp) == -1)
+	if (wait_children(&state, envp) == -1 || failed)
 		return (-1);
 	return (0);
 }
