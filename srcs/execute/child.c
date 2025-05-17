@@ -45,6 +45,8 @@ int	child_process(
 	if (is_builtin(args->content))
 	{
 		status = execute_builtin(args, state, ms_envp);
+		if (status == -1)
+			status = STATUS_ERRORS;
 		exit(error_free(status, *state, ms_envp, top));
 	}
 	envp = NULL;

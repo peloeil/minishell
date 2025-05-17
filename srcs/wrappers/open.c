@@ -19,7 +19,7 @@ int	wrap_open(const char *file, int flag)
 {
 	int	fd;
 
-	if ((flag & O_WRONLY) || (flag & O_RDWR))
+	if (flag & O_WRONLY)
 		fd = open(file, flag, 0644);
 	else
 		fd = open(file, flag);

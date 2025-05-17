@@ -66,6 +66,8 @@ int	evaluate_command(const char *cmd, t_envp *envp)
 	free((void *)cmd);
 	if (failed)
 		return (-1);
+	if (tokens == NULL)
+		return (0);
 	failed = (parse_tokens(&ast, tokens, tokens->prev) == -1);
 	free_tokens(tokens);
 	if (failed)

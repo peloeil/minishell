@@ -53,7 +53,7 @@ static int	set_absolute_path(char **const pathptr, const char *cmd)
 	struct stat	statbuf;
 
 	if (!file_exists(cmd))
-		return (STATUS_NOT_EXECUTABLE);
+		return (STATUS_CMD_NOT_FOUND);
 	if (wrap_stat(cmd, &statbuf) == -1)
 		return (-1);
 	if (is_not_executable(cmd, statbuf))
