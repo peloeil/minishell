@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/17 01:25:36 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/17 17:43:54 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int	set_redirect_fd(
 		fd = wrap_open(file, O_WRONLY | O_CREAT | O_TRUNC);
 	if (id == DGREAT)
 		fd = wrap_open(file, O_WRONLY | O_CREAT | O_APPEND);
-	if (fd == -1)
-		return (-1);
 	close_old_fds(state, oldfd);
 	state->iofd[oldfd] = fd;
+	if (fd == -1)
+		return (-1);
 	return (0);
 }
 
@@ -74,6 +74,8 @@ int	set_parent_fds(t_proc_state *state)
 
 int	set_child_fds(t_proc_state *state)
 {
+	if (state->iofd[INFD_INDEX] == -1 || state->iofd[OUTFD_INDEX] == -1)
+		return (-1);
 	if (state->iofd[INFD_INDEX] != STDIN_FILENO
 		&& wrap_dup2(state->iofd[INFD_INDEX], STDIN_FILENO) == -1)
 		return (-1);
