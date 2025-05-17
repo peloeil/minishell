@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   dup2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 05:26:30 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/15 03:55:30 by sota             ###   ########.fr       */
+/*   Created: 2025/05/14 15:17:13 by sota              #+#    #+#             */
+/*   Updated: 2025/05/14 15:18:23 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <unistd.h>
 #include <string.h>
-#include <libft/ft_stdio.h>
+#include <errno.h>
 
-int	pwd(int fd, char **argv, t_envp **envp)
+int	wrap_dup2(int oldfd, int newfd)
 {
-	char	*cwd;
+	int	ret;
 
-	(void)argv;
-	(void)envp;
-	cwd = getcwd(NULL, 0);
-	if (cwd == NULL)
-	{
-		perror("getcwd");
-		return (1);
-	}
-	ft_dprintf(fd, "%s\n", cwd);
-	free(cwd);
+	ret = dup2(oldfd, newfd);
+	if (ret == -1)
+		return (error_return("dup2", strerror(errno)));
 	return (0);
 }

@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.h                                           :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 17:53:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 01:51:35 by sota             ###   ########.fr       */
+/*   Created: 2025/05/11 16:19:31 by sota              #+#    #+#             */
+/*   Updated: 2025/05/15 03:12:32 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXPAND_H
-# define EXPAND_H
+#include <libft/ft_stdio.h>
 
-# include <minishell/minishell.h>
-# include <minishell/parser.h>
-
-int		push_expanded_str(
-			t_string *after,
-			char *str,
-			size_t *index,
-			const t_envp *envp);
-int		expand_variables(t_ast_node *ast, const t_envp *envp);
-
-#endif // EXPAND_H
+int	error_return(const char *name, const char *msg)
+{
+	ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", name, msg);
+	return (-1);
+}

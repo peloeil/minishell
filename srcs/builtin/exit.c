@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 21:30:14 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/13 21:30:14 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/15 04:19:52 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <libft/ft_string.h>
 #include <limits.h>
 #include <minishell/minishell.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 long	is_numeric_argument(const char *str)
 {
@@ -64,7 +62,7 @@ long	ft_atoilong(const char *str)
 	return (res);
 }
 
-int	builtin_exit(int fd, char *argv[], t_envp *envp)
+int	builtin_exit(int fd, char **argv, t_envp **envp)
 {
 	int		argc;
 	int		status;

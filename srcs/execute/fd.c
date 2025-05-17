@@ -6,10 +6,11 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 17:45:46 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/14 15:55:11 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minishell/minishell.h>
 #include <minishell/execute.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -39,6 +40,7 @@ int	set_redirect_fd(t_token_id id, char *file, t_proc_state *state)
 {
 	int	fd;
 
+	fd = -1;
 	if (id == LESS || id == LESSAND)
 	{
 		fd = open(file, O_RDONLY);
@@ -70,10 +72,10 @@ int	set_parent_fds(t_proc_state *state)
 int	set_child_fds(t_proc_state *state)
 {
 	if (state->iofd[INFD_INDEX] != STDIN_FILENO
-		&& dup2(state->iofd[INFD_INDEX], STDIN_FILENO) == -1)
+		&& wrap_dup2(state->iofd[INFD_INDEX], STDIN_FILENO) == -1)
 		return (-1);
 	if (state->iofd[OUTFD_INDEX] != STDOUT_FILENO
-		&& dup2(state->iofd[OUTFD_INDEX], STDOUT_FILENO) == -1)
+		&& wrap_dup2(state->iofd[OUTFD_INDEX], STDOUT_FILENO) == -1)
 		return (-1);
 	wrap_close(&state->iofd[INFD_INDEX], STDIN_FILENO);
 	wrap_close(&state->iofd[OUTFD_INDEX], STDOUT_FILENO);

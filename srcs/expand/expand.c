@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:55:00 by sota              #+#    #+#             */
-/*   Updated: 2025/05/04 22:46:56 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:50:58 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ static int	expand_arg(t_arg_list *arg, const t_envp *envp)
 	char		quote_char;
 	size_t		index;
 	char		*str;
-	t_string	new;
+	t_string	after;
 	int			cond;
 
 	quote_char = 0;
 	index = 0;
 	str = (char *)arg->content;
-	if (ft_str_new(&new) == -1)
+	if (ft_str_new(&after) == -1)
 		return (-1);
 	while (str[index] != '\0')
 	{
@@ -61,13 +61,13 @@ static int	expand_arg(t_arg_list *arg, const t_envp *envp)
 			continue ;
 		cond = ((quote_char == 0 || quote_char == '\"')
 				&& dollar_as_prefix(str, index));
-		if (cond && push_expanded_str(&new, str, &index, envp) == -1)
+		if (cond && push_expanded_str(&after, str, &index, envp) == -1)
 			return (-1);
-		if (!cond && ft_str_push(&new, str[index++]) == -1)
+		if (!cond && ft_str_push(&after, str[index++]) == -1)
 			return (-1);
 	}
 	free(str);
-	arg->content = new.str;
+	arg->content = after.str;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:37:41 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 18:34:28 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:21:15 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ typedef struct s_token
 	char		*str;
 }	t_token;
 
-t_token_id		identify_operator(const char *input, size_t index);
-char			*read_operator(const char *input, size_t index);
-char			*read_string(const char *input, size_t index);
-t_token_list	*tokenize_input(const char *input);
+t_token_id	identify_operator(const char *input, size_t index);
+char		*read_operator(const char *input, size_t index);
+char		*read_string(const char *input, size_t index);
+int			tokenize_input(t_token_list **tokens, const char *cmd);
 
 #endif // LEXER_H

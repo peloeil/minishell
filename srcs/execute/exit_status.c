@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   exit_status.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 05:26:30 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/15 03:55:30 by sota             ###   ########.fr       */
+/*   Created: 2025/05/11 01:03:28 by sota              #+#    #+#             */
+/*   Updated: 2025/05/15 04:05:01 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <minishell/execute.h>
 #include <libft/ft_stdio.h>
 
-int	pwd(int fd, char **argv, t_envp **envp)
+int	update_exit_status(t_exit_status status, t_envp *envp)
 {
-	char	*cwd;
+	char	*argv[3];
+	char	str[20];
 
-	(void)argv;
-	(void)envp;
-	cwd = getcwd(NULL, 0);
-	if (cwd == NULL)
-	{
-		perror("getcwd");
-		return (1);
-	}
-	ft_dprintf(fd, "%s\n", cwd);
-	free(cwd);
-	return (0);
+	if (ft_sprintf(str, "?=%d", (int)status) == -1)
+		return (-1);
+	argv[0] = "export";
+	argv[1] = str;
+	argv[2] = NULL;
+	if (export(0, argv, &envp) == -1)
+		return (-1);
+	return (status);
 }

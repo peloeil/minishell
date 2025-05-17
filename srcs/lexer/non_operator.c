@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:45:32 by sota              #+#    #+#             */
-/*   Updated: 2025/05/02 17:05:45 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/15 01:43:06 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,16 @@ char	*read_string(const char *input, size_t index)
 	int			in_quote;
 	char		c;
 
-	ft_str_new(&str);
+	if (ft_str_new(&str) == -1)
+		return (NULL);
 	in_quote = 0;
 	while (1)
 	{
 		if (is_delimiter(input, index, in_quote))
 			break ;
 		c = input[index];
-		ft_str_push(&str, c);
+		if (ft_str_push(&str, c) == -1)
+			return (NULL);
 		if (c == '\"' || c == '\'')
 			change_quote_state(&in_quote, c);
 		index++;

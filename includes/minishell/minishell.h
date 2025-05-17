@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 20:17:36 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/15 05:13:53 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <minishell/lexer.h>
 # include <minishell/parser.h>
 # include <libft/std_string.h>
+# include <sys/stat.h>
 
 # define PROMPT "minishell$ "
 # define NUMERIC "numeric argument required"
@@ -33,40 +34,46 @@ typedef struct s_envp
 	struct s_envp	*next;
 }	t_envp;
 
+// wrappers
 char	*wrap_readline(const char *prompt)
 		__attribute__((nonnull(1)));
-int		wrap_close(int *fd, int is_infd);
+int		wrap_close(int *fd, int afterfd);
+int		wrap_dup2(int oldfd, int newfd);
+int		wrap_fork(void);
+int		wrap_stat(const char *path, struct stat *statbuf);
+int		wrap_pipe(int *pipefd);
+
 int		eval_cmd(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));
-int		set_cmd_path(char **const path_ptr, const char *cmd, const t_envp *envp)
-		__attribute__((nonnull(3)));
+int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
+		__attribute__((nonnull(2, 3)));
 char	*ft_getenv(const char *key, const t_envp *envp)
 		__attribute__((nonnull(1)));
-t_envp	*make_ms_envp(char **envp)
-		__attribute__((nonnull(1)));
+int		make_ms_envp(t_envp **ms_envp, char **envp)
+		__attribute__((nonnull(2)));
 
 void	free_strs(char **strs)
 		__attribute__((nonnull(1)));
-void	free_ms_envp(t_envp *env)
+void	free_ms_envp(t_envp *env);
+void	free_token(void *ptr);
+void	free_tokens(t_token_list *tokens);
+void	free_ast(t_ast_node *ast);
+int		found_parse_error(t_ast_node *ast)
 		__attribute__((nonnull(1)));
-void	free_tokens(t_token_list *tokens, int parse_failed)
-		__attribute__((nonnull(1)));
-void	free_ast(t_ast_node *ast, int status)
-		__attribute__((nonnull(1)));
-int		check_parse_error(t_ast_node *ast)
-		__attribute__((nonnull(1)));
+int		error_return(const char *name, const char *msg)
+		__attribute__((nonnull(1, 2)));
 
 //builtin
 
 void	make_str(int is_double, t_string *str, const char *key,
 			const char *value);
-int		pwd(int fd);
-int		echo(int fd, char *argv[]);
-int		export(int fd, char *argv[], t_envp *envp);
-int		unset(char *argv[], t_envp **envp);
-int		env(int fd, t_envp *envp);
-int		cd(char *argv[], t_envp *envp);
-int		builtin_exit(int fd, char *argv[], t_envp *envp);
+int		echo(int fd, char **argv, t_envp **envp);
+int		env(int fd, char **argv, t_envp **envp);
+int		export(int fd, char **argv, t_envp **envp);
+int		pwd(int fd, char **argv, t_envp **envp);
+int		cd(int fd, char **argv, t_envp **envp);
+int		unset(int fd, char **argv, t_envp **envp);
+int		builtin_exit(int fd, char **argv, t_envp **envp);
 
 // cd_utils
 void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags);

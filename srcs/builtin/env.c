@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:38:56 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/10 19:53:52 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/15 04:15:49 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,20 @@
 #include <libft/std_string.h>
 #include <stdlib.h>
 
-int	env(int fd, t_envp *envp)
+int	env(int fd, char **argv, t_envp **envp)
 {
 	t_string	str;
+	t_envp		*tmp_envp;
 
+	(void)argv;
 	if (ft_str_new(&str) == -1)
 		return (1);
-	while (envp != NULL)
+	tmp_envp = *envp;
+	while (tmp_envp != NULL)
 	{
-		if (envp->exported & FLAG_EXPORT)
-			make_str(0, &str, envp->key, envp->value);
-		envp = envp->next;
+		if (tmp_envp->exported & FLAG_EXPORT)
+			make_str(0, &str, tmp_envp->key, tmp_envp->value);
+		tmp_envp = tmp_envp->next;
 	}
 	ft_dprintf(fd, "%s", str.str);
 	free(str.str);

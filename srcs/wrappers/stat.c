@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   stat.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 05:26:30 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/15 03:55:30 by sota             ###   ########.fr       */
+/*   Created: 2025/05/14 15:10:49 by sota              #+#    #+#             */
+/*   Updated: 2025/05/14 17:49:46 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <sys/stat.h>
 #include <string.h>
-#include <libft/ft_stdio.h>
+#include <errno.h>
 
-int	pwd(int fd, char **argv, t_envp **envp)
+int	wrap_stat(const char *path, struct stat *statbuf)
 {
-	char	*cwd;
+	int	ret;
 
-	(void)argv;
-	(void)envp;
-	cwd = getcwd(NULL, 0);
-	if (cwd == NULL)
-	{
-		perror("getcwd");
-		return (1);
-	}
-	ft_dprintf(fd, "%s\n", cwd);
-	free(cwd);
+	ret = stat(path, statbuf);
+	if (ret == -1)
+		return (error_return(path, strerror(errno)));
 	return (0);
 }

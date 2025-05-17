@@ -9,8 +9,12 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	eval.c \
 	command.c \
 	$(addprefix wrappers/, \
-		readline.c \
 		close.c \
+		dup2.c \
+		fork.c \
+		pipe.c \
+		stat.c \
+		readline.c \
 	) \
 	$(addprefix env/, \
 		ft_getenv.c \
@@ -20,6 +24,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		free_strs.c \
 		lexer.c \
 		parser.c \
+		execute.c \
 	) \
 	$(addprefix builtin/, \
 		utils.c \
@@ -52,6 +57,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		exec_args.c \
 		execute.c \
 		fd.c \
+		exit_status.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
