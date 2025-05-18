@@ -57,114 +57,45 @@ void print_ast(t_ast_node *ast, int depth) {
     }
 }
 
-static int check_parse_error(t_ast_node *ast) {
-    if (ast->id == PARSE_ERROR) { return 1; }
-    if (ast->left != NULL && check_parse_error(ast->left)) { return 1; }
-    if (ast->right != NULL && check_parse_error(ast->right)) { return 1; }
-    return 0;
-}
-
-static void free_token(void *ptr) {
-    t_token *token = (t_token *)ptr;
-    free(token->str);
-    free(token);
-}
-
-static void free_tokens(t_token_list *tokens, int parse_failed) {
-    if (parse_failed) {
-        ft_list_clear(&tokens, free_token);
-    } else {
-        ft_list_clear(&tokens, free);
-    }
-}
-
-static void free_ast(t_ast_node *ast, int parse_failed) {
-    if (ast->left != NULL) { free_ast(ast->left, parse_failed); }
-    if (ast->right != NULL) { free_ast(ast->right, parse_failed); }
-    if (parse_failed) {
-        ft_list_clear(&ast->args, NULL);
-    } else {
-        ft_list_clear(&ast->args, free);
-    }
-    free(ast);
-}
-
-t_envp *make_envp(char **envp) {
-    t_envp *minishell_envp;
-    t_envp *head;
-    char *delimiter_pos;
-    int i;
-
-    minishell_envp = NULL;
-    head = NULL;
-    i = 0;
-    while (envp[i]) {
-        minishell_envp = malloc(sizeof(t_envp));
-        if (!minishell_envp) return (NULL);
-        delimiter_pos = ft_strchr(envp[i], '=');
-        minishell_envp->key = ft_substr(envp[i], 0, delimiter_pos - envp[i]);
-        minishell_envp->value = ft_strdup(delimiter_pos + 1);
-        minishell_envp->exported = 0x00000001;
-        minishell_envp->next = head;
-        head = minishell_envp;
-        i++;
-    }
-    return (head);
-}
-
-void free_envp(const t_envp *envp) {
-    while (1) {
-        t_envp *tmp = envp->next;
-        free(envp->key);
-        free(envp->value);
-        free((void *)envp);
-        envp = tmp;
-        if (envp == NULL) { break; }
-    }
-}
-
 static void test(const char *cmd, const t_envp *envp) {
-    t_token_list *start = tokenize_input(cmd);
+    t_token_list *start;
+    tokenize_input(&start, cmd);
 
-    t_ast_node *ast = parse_tokens(start, start->prev);
-
-    int parse_failed = check_parse_error(ast);
-    free_tokens(start, parse_failed);
-    if (parse_failed) {
-        free_ast(ast, parse_failed);
+    t_ast_node *ast;
+    parse_tokens(&ast, start, start->prev);
+    free_tokens(start);
+    if (found_parse_error(ast)) {
+        free_ast(ast);
         return;
     }
 
     expand_variables(ast, envp);
+
     printf("expanded variables:\n");
     printf("command: %s\n", cmd);
     print_ast(ast, 1);
     printf("\n");
 
-    // split_field(ast, ft_getenv("IFS", envp));
-    // printf("splitted field:\n");
-    // printf("command: %s\n", cmd);
-    // print_ast(ast, 1);
-    // printf("\n");
-
-    free_ast(ast, parse_failed);
+    free_ast(ast);
 }
 
 int main(int argc, char **argv, char **envp) {
     (void)argc;
     (void)argv;
-    const t_envp *env = make_ms_envp(envp);
+
+    t_envp *ms_envp;
+    make_ms_envp(&ms_envp, envp);
 
     printf("\n");
 
-    test("echo $HOME_sota", env);
-    test("echo \"$HOME\"", env);
-    test("echo '$HOME'", env);
+    test("echo $HOME_sota", ms_envp);
+    test("echo \"$HOME\"", ms_envp);
+    test("echo '$HOME'", ms_envp);
 
-    test("c'a't $USER_$USER_file.txt>file", env);
-    test("echo \"$HOME\"_value > file", env);
-    test("echo ''", env);
+    test("c'a't $USER_$USER_file.txt>file", ms_envp);
+    test("echo \"$HOME\"_value > file", ms_envp);
+    test("echo ''", ms_envp);
 
-    free_ms_envp((t_envp *)env);
+    free_ms_envp(ms_envp);
     return 0;
 }

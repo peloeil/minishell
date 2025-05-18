@@ -1,6 +1,6 @@
 #include <minishell/lexer.h>
+#include <minishell/minishell.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 static char *token_name(t_token_id id) {
     if (id == TOKEN) { return "TOKEN"; }
@@ -15,18 +15,19 @@ static char *token_name(t_token_id id) {
 }
 
 static void test(const char *str) {
-    printf("\nstr: %s\n", str);
+    printf("\ncommand: %s\n", str);
 
-    t_token_list *head = tokenize_input(str);
+    t_token_list *head;
+    tokenize_input(&head, str);
+
     t_token_list *cur = head;
     while (1) {
         t_token *token = (t_token *)cur->content;
         printf("Token: %s (%s)\n", token->str, token_name(token->id));
-        free(token->str);
         cur = cur->next;
         if (cur == head) { break; }
     }
-    ft_list_clear(&head, free);
+    free_tokens(head);
 }
 
 int main(void) {
