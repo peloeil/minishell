@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 02:56:15 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 20:11:55 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,43 +20,40 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-static int	file_exists(const char *cmd)
+
+static int	found_suitable_file(const char *path, int flag, int show_error)
 {
-	if (access(cmd, F_OK) == -1 && errno == ENOENT)
+	struct stat	statbuf;
+
+	if (access(path, F_OK) == -1)
 	{
-		error_return(cmd, strerror(ENOENT));
+		if (show_error)
+			error_return(path, strerror(ENOENT));
 		return (0);
 	}
-	return (1);
-}
-
-static int	is_not_executable(const char *cmd, struct stat statbuf)
-{
+	if (wrap_stat(path, &statbuf) == -1)
+		return (0);
 	if (S_ISDIR(statbuf.st_mode))
 	{
-		error_return(cmd, strerror(EISDIR));
-		return (1);
+		if (show_error)
+			error_return(path, strerror(EISDIR));
+		return (0);
 	}
-	if (statbuf.st_mode & S_IXUSR)
-		return (0);
-	if (statbuf.st_mode & S_IXGRP)
-		return (0);
-	if (statbuf.st_mode & S_IXOTH)
-		return (0);
-	error_return(cmd, strerror(EACCES));
-	return (1);
+	if (flag == F_OK)
+		return (1);
+	if (flag == X_OK && (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
+		return (1);
+	error_return(path, strerror(EACCES));
+	return (0);
 }
 
 static int	set_absolute_path(char **const pathptr, const char *cmd)
 {
 	char		*path;
-	struct stat	statbuf;
 
-	if (!file_exists(cmd))
+	if (!found_suitable_file(cmd, F_OK, 1))
 		return (STATUS_CMD_NOT_FOUND);
-	if (wrap_stat(cmd, &statbuf) == -1)
-		return (-1);
-	if (is_not_executable(cmd, statbuf))
+	if (!found_suitable_file(cmd, X_OK, 1))
 		return (STATUS_NOT_EXECUTABLE);
 	path = ft_strdup(cmd);
 	if (path == NULL)
@@ -76,7 +73,7 @@ static char	*search_file(const char *cmd, char **dirs, int mode)
 	{
 		if (ft_asprintf(&file, "%s/%s", dirs[i], cmd) == -1)
 			return (NULL);
-		if (access(file, mode) == 0)
+		if (found_suitable_file(file, mode, 0))
 		{
 			if (mode == F_OK)
 				error_return(file, strerror(EACCES));
@@ -86,10 +83,7 @@ static char	*search_file(const char *cmd, char **dirs, int mode)
 		i++;
 	}
 	if (mode == F_OK)
-	{
 		error_return(cmd, "command not found");
-		return (NULL);
-	}
 	return (NULL);
 }
 
