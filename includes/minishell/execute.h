@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/17 01:26:03 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 16:58:07 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef enum e_exit_status
 {
 	STATUS_SUCCESS = 0,
 	STATUS_ERRORS = 1,
+	STATUS_MISUSE = 2,
 	STATUS_NOT_EXECUTABLE = 126,
 	STATUS_CMD_NOT_FOUND = 127,
 	STATUS_INVALID_EXIT = 128,
