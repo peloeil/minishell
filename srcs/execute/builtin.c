@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/17 17:23:03 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 15:53:24 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 	int				index;
 	int				(*builtin_func[8])(int, char **, t_envp **);
 
-	init_builtin_func(builtin_func);
-	envp = NULL;
 	if (state->iofd[INFD_INDEX] == -1 || state->iofd[OUTFD_INDEX] == -1)
-		return (-1);
+		return (update_exit_status(STATUS_ERRORS, ms_envp));
+	envp = NULL;
 	if (make_argv(&argv, args) == -1 || make_envp(&envp, ms_envp) == -1)
 	{
 		free_strs(argv);
 		free_strs(envp);
 		return (-1);
 	}
+	init_builtin_func(builtin_func);
 	index = is_builtin(args->content);
 	status = builtin_func[index](state->iofd[OUTFD_INDEX], argv, &ms_envp);
 	free_strs(argv);

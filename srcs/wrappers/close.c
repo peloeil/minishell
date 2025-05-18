@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 15:37:52 by sota              #+#    #+#             */
-/*   Updated: 2025/05/10 16:01:01 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 15:56:10 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	wrap_close(int *fd, int afterfd)
 {
+	if (*fd == -1)
+		return (0);
 	if (*fd == afterfd)
 		return (0);
 	close(*fd);

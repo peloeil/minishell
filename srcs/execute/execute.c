@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/17 17:32:27 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 15:51:47 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static int	execute_nopipe(
 				t_envp *envp,
 				t_ast_node *top)
 {
+	if (ast == NULL)
+		return (0);
 	if (ast->id == COMMAND)
 		return (execute_command(ast->args, state, envp, top));
 	set_redirect_fd(ast->id, ast->left->args->content, state, envp);
