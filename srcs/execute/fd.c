@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/17 17:43:54 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 16:37:16 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,14 @@ static int	close_old_fds(t_proc_state *state, int fd)
 	if (fd == STDIN_FILENO)
 	{
 		if (state->iofd[INFD_INDEX] == state->pipefd[READ_PIPE])
-		{
-			wrap_close(&state->iofd[INFD_INDEX], STDIN_FILENO);
 			wrap_close(&state->pipefd[READ_PIPE], STDIN_FILENO);
-		}
+		wrap_close(&state->iofd[INFD_INDEX], STDIN_FILENO);
 	}
 	else
 	{
 		if (state->iofd[OUTFD_INDEX] == state->pipefd[WRITE_PIPE])
-		{
-			wrap_close(&state->iofd[OUTFD_INDEX], STDOUT_FILENO);
 			wrap_close(&state->pipefd[WRITE_PIPE], STDOUT_FILENO);
-		}
+		wrap_close(&state->iofd[OUTFD_INDEX], STDOUT_FILENO);
 	}
 	return (0);
 }
