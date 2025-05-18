@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+valgrind \
+	--leak-check=full \
+	--track-fds=yes \
+	--trace-children=yes \
+	--show-leak-kinds=all \
+	--suppressions=readline.supp \
+	./minishell
