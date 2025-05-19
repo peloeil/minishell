@@ -18,8 +18,8 @@
 int	is_n_option(char *str, t_envp **envp)
 {
 	int	i;
-	(void)envp;
 
+	(void)envp;
 	if (str == NULL || str[0] != '-')
 		return (0);
 	i = 1;
@@ -34,6 +34,19 @@ int	is_n_option(char *str, t_envp **envp)
 	return (1);
 }
 
+int	skip_n_option(char **argv, int *i, t_envp **envp)
+{
+	int	n_option;
+
+	n_option = 0;
+	while (argv[*i] && is_n_option(argv[*i], envp))
+	{
+		n_option = 1;
+		(*i)++;
+	}
+	return (n_option);
+}
+
 int	echo(int fd, char **argv, t_envp **envp)
 {
 	int			n_option;
@@ -42,13 +55,8 @@ int	echo(int fd, char **argv, t_envp **envp)
 
 	if (ft_str_new(&str))
 		return (1);
-	n_option = 0;
 	i = 1;
-	while (argv[i] && is_n_option(argv[i], envp))
-	{
-		n_option = 1;
-		i++;
-	}
+	n_option = skip_n_option(argv, &i, envp);
 	while (argv[i])
 	{
 		if (ft_str_push_str(&str, argv[i]) == -1
