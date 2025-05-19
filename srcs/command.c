@@ -20,7 +20,6 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-
 static int	found_suitable_file(const char *path, int flag, int show_error)
 {
 	struct stat	statbuf;

@@ -33,8 +33,8 @@ static int	execute_command(
 			return (-1);
 		return (status);
 	}
-	state->nproc++;
 	state->pid = wrap_fork();
+	state->nproc++;
 	if (state->pid == -1)
 		return (-1);
 	if (state->pid == 0)
