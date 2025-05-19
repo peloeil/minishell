@@ -21,6 +21,8 @@
 # define PROMPT "minishell$ "
 # define NUMERIC "numeric argument required"
 # define TOO_MANY "-minishell: exit: too many arguments"
+
+// ENVIRONMENT
 # define FLAG_EXPORT 0b00000001
 # define FLAG_VALUE 0b00000010
 # define FLAG_UNSET 0b00000100
