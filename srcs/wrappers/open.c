@@ -1,48 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   close.c                                            :+:      :+:    :+:   */
+/*   open.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 15:37:52 by sota              #+#    #+#             */
-/*   Updated: 2025/05/18 17:32:05 by sota             ###   ########.fr       */
+/*   Created: 2025/05/16 15:51:25 by sota              #+#    #+#             */
+/*   Updated: 2025/05/16 23:14:12 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
-#include <unistd.h>
+#include <fcntl.h>
 #include <string.h>
 #include <errno.h>
 
-static int	already_closed(int fd)
+int	wrap_open(const char *file, int flag)
 {
-	int	newfd;
+	int	fd;
 
-	newfd = dup(fd);
-	if (newfd == -1 && errno == EBADF)
-		return (1);
-	if (newfd == -1)
-	{
-		error_return("dup", strerror(errno));
-		return (0);
-	}
-	close(newfd);
-	return (0);
-}
-
-int	wrap_close(int *fd, int afterfd)
-{
-	if (*fd == -1)
-		return (0);
-	if (*fd == afterfd)
-		return (0);
-	if (already_closed(*fd))
-	{
-		*fd = afterfd;
-		return (0);
-	}
-	close(*fd);
-	*fd = afterfd;
-	return (0);
+	if (flag & O_WRONLY)
+		fd = open(file, flag, 0644);
+	else
+		fd = open(file, flag);
+	if (fd == -1)
+		return (error_return(file, strerror(errno)));
+	return (fd);
 }

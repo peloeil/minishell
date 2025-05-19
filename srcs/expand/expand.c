@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:55:00 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 01:50:58 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 14:04:24 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	change_quote_state(char *quote_char, const char *str, size_t *index)
 	return (0);
 }
 
-static int	expand_arg(t_arg_list *arg, const t_envp *envp)
+int	expand_arg(t_arg_list *arg, const t_envp *envp)
 {
 	char		quote_char;
 	size_t		index;
@@ -89,6 +89,8 @@ static int	expand_args(t_arg_list *args, const t_envp *envp)
 
 int	expand_variables(t_ast_node *ast, const t_envp *envp)
 {
+	if (ast == NULL)
+		return (0);
 	if (ast->left == NULL)
 		return (expand_args(ast->args, envp));
 	if (expand_variables(ast->left, envp) == -1)

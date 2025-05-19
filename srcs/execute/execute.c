@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 12:18:12 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 16:45:54 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,17 @@ static int	execute_command(
 				t_envp *envp,
 				t_ast_node *top)
 {
+	int	status;
+
 	if (is_builtin(args->content))
-		return (execute_builtin(args, state, envp));
-	state->nproc++;
+	{
+		status = execute_builtin(args, state, envp);
+		if (set_parent_fds(state) == -1)
+			return (-1);
+		return (status);
+	}
 	state->pid = wrap_fork();
+	state->nproc++;
 	if (state->pid == -1)
 		return (-1);
 	if (state->pid == 0)
@@ -41,10 +48,11 @@ static int	execute_nopipe(
 				t_envp *envp,
 				t_ast_node *top)
 {
+	if (ast == NULL)
+		return (set_parent_fds(state));
 	if (ast->id == COMMAND)
 		return (execute_command(ast->args, state, envp, top));
-	if (set_redirect_fd(ast->id, ast->left->args->content, state) == -1)
-		return (-1);
+	set_redirect_fd(ast->id, ast->left->args->content, state, envp);
 	return (execute_nopipe(ast->right, state, envp, top));
 }
 

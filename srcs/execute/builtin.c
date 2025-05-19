@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:23:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 04:22:53 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/18 15:53:24 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+void	init_builtin_func(int (*builtin_func[8])(int, char **, t_envp **))
+{
+	builtin_func[1] = echo;
+	builtin_func[2] = env;
+	builtin_func[3] = export;
+	builtin_func[4] = pwd;
+	builtin_func[5] = cd;
+	builtin_func[6] = unset;
+	builtin_func[7] = builtin_exit;
+}
+
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 {
 	char			**argv;
@@ -42,13 +53,8 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 	int				index;
 	int				(*builtin_func[8])(int, char **, t_envp **);
 
-	builtin_func[1] = echo;
-	builtin_func[2] = env;
-	builtin_func[3] = export;
-	builtin_func[4] = pwd;
-	builtin_func[5] = cd;
-	builtin_func[6] = unset;
-	builtin_func[7] = builtin_exit;
+	if (state->iofd[INFD_INDEX] == -1 || state->iofd[OUTFD_INDEX] == -1)
+		return (update_exit_status(STATUS_ERRORS, ms_envp));
 	envp = NULL;
 	if (make_argv(&argv, args) == -1 || make_envp(&envp, ms_envp) == -1)
 	{
@@ -56,6 +62,7 @@ int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 		free_strs(envp);
 		return (-1);
 	}
+	init_builtin_func(builtin_func);
 	index = is_builtin(args->content);
 	status = builtin_func[index](state->iofd[OUTFD_INDEX], argv, &ms_envp);
 	free_strs(argv);

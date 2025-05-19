@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/15 02:39:53 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/16 15:02:32 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 #include <minishell/parser.h>
 #include <minishell/expand.h>
 #include <minishell/execute.h>
-#include <libft/ft_string.h>
-#include <libft/ft_stdio.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <stdlib.h>
 
 static void	init_proc_state(t_proc_state *state)
 {
@@ -56,15 +55,19 @@ int	wait_children(t_proc_state *state, t_envp *envp)
 	return (update_exit_status(exit_status, envp));
 }
 
-int	eval_cmd(const char *cmd, t_envp *envp)
+int	evaluate_command(const char *cmd, t_envp *envp)
 {
 	t_token_list	*tokens;
 	t_ast_node		*ast;
 	t_proc_state	state;
 	int				failed;
 
-	if (tokenize_input(&tokens, cmd) == -1)
+	failed = (tokenize_input(&tokens, cmd) == -1);
+	free((void *)cmd);
+	if (failed)
 		return (-1);
+	if (tokens == NULL)
+		return (0);
 	failed = (parse_tokens(&ast, tokens, tokens->prev) == -1);
 	free_tokens(tokens);
 	if (failed)
@@ -74,7 +77,7 @@ int	eval_cmd(const char *cmd, t_envp *envp)
 			|| expand_variables(ast, envp) == -1
 			|| execute_ast(ast, &state, envp, ast) == -1);
 	free_ast(ast);
-	if (failed || wait_children(&state, envp) == -1)
+	if (wait_children(&state, envp) == -1 || failed)
 		return (-1);
 	return (0);
 }

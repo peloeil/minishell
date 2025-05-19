@@ -15,7 +15,7 @@ static char *token_name(t_token_id id) {
 }
 
 static void test(const char *str) {
-    printf("\ncommand: %s\n", str);
+    printf("\ncommand: [%s]\n", str);
 
     t_token_list *head;
     tokenize_input(&head, str);
@@ -23,7 +23,7 @@ static void test(const char *str) {
     t_token_list *cur = head;
     while (1) {
         t_token *token = (t_token *)cur->content;
-        printf("Token: %s (%s)\n", token->str, token_name(token->id));
+        printf("token: %s (%s)\n", token->str, token_name(token->id));
         cur = cur->next;
         if (cur == head) { break; }
     }
@@ -31,6 +31,7 @@ static void test(const char *str) {
 }
 
 int main(void) {
+    setbuf(stdout, NULL);
     test("echo hello world");
     test("echo \"hello world\"");
     test("echo 'hello world'");

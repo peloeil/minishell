@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:53:51 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 01:51:35 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/16 21:54:41 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int		push_expanded_str(
 			char *str,
 			size_t *index,
 			const t_envp *envp);
+int		expand_arg(t_arg_list *arg, const t_envp *envp);
 int		expand_variables(t_ast_node *ast, const t_envp *envp);
 
 #endif // EXPAND_H
