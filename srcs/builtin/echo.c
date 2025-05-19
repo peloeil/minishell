@@ -15,31 +15,51 @@
 #include <libft/libft.h>
 #include <stdlib.h>
 
+int	is_n_option(char *str, t_envp **envp)
+{
+	int	i;
+	(void)envp;
+
+	if (str == NULL || str[0] != '-')
+		return (0);
+	i = 1;
+	if (!str[1])
+		return (0);
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	echo(int fd, char **argv, t_envp **envp)
 {
 	int			n_option;
 	int			i;
 	t_string	str;
 
-	(void)envp;
 	if (ft_str_new(&str))
 		return (1);
 	n_option = 0;
 	i = 1;
-	while (argv[i] != NULL)
+	while (argv[i] && is_n_option(argv[i], envp))
 	{
-		if (ft_strncmp(argv[i], "-n", 2) == 0)
-			n_option = 1;
-		else if (ft_str_push_str(&str, argv[i]) == -1
+		n_option = 1;
+		i++;
+	}
+	while (argv[i])
+	{
+		if (ft_str_push_str(&str, argv[i]) == -1
 			|| (argv[i + 1] != NULL && ft_str_push(&str, ' ') == -1))
 			return (1);
 		i++;
 	}
-	if (n_option != 1 && ft_str_push(&str, '\n') == -1)
+	if (n_option == 0)
+		ft_str_push(&str, '\n');
+	if (ft_dprintf(fd, "%s", str.str) < 0)
 		return (1);
-	i = ft_dprintf(fd, "%s", str.str);
 	free(str.str);
-	if (i < 0)
-		return (1);
 	return (0);
 }
