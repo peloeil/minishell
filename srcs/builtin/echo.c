@@ -52,7 +52,6 @@ int	echo(int fd, char **argv, t_envp **envp)
 	int			i;
 	t_string	str;
 
-	(void)envp;
 	if (ft_str_new(&str))
 		return (EXIT_FAILURE);
 	i = 1;
