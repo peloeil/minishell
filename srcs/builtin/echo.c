@@ -19,7 +19,6 @@ int	is_n_option(const char *str)
 {
 	int	i;
 
-	(void)envp;
 	if (str == NULL || str[0] != '-')
 		return (0);
 	i = 1;
@@ -38,6 +37,7 @@ int	skip_n_option(char **argv, int *i)
 {
 	int	n_option;
 
+	(void)envp;
 	n_option = 0;
 	while (argv[*i] && is_n_option(argv[*i]))
 	{
