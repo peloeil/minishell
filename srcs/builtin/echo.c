@@ -15,11 +15,10 @@
 #include <libft/libft.h>
 #include <stdlib.h>
 
-int	is_n_option(char *str, t_envp **envp)
+int	is_n_option(char *str)
 {
 	int	i;
 
-	(void)envp;
 	if (str == NULL || str[0] != '-')
 		return (0);
 	i = 1;
@@ -38,8 +37,9 @@ int	skip_n_option(char **argv, int *i, t_envp **envp)
 {
 	int	n_option;
 
+	(void)envp;
 	n_option = 0;
-	while (argv[*i] && is_n_option(argv[*i], envp))
+	while (argv[*i] && is_n_option(argv[*i]))
 	{
 		n_option = 1;
 		(*i)++;
