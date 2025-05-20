@@ -16,6 +16,58 @@
 #include <libft/ft_stdlib.h>
 #include <stdlib.h>
 
+static int	ms_envp_push_PWD(t_envp **ms_envp, char *node)
+{
+	t_envp	*new_node;
+	size_t	key_len;
+
+	if (ft_getenv("!PWD", *ms_envp) != NULL)
+		return (0);
+	new_node = (t_envp *)ft_calloc(1, sizeof(t_envp));
+	if (new_node == NULL)
+		return (-1);
+	key_len = 4;
+	new_node->key = ft_strndup(node, key_len);
+	new_node->value = chdir(NULL, 0);
+	if (new_node->key == NULL)
+	{
+		free(new_node->key);
+		free(new_node->value);
+		free(new_node);
+		return (-1);
+	}
+	new_node->exported = 0;
+	new_node->next = *ms_envp;
+	*ms_envp = new_node;
+	return (0);
+}
+
+static int	ms_envp_push_OLDPWD(t_envp **ms_envp, char *node)
+{
+	t_envp	*new_node;
+	size_t	key_len;
+
+	if (ft_getenv("OLDPWD", *ms_envp) != NULL)
+		return (0);
+	new_node = (t_envp *)ft_calloc(1, sizeof(t_envp));
+	if (new_node == NULL)
+		return (-1);
+	key_len = 6;
+	new_node->key = ft_strndup(node, key_len);
+	new_node->value = NULL;
+	if (new_node->key == NULL)
+	{
+		free(new_node->key);
+		free(new_node->value);
+		free(new_node);
+		return (-1);
+	}
+	new_node->exported = 0;
+	new_node->next = *ms_envp;
+	*ms_envp = new_node;
+	return (0);
+}
+
 static int	ms_envp_push(t_envp **ms_envp, char *node)
 {
 	t_envp	*new_node;
@@ -55,7 +107,8 @@ int	make_ms_envp(t_envp **ms_envp, char **envp)
 		}
 		i++;
 	}
-	if (ms_envp_push(ms_envp, "OLDPWD=") == -1
+	if (ms_envp_push_OLDPWD(ms_envp, "OLDPWD") == -1
+		|| ms_envp_push_PWD(ms_envp, "!PWD") == -1
 		|| update_exit_status(0, *ms_envp) == -1)
 	{
 		free_ms_envp(*ms_envp);

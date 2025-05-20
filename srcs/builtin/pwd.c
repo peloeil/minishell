@@ -25,7 +25,7 @@ int	pwd(int fd, char **argv, t_envp **envp)
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
 	{
-		perror("getcwd");
+		cwd = ft_getenv("!PWD", *envp);
 		return (1);
 	}
 	ft_dprintf(fd, "%s\n", cwd);

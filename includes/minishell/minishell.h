@@ -25,6 +25,7 @@
 # define FLAG_VALUE 0b00000010
 # define FLAG_UNSET 0b00000100
 # define FLAG_SPECIAL 0b00001000
+# define FLAG_HIDDEN 0b00010000
 
 typedef struct s_envp
 {
@@ -49,6 +50,8 @@ int		evaluate_command(const char *cmd, t_envp *ms_envp)
 int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		__attribute__((nonnull(2, 3)));
 char	*ft_getenv(const char *key, const t_envp *envp)
+		__attribute__((nonnull(1)));
+int		ft_hasKey(char *key, t_envp *envp)
 		__attribute__((nonnull(1)));
 int		make_ms_envp(t_envp **ms_envp, char **envp)
 		__attribute__((nonnull(2)));

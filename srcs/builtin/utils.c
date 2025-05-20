@@ -48,7 +48,7 @@ void	print_sorted_env(int fd, t_envp *envp)
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
-		if (envp->exported & (FLAG_UNSET | FLAG_SPECIAL))
+		if (envp->exported & (FLAG_UNSET | FLAG_SPECIAL) || envp->exported == 0)
 			envp = envp->next;
 		else if ((envp->exported & FLAG_EXPORT)
 			&& ft_strcmp(envp->key, "_") != 0)
