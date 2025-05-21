@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 05:28:19 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/15 04:18:38 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/22 00:10:31 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <libft/libft.h>
 #include <stdlib.h>
 
-int	is_n_option(char *str)
+int	is_n_option(const char *str)
 {
 	int	i;
 
@@ -33,11 +33,10 @@ int	is_n_option(char *str)
 	return (1);
 }
 
-int	skip_n_option(char **argv, int *i, t_envp **envp)
+int	skip_n_option(char **argv, int *i)
 {
 	int	n_option;
 
-	(void)envp;
 	n_option = 0;
 	while (argv[*i] && is_n_option(argv[*i]))
 	{
@@ -53,10 +52,11 @@ int	echo(int fd, char **argv, t_envp **envp)
 	int			i;
 	t_string	str;
 
+	(void)envp;
 	if (ft_str_new(&str))
 		return (1);
 	i = 1;
-	n_option = skip_n_option(argv, &i, envp);
+	n_option = skip_n_option(argv, &i);
 	while (argv[i])
 	{
 		if (ft_str_push_str(&str, argv[i]) == -1
@@ -64,14 +64,11 @@ int	echo(int fd, char **argv, t_envp **envp)
 			return (1);
 		i++;
 	}
-	if (n_option == 0)
-		if (ft_str_push(&str, '\n') == -1)
-			free(str.str);
-	if (ft_dprintf(fd, "%s", str.str) < 0)
-	{
-		free(str.str);
+	if (n_option == 0 || ft_str_push(&str, '\n') == -1)
 		return (1);
-	}
+	i = ft_dprintf(fd, "%s", str.str);
 	free(str.str);
+	if (i < 0)
+		return (1);
 	return (0);
 }
