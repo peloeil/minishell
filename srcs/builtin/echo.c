@@ -37,7 +37,6 @@ int	skip_n_option(char **argv, int *i)
 {
 	int	n_option;
 
-	(void)envp;
 	n_option = 0;
 	while (argv[*i] && is_n_option(argv[*i]))
 	{
@@ -53,6 +52,7 @@ int	echo(int fd, char **argv, t_envp **envp)
 	int			i;
 	t_string	str;
 
+	(void)envp;
 	if (ft_str_new(&str))
 		return (EXIT_FAILURE);
 	i = 1;
