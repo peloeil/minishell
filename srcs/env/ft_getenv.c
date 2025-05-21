@@ -21,7 +21,6 @@ char	*ft_getenv(const char *key, const t_envp *envp)
 	value = NULL;
 	while (envp != NULL)
 	{
-		ft_printf("key: %s\n", envp->key);
 		if (ft_strcmp(key, envp->key) == 0)
 		{
 			value = envp->value;

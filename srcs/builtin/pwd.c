@@ -19,16 +19,19 @@
 int	pwd(int fd, char **argv, t_envp **envp)
 {
 	char	*cwd;
+	int		need_free;
 
 	(void)argv;
 	(void)envp;
+	need_free = 1;
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
 	{
 		cwd = ft_getenv("!PWD", *envp);
-		return (1);
+		need_free = 0;
 	}
 	ft_dprintf(fd, "%s\n", cwd);
-	free(cwd);
+	if (need_free)
+		free(cwd);
 	return (0);
 }

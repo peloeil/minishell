@@ -15,6 +15,7 @@
 #include <libft/ft_string.h>
 #include <libft/ft_stdlib.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static int	ms_envp_push_PWD(t_envp **ms_envp, char *node)
 {
@@ -28,7 +29,7 @@ static int	ms_envp_push_PWD(t_envp **ms_envp, char *node)
 		return (-1);
 	key_len = 4;
 	new_node->key = ft_strndup(node, key_len);
-	new_node->value = chdir(NULL, 0);
+	new_node->value = getcwd(NULL, 0);
 	if (new_node->key == NULL)
 	{
 		free(new_node->key);
