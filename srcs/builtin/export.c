@@ -33,23 +33,29 @@ t_envp	*create_new_node(char *key, char *value, int exported)
 	return (new_node);
 }
 
+// 常に？が回っている
 void	register_env_with_value(t_envp *envp, char *key, char *value)
 {
 	t_envp	*new_node;
 
 	while (envp->next && ft_strcmp(envp->key, key) != 0)
 		envp = envp->next;
-	if (ft_strcmp(envp->key, key) == 0)
+	if (ft_strcmp(envp->key, key) == 0) // ここの処理がおかしい
 	{
 		free(envp->value);
 		envp->value = value;
+		envp->exported = FLAG_EXPORT;
 		free(key);
+		ft_printf("こっちなんですよ: %s, %s\n", envp->key, envp->value);
 		return ;
 	}
 	if (ft_strcmp(key, "?") == 0)
 		new_node = create_new_node(key, value, FLAG_SPECIAL);
 	else
+	{
 		create_new_node(key, value, FLAG_EXPORT);
+		// ft_printf("表示: %s\n", key);
+	}
 	if (!new_node)
 	{
 		free(key);

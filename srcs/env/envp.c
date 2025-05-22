@@ -63,7 +63,7 @@ static int	ms_envp_push_OLDPWD(t_envp **ms_envp, char *node)
 		free(new_node);
 		return (-1);
 	}
-	new_node->exported = 0;
+	new_node->exported = FLAG_EXPORT;
 	new_node->next = *ms_envp;
 	*ms_envp = new_node;
 	return (0);

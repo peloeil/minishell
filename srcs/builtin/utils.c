@@ -48,8 +48,12 @@ void	print_sorted_env(int fd, t_envp *envp)
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
+		// ft_printf("test2:  %s=%s\n", envp->key, envp->value);
 		if (envp->exported & (FLAG_UNSET | FLAG_SPECIAL) || envp->exported == 0)
+		{
 			envp = envp->next;
+			continue ;
+		}
 		else if ((envp->exported & FLAG_EXPORT)
 			&& ft_strcmp(envp->key, "_") != 0)
 			ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
@@ -75,6 +79,7 @@ void	swap_envp_nodes(t_envp *curr)
 	curr->next->value = tmp_value;
 	curr->next->exported = tmp_i;
 }
+// sort が悪いように見える
 
 void	sort_envp(t_envp **head)
 {
@@ -88,6 +93,7 @@ void	sort_envp(t_envp **head)
 		curr = *head;
 		while (curr && curr->next)
 		{
+			// ft_printf("test:  %s=%s\n", curr->key, curr->value);
 			if (ft_strcmp(curr->key, curr->next->key) > 0)
 			{
 				swap_envp_nodes(curr);
@@ -97,3 +103,5 @@ void	sort_envp(t_envp **head)
 		}
 	}
 }
+
+// sort 時には存在しているPATHがソートすると非表示になる
