@@ -21,7 +21,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	$(addprefix env/, \
 		ft_getenv.c \
 		envp.c \
-		ft_hasKey.c \
+		ft_haskey.c \
 	) \
 	$(addprefix error/, \
 		free_strs.c \

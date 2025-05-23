@@ -51,7 +51,7 @@ int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		__attribute__((nonnull(2, 3)));
 char	*ft_getenv(const char *key, const t_envp *envp)
 		__attribute__((nonnull(1)));
-int		ft_hasKey(char *key, t_envp *envp)
+int		ft_haskey(char *key, t_envp *envp)
 		__attribute__((nonnull(1)));
 int		make_ms_envp(t_envp **ms_envp, char **envp)
 		__attribute__((nonnull(2)));
@@ -80,13 +80,13 @@ int		unset(int fd, char **argv, t_envp **envp);
 int		builtin_exit(int fd, char **argv, t_envp **envp);
 
 // cd_utils
-void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags);
-void	update_env_value(const char *key, const char *value, t_envp *envp);
+int		add_envp_with_flag(char *key, char *value, t_envp *envp, int flags);
+int		update_env_value(const char *key, const char *value, t_envp *envp);
 int		get_env_flags(const char *key, t_envp *envp);
 
 // builtin/utils.c
 t_envp	*create_new_node(char *key, char *value, int exported);
-void	print_sorted_env(int fd, t_envp *envp);
+int		print_sorted_env(int fd, t_envp *envp);
 void	add_double_quotes(int fd,
 			t_string *str,
 			const char *key,

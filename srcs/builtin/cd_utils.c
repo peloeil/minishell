@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags)
+int	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags)
 {
 	t_envp	*current;
 	t_envp	*new_node;
@@ -30,7 +30,7 @@ void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags)
 			free(current->value);
 			current->value = ft_strdup(value);
 			current->exported = flags;
-			return ;
+			return (EXIT_SUCCESS);
 		}
 		if (current->next == NULL)
 			break ;
@@ -41,12 +41,13 @@ void	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags)
 	{
 		free(key);
 		free(value);
-		return ;
+		return (EXIT_FAILURE);
 	}
 	current->next = new_node;
+	return (EXIT_SUCCESS);
 }
 
-void	update_env_value(const char *key, const char *value, t_envp *envp)
+int	update_env_value(const char *key, const char *value, t_envp *envp)
 {
 	t_envp	*current;
 
@@ -57,10 +58,11 @@ void	update_env_value(const char *key, const char *value, t_envp *envp)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			return ;
+			return (EXIT_SUCCESS);
 		}
 		current = current->next;
 	}
+	return (EXIT_SUCCESS);
 }
 
 int	get_env_flags(const char *key, t_envp *envp)

@@ -43,12 +43,14 @@ void	make_str(int is_double, t_string *str,
 	ft_str_push_str(str, "\"\n");
 }
 
-void	print_sorted_env(int fd, t_envp *envp)
+int	print_sorted_env(int fd, t_envp *envp)
 {
+	int	status;
+
+	status = 0;
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
-		// ft_printf("test2:  %s=%s\n", envp->key, envp->value);
 		if (envp->exported & (FLAG_UNSET | FLAG_SPECIAL) || envp->exported == 0)
 		{
 			envp = envp->next;
@@ -56,11 +58,15 @@ void	print_sorted_env(int fd, t_envp *envp)
 		}
 		else if ((envp->exported & FLAG_EXPORT)
 			&& ft_strcmp(envp->key, "_") != 0)
-			ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
-		else if (!(envp->exported & FLAG_EXPORT))
-			ft_dprintf(fd, "declare -x %s\n", envp->key);
+			status = ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
+		else if ((envp->exported & FLAG_VALUE))
+			status = ft_dprintf(fd, "declare -x %s\n", envp->key);
 		envp = envp->next;
 	}
+	if (status == -1)
+		return (EXIT_FAILURE);
+	else
+		return (EXIT_SUCCESS);
 }
 
 void	swap_envp_nodes(t_envp *curr)
@@ -79,7 +85,6 @@ void	swap_envp_nodes(t_envp *curr)
 	curr->next->value = tmp_value;
 	curr->next->exported = tmp_i;
 }
-// sort が悪いように見える
 
 void	sort_envp(t_envp **head)
 {

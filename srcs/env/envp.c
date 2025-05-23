@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/execute.h>
-#include <libft/ft_string.h>
 #include <libft/ft_stdlib.h>
+#include <libft/ft_string.h>
+#include <minishell/execute.h>
+#include <minishell/minishell.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-static int	ms_envp_push_PWD(t_envp **ms_envp, char *node)
+static int	ms_envp_push_(t_envp **ms_envp, char *node)
 {
 	t_envp	*new_node;
 	size_t	key_len;
@@ -43,7 +43,7 @@ static int	ms_envp_push_PWD(t_envp **ms_envp, char *node)
 	return (0);
 }
 
-static int	ms_envp_push_OLDPWD(t_envp **ms_envp, char *node)
+static int	ms_envp_push_oldpwd(t_envp **ms_envp, char *node)
 {
 	t_envp	*new_node;
 	size_t	key_len;
@@ -63,7 +63,7 @@ static int	ms_envp_push_OLDPWD(t_envp **ms_envp, char *node)
 		free(new_node);
 		return (-1);
 	}
-	new_node->exported = FLAG_EXPORT;
+	new_node->exported = FLAG_VALUE;
 	new_node->next = *ms_envp;
 	*ms_envp = new_node;
 	return (0);
@@ -108,9 +108,9 @@ int	make_ms_envp(t_envp **ms_envp, char **envp)
 		}
 		i++;
 	}
-	if (ms_envp_push_OLDPWD(ms_envp, "OLDPWD") == -1
-		|| ms_envp_push_PWD(ms_envp, "!PWD") == -1
-		|| update_exit_status(0, *ms_envp) == -1)
+	if (ms_envp_push_oldpwd(ms_envp, "OLDPWD") == -1
+		|| ms_envp_push_(ms_envp, "!PWD") == -1 || update_exit_status(0,
+			*ms_envp) == -1)
 	{
 		free_ms_envp(*ms_envp);
 		return (-1);

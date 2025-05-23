@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_hasKey.c                                        :+:      :+:    :+:   */
+/*   ft_haskey.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yonuma <yonuma@student.42.fr>              #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,19 +13,19 @@
 #include <minishell/minishell.h>
 #include <libft/ft_string.h>
 
-int	ft_hasKey(char *key, t_envp *envp)
+int	ft_haskey(char *key, t_envp *envp)
 {
-	int	hasKey;
+	int	haskey;
 
-	hasKey = 0;
+	haskey = 0;
 	while (envp)
 	{
 		if (ft_strcmp(key, envp->key) == 0)
 		{
-			hasKey = 1;
+			haskey = 1;
 			break;
 		}
 		envp = envp->next;
 	}
-	return (hasKey);
+	return (haskey);
 }

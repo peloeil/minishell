@@ -33,39 +33,35 @@ t_envp	*create_new_node(char *key, char *value, int exported)
 	return (new_node);
 }
 
-// 常に？が回っている
-void	register_env_with_value(t_envp *envp, char *key, char *value)
+int	register_env_with_value(t_envp *envp, char *key, char *value)
 {
 	t_envp	*new_node;
 
 	while (envp->next && ft_strcmp(envp->key, key) != 0)
 		envp = envp->next;
-	if (ft_strcmp(envp->key, key) == 0) // ここの処理がおかしい
+	if (ft_strcmp(envp->key, key) == 0)
 	{
 		free(envp->value);
 		envp->value = value;
 		envp->exported = FLAG_EXPORT;
 		free(key);
-		ft_printf("こっちなんですよ: %s, %s\n", envp->key, envp->value);
-		return ;
+		return(EXIT_SUCCESS);
 	}
 	if (ft_strcmp(key, "?") == 0)
 		new_node = create_new_node(key, value, FLAG_SPECIAL);
 	else
-	{
-		create_new_node(key, value, FLAG_EXPORT);
-		// ft_printf("表示: %s\n", key);
-	}
+		new_node = create_new_node(key, value, FLAG_EXPORT);
 	if (!new_node)
 	{
 		free(key);
 		free(value);
-		return ;
+		return (EXIT_FAILURE);
 	}
 	envp->next = new_node;
+	return (EXIT_SUCCESS);
 }
 
-void	register_env_without_value(t_envp *envp, char *key)
+int	register_env_without_value(t_envp *envp, char *key)
 {
 	t_envp	*curr;
 	t_envp	*new_node;
@@ -78,22 +74,23 @@ void	register_env_without_value(t_envp *envp, char *key)
 			if (curr->exported & FLAG_UNSET)
 				curr->exported = (curr->exported & ~FLAG_UNSET) | FLAG_EXPORT;
 			free(key);
-			return ;
+			return (EXIT_SUCCESS);
 		}
 		if (curr->next == NULL)
 			break ;
 		curr = curr->next;
 	}
-	new_node = create_new_node(key, NULL, 0);
+	new_node = create_new_node(key, NULL, FLAG_VALUE);
 	if (!new_node)
 	{
 		free(key);
-		return ;
+		return (EXIT_FAILURE);
 	}
 	curr->next = new_node;
+	return (EXIT_SUCCESS);
 }
 
-void	register_env(t_envp *envp, char *str)
+int	register_env(t_envp *envp, char *str)
 {
 	char	*key;
 	char	*value;
@@ -104,9 +101,9 @@ void	register_env(t_envp *envp, char *str)
 	{
 		key = ft_strdup(str);
 		if (!key)
-			return ;
+			return (EXIT_FAILURE);
 		register_env_without_value(envp, key);
-		return ;
+		return (EXIT_SUCCESS);
 	}
 	key = ft_substr(str, 0, delimiter_pos - str);
 	value = ft_strdup(delimiter_pos + 1);
@@ -114,16 +111,17 @@ void	register_env(t_envp *envp, char *str)
 	{
 		free(key);
 		free(value);
-		return ;
+		return (EXIT_FAILURE);
 	}
 	register_env_with_value(envp, key, value);
+	return (EXIT_SUCCESS);
 }
 
+// export は内部の関数の失敗によらず0を返すようになっている
 int	export(int fd, char **argv, t_envp **envp)
 {
 	if (argv[1] == NULL) // TODO: argv が終わるまでずっと見る
-		print_sorted_env(fd, *envp);
+		return(print_sorted_env(fd, *envp));
 	else
-		register_env(*envp, argv[1]);
-	return (0);
+		return(register_env(*envp, argv[1]));
 }
