@@ -65,22 +65,27 @@ int	update_pwd_and_oldpwd(t_envp *envp)
 
 	status = 0;
 	new_path = getcwd(NULL, 0);
+	if (!new_path)
+	{
+		perror("getcwd");
+		return EXIT_FAILURE;
+	}
 	pwd_key = ft_haskey("PWD", envp);
 	old_key = ft_haskey("OLDPWD", envp);
 	pwd_value = ft_getenv("!PWD", envp);
 	if (!pwd_key)
 	{
-		status += add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
-		status += add_envp_with_flag("!PWD", new_path, envp, FLAG_HIDDEN);
-		status += add_envp_with_flag("OLDPWD", "", envp, FLAG_VALUE);
+		status |= add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
+		status |= add_envp_with_flag("!PWD", new_path, envp, FLAG_HIDDEN);
+		status |= add_envp_with_flag("OLDPWD", "", envp, FLAG_VALUE);
 	}
 	else if (!old_key)
 	{
-		status += add_envp_with_flag("OLDPWD", pwd_value, envp, FLAG_UNSET);
-		status += add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
+		status |= add_envp_with_flag("OLDPWD", pwd_value, envp, FLAG_UNSET);
+		status |= add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
 	}
 	else
-		status += update_pwd_and_oldpwd2(new_path, pwd_value, envp);
+		status |= update_pwd_and_oldpwd2(new_path, pwd_value, envp);
 	free(new_path);
 	if (status == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);

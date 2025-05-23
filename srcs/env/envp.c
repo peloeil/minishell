@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static int	ms_envp_push_(t_envp **ms_envp, char *node)
+static int	ms_envp_push_pwd(t_envp **ms_envp, char *node)
 {
 	t_envp	*new_node;
 	size_t	key_len;
@@ -109,7 +109,7 @@ int	make_ms_envp(t_envp **ms_envp, char **envp)
 		i++;
 	}
 	if (ms_envp_push_oldpwd(ms_envp, "OLDPWD") == -1
-		|| ms_envp_push_(ms_envp, "!PWD") == -1 || update_exit_status(0,
+		|| ms_envp_push_pwd(ms_envp, "!PWD") == -1 || update_exit_status(0,
 			*ms_envp) == -1)
 	{
 		free_ms_envp(*ms_envp);
