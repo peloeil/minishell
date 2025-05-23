@@ -67,7 +67,7 @@ int	update_pwd_and_oldpwd(t_envp *envp)
 	new_path = getcwd(NULL, 0);
 	pwd_key = ft_haskey("PWD", envp);
 	old_key = ft_haskey("OLDPWD", envp);
-	pwd_value = ft_getenv("PWD", envp);
+	pwd_value = ft_getenv("!PWD", envp);
 	if (!pwd_key)
 	{
 		status += add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
