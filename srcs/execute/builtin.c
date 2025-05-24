@@ -45,7 +45,6 @@ void	init_builtin_func(int (*builtin_func[8])(int, char **, t_envp **))
 	builtin_func[7] = builtin_exit;
 }
 
-// status を調べる必要あり
 int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp)
 {
 	char			**argv;

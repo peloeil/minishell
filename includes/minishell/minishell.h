@@ -21,6 +21,7 @@
 # define PROMPT "minishell$ "
 # define NUMERIC "numeric argument required"
 # define TOO_MANY "-minishell: exit: too many arguments"
+# define NO_VALID "not a valid identifier"
 
 // ENVIRONMENT
 # define FLAG_EXPORT 0b00000001
@@ -70,7 +71,6 @@ int		error_return(const char *name, const char *msg)
 		__attribute__((nonnull(1, 2)));
 
 //builtin
-
 int		make_str(int is_double, t_string *str, const char *key,
 			const char *value);
 int		echo(int fd, char **argv, t_envp **envp);
@@ -82,7 +82,7 @@ int		unset(int fd, char **argv, t_envp **envp);
 int		builtin_exit(int fd, char **argv, t_envp **envp);
 
 // cd_utils
-int		add_envp_with_flag(char *key, char *value, t_envp *envp, int flags);
+int		add_with_flag(char *key, char *value, t_envp *envp, int flags);
 int		update_env_value(const char *key, const char *value, t_envp *envp);
 int		get_env_flags(const char *key, t_envp *envp);
 
@@ -95,5 +95,8 @@ void	add_double_quotes(int fd,
 			const char *value);
 void	sort_envp(t_envp **head);
 int		count_argv(char **argv);
+int		is_valid_env_key(const char *key);
+int		no_such(char *path, char *old_path);
+t_envp	*create_new_node(char *key, char *value, int exported);
 
 #endif // MINISHELL_H

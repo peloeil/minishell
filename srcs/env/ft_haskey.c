@@ -15,7 +15,7 @@
 
 int	ft_haskey(char *key, t_envp *envp)
 {
-	int haskey;
+	int	haskey;
 
 	haskey = 0;
 	while (envp)

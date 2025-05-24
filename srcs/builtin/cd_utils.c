@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags)
+int	add_with_flag(char *key, char *value, t_envp *envp, int flags)
 {
 	t_envp	*current;
 	t_envp	*new_node;
@@ -38,11 +38,7 @@ int	add_envp_with_flag(char *key, char *value, t_envp *envp, int flags)
 	}
 	new_node = create_new_node(ft_strdup(key), ft_strdup(value), flags);
 	if (!new_node)
-	{
-		free(key);
-		free(value);
-		return (EXIT_FAILURE);
-	}
+		return (free(key), free(value), EXIT_FAILURE);
 	current->next = new_node;
 	return (EXIT_SUCCESS);
 }
@@ -77,4 +73,16 @@ int	get_env_flags(const char *key, t_envp *envp)
 		current = current->next;
 	}
 	return (-1);
+}
+
+int	no_such(char *path, char *old_path)
+{
+	if (chdir(path) == -1)
+	{
+		perror("chdir");
+		free(old_path);
+		free(path);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }

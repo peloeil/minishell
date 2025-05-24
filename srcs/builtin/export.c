@@ -17,23 +17,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-t_envp	*create_new_node(char *key, char *value, int exported)
-{
-	t_envp	*new_node;
-
-	new_node = malloc(sizeof(t_envp));
-	if (!new_node)
-		return (NULL);
-	new_node->key = key;
-	if (value != NULL)
-		new_node->value = value;
-	else
-		new_node->value = ft_strdup("");
-	new_node->exported = exported;
-	new_node->next = NULL;
-	return (new_node);
-}
-
 int	register_env_with_value(t_envp *envp, char *key, char *value)
 {
 	t_envp	*new_node;
@@ -91,22 +74,17 @@ int	register_env_without_value(t_envp *envp, char *key)
 	return (EXIT_SUCCESS);
 }
 
-int	is_valid_env_key(const char *key)
+int	null_delimiter_pos(t_envp *envp, char *key)
 {
-	size_t	i;
-
-	if (!key || !key[0])
-		return (0);
-	if (!ft_isalpha(key[0]) && key[0] != '_')
-		return (0);
-	i = 1;
-	while (key[i])
+	if (!key)
+		return (EXIT_FAILURE);
+	if (!is_valid_env_key(key))
 	{
-		if (!ft_isalnum(key[i]) && key[i] != '_')
-			return (0);
-		i++;
+		ft_dprintf(STDERR_FILENO, "minishell: export: '%s': %s\n", key,
+			NO_VALID);
+		return (free(key), EXIT_FAILURE);
 	}
-	return (1);
+	return (register_env_without_value(envp, key));
 }
 
 int	register_env(t_envp *envp, char *str)
@@ -119,31 +97,17 @@ int	register_env(t_envp *envp, char *str)
 	if (delimiter_pos == NULL)
 	{
 		key = ft_strdup(str);
-		if (!key)
-			return (EXIT_FAILURE);
-		if (!is_valid_env_key(key))
-		{
-			ft_printf("minishell: export: '%s': not a valid identifier\n", key);
-			free(key);
-			return (EXIT_FAILURE);
-		}
-		register_env_without_value(envp, key);
-		return (EXIT_SUCCESS);
+		return (null_delimiter_pos(envp, key));
 	}
 	key = ft_substr(str, 0, delimiter_pos - str);
 	value = ft_strdup(delimiter_pos + 1);
 	if (!key || !value)
-	{
-		free(key);
-		free(value);
-		return (EXIT_FAILURE);
-	}
+		return (free(key), free(value), EXIT_FAILURE);
 	if (!is_valid_env_key(key))
 	{
-		ft_printf("minishell: export: '%s': not a valid identifier\n", key);
-		free(key);
-		free(value);
-		return (EXIT_FAILURE);
+		ft_dprintf(STDERR_FILENO, "minishell: export: '%s': %s\n", key,
+			NO_VALID);
+		return (free(key), free(value), EXIT_FAILURE);
 	}
 	return (register_env_with_value(envp, key, value));
 }
@@ -152,17 +116,16 @@ int	export(int fd, char **argv, t_envp **envp)
 {
 	int	i;
 	int	status;
-	int	tmp_status;
 
+	status = 0;
 	if (argv[1] == NULL)
 		return (print_sorted_env(fd, *envp));
-	status = EXIT_SUCCESS;
 	i = 1;
 	while (argv[i])
 	{
-		tmp_status = register_env(*envp, argv[i]);
-		if (tmp_status == EXIT_FAILURE)
-			status = EXIT_FAILURE;
+		status = register_env(*envp, argv[i]);
+		if (status == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		i++;
 	}
 	return (status);

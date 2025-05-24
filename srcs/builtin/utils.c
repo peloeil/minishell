@@ -102,7 +102,6 @@ void	sort_envp(t_envp **head)
 		curr = *head;
 		while (curr && curr->next)
 		{
-			// ft_printf("test:  %s=%s\n", curr->key, curr->value);
 			if (ft_strcmp(curr->key, curr->next->key) > 0)
 			{
 				swap_envp_nodes(curr);
@@ -112,5 +111,3 @@ void	sort_envp(t_envp **head)
 		}
 	}
 }
-
-// sort 時には存在しているPATHがソートすると非表示になる
