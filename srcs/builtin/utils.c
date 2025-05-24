@@ -26,21 +26,25 @@ int	count_argv(char **argv)
 	return (count);
 }
 
-void	make_str(int is_double, t_string *str,
+int	make_str(int is_double, t_string *str,
 	const char *key, const char *value)
 {
+	int	status;
+
+	status = 0;
 	if (is_double == 0)
 	{
-		ft_str_push_str(str, key);
-		ft_str_push_str(str, "=");
-		ft_str_push_str(str, value);
-		ft_str_push_str(str, "\n");
-		return ;
+		status |= ft_str_push_str(str, key);
+		status |= ft_str_push_str(str, "=");
+		status |= ft_str_push_str(str, value);
+		status |= ft_str_push_str(str, "\n");
+		return (status);
 	}
-	ft_str_push_str(str, key);
-	ft_str_push_str(str, "=\"");
-	ft_str_push_str(str, value);
-	ft_str_push_str(str, "\"\n");
+	status |= ft_str_push_str(str, key);
+	status |= ft_str_push_str(str, "=\"");
+	status |= ft_str_push_str(str, value);
+	status |= ft_str_push_str(str, "\"\n");
+	return (status);
 }
 
 int	print_sorted_env(int fd, t_envp *envp)

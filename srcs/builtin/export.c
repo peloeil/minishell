@@ -12,6 +12,7 @@
 
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
+#include <libft/ft_ctype.h>
 #include <minishell/minishell.h>
 #include <stdlib.h>
 #include <string.h>
@@ -90,6 +91,24 @@ int	register_env_without_value(t_envp *envp, char *key)
 	return (EXIT_SUCCESS);
 }
 
+int	is_valid_env_key(const char *key)
+{
+	size_t	i;
+
+	if (!key || !key[0])
+		return (0);
+	if (!ft_isalpha(key[0]) && key[0] != '_')
+		return (0);
+	i = 1;
+	while (key[i])
+	{
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	register_env(t_envp *envp, char *str)
 {
 	char	*key;
@@ -102,6 +121,12 @@ int	register_env(t_envp *envp, char *str)
 		key = ft_strdup(str);
 		if (!key)
 			return (EXIT_FAILURE);
+		if (!is_valid_env_key(key))
+		{
+			ft_printf("minishell: export: '%s': not a valid identifier\n", key);
+			free(key);
+			return (EXIT_FAILURE);
+		}
 		register_env_without_value(envp, key);
 		return (EXIT_SUCCESS);
 	}
@@ -113,11 +138,16 @@ int	register_env(t_envp *envp, char *str)
 		free(value);
 		return (EXIT_FAILURE);
 	}
-	register_env_with_value(envp, key, value);
-	return (EXIT_SUCCESS);
+	if (!is_valid_env_key(key))
+	{
+		ft_printf("minishell: export: '%s': not a valid identifier\n", key);
+		free(key);
+		free(value);
+		return (EXIT_FAILURE);
+	}
+	return (register_env_with_value(envp, key, value));
 }
 
-// export は内部の関数の失敗によらず0を返すようになっている
 int	export(int fd, char **argv, t_envp **envp)
 {
 	if (argv[1] == NULL) // TODO: argv が終わるまでずっと見る

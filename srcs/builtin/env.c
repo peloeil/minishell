@@ -15,6 +15,7 @@
 #include <libft/ft_stdio.h>
 #include <libft/ft_put_fd.h>
 #include <libft/std_string.h>
+#include <minishell/execute.h>
 #include <stdlib.h>
 
 int	env(int fd, char **argv, t_envp **envp)
@@ -30,7 +31,13 @@ int	env(int fd, char **argv, t_envp **envp)
 	while (tmp_envp != NULL)
 	{
 		if (tmp_envp->exported & FLAG_EXPORT)
-			make_str(0, &str, tmp_envp->key, tmp_envp->value);
+		{
+			if (make_str(0, &str, tmp_envp->key, tmp_envp->value) == -1)
+			{
+				free(str.str);
+				return (EXIT_FAILURE);
+			}
+		}
 		tmp_envp = tmp_envp->next;
 	}
 	i = ft_dprintf(fd, "%s", str.str);

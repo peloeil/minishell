@@ -71,7 +71,7 @@ int		error_return(const char *name, const char *msg)
 
 //builtin
 
-void	make_str(int is_double, t_string *str, const char *key,
+int		make_str(int is_double, t_string *str, const char *key,
 			const char *value);
 int		echo(int fd, char **argv, t_envp **envp);
 int		env(int fd, char **argv, t_envp **envp);
