@@ -13,7 +13,9 @@
 #include <minishell/minishell.h>
 #include <libft/ft_stdio.h>
 #include <libft/libft.h>
+#include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 int	is_n_option(const char *str)
 {
@@ -69,6 +71,10 @@ int	echo(int fd, char **argv, t_envp **envp)
 	i = ft_dprintf(fd, "%s", str.str);
 	free(str.str);
 	if (i < 0)
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: echo: write error: %s\n",
+			strerror(errno));
 		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
