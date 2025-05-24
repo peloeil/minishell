@@ -48,6 +48,37 @@ int	skip_n_option(char **argv, int *i)
 	return (n_option);
 }
 
+int	is_n_option(const char *str)
+{
+	int	i;
+
+	if (str == NULL || str[0] != '-')
+		return (0);
+	i = 1;
+	if (!str[1])
+		return (0);
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	skip_n_option(char **argv, int *i)
+{
+	int	n_option;
+
+	n_option = 0;
+	while (argv[*i] && is_n_option(argv[*i]))
+	{
+		n_option = 1;
+		(*i)++;
+	}
+	return (n_option);
+}
+
 int	echo(int fd, char **argv, t_envp **envp)
 {
 	int			n_option;
