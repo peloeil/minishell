@@ -28,26 +28,26 @@ int	update_pwd_and_oldpwd2(char *new_path, char *old_path, t_envp *envp)
 	old_flags = get_env_flags("OLDPWD", envp);
 	if (old_flags != FLAG_UNSET && pwd_flags != FLAG_UNSET)
 	{
-		status += add_envp_with_flag("OLDPWD", old_path, envp, old_flags | FLAG_EXPORT);
-		status += add_envp_with_flag("PWD", new_path, envp, pwd_flags | FLAG_EXPORT);
+		status |= add_envp_with_flag("OLDPWD", old_path, envp, old_flags | FLAG_EXPORT);
+		status |= add_envp_with_flag("PWD", new_path, envp, pwd_flags | FLAG_EXPORT);
 		if (status == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
 		else
 			return (EXIT_FAILURE);
 	}
 	if (old_flags == FLAG_UNSET)
-		status += add_envp_with_flag("OLDPWD", old_path, envp, FLAG_UNSET);
+		status |= add_envp_with_flag("OLDPWD", old_path, envp, FLAG_UNSET);
 	else
-		status += add_envp_with_flag("OLDPWD", old_path, envp, FLAG_EXPORT);
+		status |= add_envp_with_flag("OLDPWD", old_path, envp, FLAG_EXPORT);
 	if (pwd_flags == FLAG_UNSET)
 	{
-		status += add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
-		status += add_envp_with_flag("!PWD", new_path, envp, FLAG_HIDDEN);
+		status |= add_envp_with_flag("PWD", new_path, envp, FLAG_UNSET);
+		status |= add_envp_with_flag("!PWD", new_path, envp, FLAG_HIDDEN);
 	}
 	else
 	{
-		status += add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
-		status += add_envp_with_flag("!PWD", new_path, envp, FLAG_HIDDEN);
+		status |= add_envp_with_flag("PWD", new_path, envp, FLAG_EXPORT);
+		status |= add_envp_with_flag("!PWD", new_path, envp, FLAG_HIDDEN);
 	}
 	if (status == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
