@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <libft/ft_string.h>
-#include <libft/ft_stdio.h>
 #include <libft/ft_put_fd.h>
+#include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
 #include <libft/std_string.h>
 #include <minishell/execute.h>
+#include <minishell/minishell.h>
 #include <stdlib.h>
 
 int	env(int fd, char **argv, t_envp **envp)
@@ -44,6 +44,5 @@ int	env(int fd, char **argv, t_envp **envp)
 	free(str.str);
 	if (i < 0)
 		return (EXIT_FAILURE);
-	
 	return (0);
 }

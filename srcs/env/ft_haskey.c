@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
 #include <libft/ft_string.h>
+#include <minishell/minishell.h>
 
 int	ft_haskey(char *key, t_envp *envp)
 {
-	int	haskey;
+	int haskey;
 
 	haskey = 0;
 	while (envp)
@@ -23,7 +23,7 @@ int	ft_haskey(char *key, t_envp *envp)
 		if (ft_strcmp(key, envp->key) == 0)
 		{
 			haskey = 1;
-			break;
+			break ;
 		}
 		envp = envp->next;
 	}

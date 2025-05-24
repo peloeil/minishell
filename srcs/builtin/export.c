@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft/ft_ctype.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
-#include <libft/ft_ctype.h>
 #include <minishell/minishell.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,7 +46,7 @@ int	register_env_with_value(t_envp *envp, char *key, char *value)
 		envp->value = value;
 		envp->exported = FLAG_EXPORT;
 		free(key);
-		return(EXIT_SUCCESS);
+		return (EXIT_SUCCESS);
 	}
 	if (ft_strcmp(key, "?") == 0)
 		new_node = create_new_node(key, value, FLAG_SPECIAL);
@@ -156,7 +156,6 @@ int	export(int fd, char **argv, t_envp **envp)
 
 	if (argv[1] == NULL)
 		return (print_sorted_env(fd, *envp));
-
 	status = EXIT_SUCCESS;
 	i = 1;
 	while (argv[i])

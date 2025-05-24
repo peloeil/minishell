@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <libft/std_string.h>
-#include <libft/ft_string.h>
-#include <stdlib.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
+#include <libft/std_string.h>
+#include <minishell/minishell.h>
+#include <stdlib.h>
 
 int	count_argv(char **argv)
 {
@@ -26,8 +26,7 @@ int	count_argv(char **argv)
 	return (count);
 }
 
-int	make_str(int is_double, t_string *str,
-	const char *key, const char *value)
+int	make_str(int is_double, t_string *str, const char *key, const char *value)
 {
 	int	status;
 
@@ -60,9 +59,10 @@ int	print_sorted_env(int fd, t_envp *envp)
 			envp = envp->next;
 			continue ;
 		}
-		else if ((envp->exported & FLAG_EXPORT)
-			&& ft_strcmp(envp->key, "_") != 0)
-			status = ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
+		else if ((envp->exported & FLAG_EXPORT) && ft_strcmp(envp->key,
+				"_") != 0)
+			status = ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key,
+					envp->value);
 		else if ((envp->exported & FLAG_VALUE))
 			status = ft_dprintf(fd, "declare -x %s\n", envp->key);
 		envp = envp->next;
