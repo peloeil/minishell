@@ -19,6 +19,7 @@
 
 int	env(int fd, char **argv, t_envp **envp)
 {
+	int			i;
 	t_string	str;
 	t_envp		*tmp_envp;
 
@@ -32,7 +33,10 @@ int	env(int fd, char **argv, t_envp **envp)
 			make_str(0, &str, tmp_envp->key, tmp_envp->value);
 		tmp_envp = tmp_envp->next;
 	}
-	ft_dprintf(fd, "%s", str.str);
+	i = ft_dprintf(fd, "%s", str.str);
 	free(str.str);
+	if (i < 0)
+		return (EXIT_FAILURE);
+	
 	return (0);
 }
