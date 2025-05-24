@@ -150,8 +150,21 @@ int	register_env(t_envp *envp, char *str)
 
 int	export(int fd, char **argv, t_envp **envp)
 {
-	if (argv[1] == NULL) // TODO: argv が終わるまでずっと見る
-		return(print_sorted_env(fd, *envp));
-	else
-		return(register_env(*envp, argv[1]));
+	int	i;
+	int	status;
+	int	tmp_status;
+
+	if (argv[1] == NULL)
+		return (print_sorted_env(fd, *envp));
+
+	status = EXIT_SUCCESS;
+	i = 1;
+	while (argv[i])
+	{
+		tmp_status = register_env(*envp, argv[i]);
+		if (tmp_status == EXIT_FAILURE)
+			status = EXIT_FAILURE;
+		i++;
+	}
+	return (status);
 }
