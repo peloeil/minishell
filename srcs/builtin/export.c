@@ -80,7 +80,7 @@ int	null_delimiter_pos(t_envp *envp, char *key)
 		return (EXIT_FAILURE);
 	if (!is_valid_env_key(key))
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: export: '%s': %s\n", key,
+		ft_dprintf(STDERR_FILENO, "minishell: export: `%s': %s\n", key,
 			NO_VALID);
 		return (free(key), EXIT_FAILURE);
 	}
@@ -105,8 +105,8 @@ int	register_env(t_envp *envp, char *str)
 		return (free(key), free(value), EXIT_FAILURE);
 	if (!is_valid_env_key(key))
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: export: '%s': %s\n", key,
-			NO_VALID);
+		ft_dprintf(STDERR_FILENO, "minishell: export: `%s=%s': %s\n", key,
+			value, NO_VALID);
 		return (free(key), free(value), EXIT_FAILURE);
 	}
 	return (register_env_with_value(envp, key, value));

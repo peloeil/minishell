@@ -17,6 +17,8 @@
 #include <minishell/execute.h>
 #include <minishell/minishell.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <string.h>
 
 int	env(int fd, char **argv, t_envp **envp)
 {
