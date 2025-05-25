@@ -10,12 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft/ft_ctype.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
 #include <minishell/minishell.h>
 #include <stdlib.h>
-#include <string.h>
 
 int	register_env_with_value(t_envp *envp, char *key, char *value)
 {

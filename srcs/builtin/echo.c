@@ -11,11 +11,8 @@
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
-#include <libft/ft_stdio.h>
 #include <libft/libft.h>
-#include <string.h>
 #include <stdlib.h>
-#include <errno.h>
 
 int	is_n_option(const char *str)
 {

@@ -10,15 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft/ft_put_fd.h>
-#include <libft/ft_stdio.h>
-#include <libft/ft_string.h>
-#include <libft/std_string.h>
-#include <minishell/execute.h>
 #include <minishell/minishell.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <string.h>
 
 int	env(int fd, char **argv, t_envp **envp)
 {

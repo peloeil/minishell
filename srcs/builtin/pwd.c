@@ -12,8 +12,6 @@
 
 #include <minishell/minishell.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <libft/ft_stdio.h>
 
 int	pwd(int fd, char **argv, t_envp **envp)

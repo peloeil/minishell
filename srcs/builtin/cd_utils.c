@@ -15,7 +15,6 @@
 #include <minishell/minishell.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 int	add_with_flag(char *key, char *value, t_envp *envp, int flags)
 {

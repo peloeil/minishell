@@ -15,7 +15,6 @@
 #include <minishell/minishell.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 int	update_pwd_and_oldpwd3(char *new_path, char *old_path, t_envp *envp)
 {

@@ -12,7 +12,6 @@
 
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
-#include <libft/std_string.h>
 #include <minishell/minishell.h>
 #include <stdlib.h>
 
