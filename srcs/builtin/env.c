@@ -46,5 +46,4 @@ int	env(int fd, char **argv, t_envp **envp)
 	if (i != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
-	return (0);
 }
