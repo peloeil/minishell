@@ -48,6 +48,21 @@ int	skip_n_option(char **argv, int *i)
 	return (n_option);
 }
 
+int	print_echo(int fd, t_string str)
+{
+	int	i;
+
+	i = ft_dprintf(fd, "%s", str.str);
+	free(str.str);
+	if (i < 0)
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: echo: write error: %s\n",
+			strerror(errno));
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
 int	echo(int fd, char **argv, t_envp **envp)
 {
 	int			n_option;
@@ -68,13 +83,8 @@ int	echo(int fd, char **argv, t_envp **envp)
 	}
 	if (n_option != 1 && ft_str_push(&str, '\n') == -1)
 		return (EXIT_FAILURE);
-	i = ft_dprintf(fd, "%s", str.str);
-	free(str.str);
-	if (i < 0)
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: echo: write error: %s\n",
-			strerror(errno));
+	i = print_echo(fd, str);
+	if (i != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
-	}
 	return (EXIT_SUCCESS);
 }

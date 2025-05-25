@@ -83,7 +83,7 @@ int	update_pwd_and_oldpwd(t_envp *envp, char *new_path, char *pwd_value)
 	else
 		s |= update_pwd_and_oldpwd2(new_path, pwd_value, envp);
 	return (s);
-}	
+}
 
 int	update_pwd_and_oldpwd_base(t_envp *envp)
 {
