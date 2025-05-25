@@ -42,13 +42,9 @@ int	env(int fd, char **argv, t_envp **envp)
 		}
 		tmp_envp = tmp_envp->next;
 	}
-	i = ft_dprintf(fd, "%s", str.str);
-	free(str.str);
-	if (i < 0)
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: env: write error: %s\n",
-			strerror(errno));
+	i = print_write_error(fd, str, "env");
+	if (i != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
-	}
+	return (EXIT_SUCCESS);
 	return (0);
 }

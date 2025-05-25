@@ -35,6 +35,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		echo.c \
 		export.c \
 		export_utils.c \
+		print_write_error.c \
 		cd.c \
 		cd_utils.c \
 		env.c \

@@ -98,5 +98,7 @@ int		count_argv(char **argv);
 int		is_valid_env_key(const char *key);
 int		no_such(char *path, char *old_path);
 t_envp	*create_new_node(char *key, char *value, int exported);
+int		print_write_error(int fd, t_string str, char *name);
+int		resolve_cd_target(char **argv, t_envp *envp, char **out_path);
 
 #endif // MINISHELL_H

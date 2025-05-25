@@ -106,32 +106,6 @@ int	update_pwd_and_oldpwd_base(t_envp *envp)
 	return (EXIT_FAILURE);
 }
 
-int	resolve_cd_target(char **argv, t_envp *envp, char **out_path)
-{
-	char	*home_path;
-
-	if (count_argv(argv) > 2)
-	{
-		ft_dprintf(STDERR_FILENO, "-minishell: cd: too many arguments\n");
-		return (EXIT_FAILURE);
-	}
-	if (argv[1] == NULL)
-	{
-		home_path = ft_getenv("HOME", envp);
-		if (home_path == NULL)
-		{
-			ft_dprintf(STDERR_FILENO, "cd: HOME not set\n");
-			return (EXIT_FAILURE);
-		}
-		*out_path = ft_strdup(home_path);
-	}
-	else
-		*out_path = ft_strdup(argv[1]);
-	if (*out_path == NULL)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
 int	cd(int fd, char **argv, t_envp **envp)
 {
 	char	*old_path;
