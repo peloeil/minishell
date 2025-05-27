@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/16 18:11:30 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:40:58 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void	free_tokens(t_token_list *tokens);
 void	free_ast(t_ast_node *ast);
 int		found_parse_error(t_ast_node *ast)
 		__attribute__((nonnull(1)));
-int		error_return(const char *name, const char *msg)
-		__attribute__((nonnull(1, 2)));
+int		error_return(int ret, const char *name, const char *msg)
+		__attribute__((nonnull(2, 3)));
 
 //builtin
 int		make_str(int is_double, t_string *str, const char *key,

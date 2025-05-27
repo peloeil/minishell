@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 05:12:04 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 05:13:33 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:47:18 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ int	wrap_pipe(int *pipefd)
 
 	ret = pipe(pipefd);
 	if (ret == -1)
-		return (error_return("pipe", strerror(errno)));
+		return (error_return(-1, "pipe", strerror(errno)));
 	return (0);
 }

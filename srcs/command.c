@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:22:05 by sota              #+#    #+#             */
-/*   Updated: 2025/05/18 20:11:55 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:46:16 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	found_suitable_file(const char *path, int flag, int show_error)
 	if (access(path, F_OK) == -1)
 	{
 		if (show_error)
-			error_return(path, strerror(ENOENT));
+			error_return(0, path, strerror(ENOENT));
 		return (0);
 	}
 	if (wrap_stat(path, &statbuf) == -1)
@@ -35,15 +35,14 @@ static int	found_suitable_file(const char *path, int flag, int show_error)
 	if (S_ISDIR(statbuf.st_mode))
 	{
 		if (show_error)
-			error_return(path, strerror(EISDIR));
+			error_return(0, path, strerror(EISDIR));
 		return (0);
 	}
 	if (flag == F_OK)
 		return (1);
 	if (flag == X_OK && (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
 		return (1);
-	error_return(path, strerror(EACCES));
-	return (0);
+	return (error_return(0, path, strerror(EACCES)));
 }
 
 static int	set_absolute_path(char **const pathptr, const char *cmd)
@@ -75,14 +74,14 @@ static char	*search_file(const char *cmd, char **dirs, int mode)
 		if (found_suitable_file(file, mode, 0))
 		{
 			if (mode == F_OK)
-				error_return(file, strerror(EACCES));
+				error_return(0, file, strerror(EACCES));
 			return (file);
 		}
 		free(file);
 		i++;
 	}
 	if (mode == F_OK)
-		error_return(cmd, "command not found");
+		error_return(0, cmd, "command not found");
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:17:13 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 15:18:23 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:47:03 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ int	wrap_dup2(int oldfd, int newfd)
 
 	ret = dup2(oldfd, newfd);
 	if (ret == -1)
-		return (error_return("dup2", strerror(errno)));
+		return (error_return(-1, "dup2", strerror(errno)));
 	return (0);
 }

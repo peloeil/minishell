@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:18:49 by sota              #+#    #+#             */
-/*   Updated: 2025/05/14 15:19:30 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 21:29:50 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ int	wrap_fork(void)
 
 	ret = fork();
 	if (ret == -1)
-		return (error_return("fork", strerror(errno)));
+		return (error_return(-1, "fork", strerror(errno)));
 	return (ret);
 }

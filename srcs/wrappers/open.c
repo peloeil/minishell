@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:51:25 by sota              #+#    #+#             */
-/*   Updated: 2025/05/16 23:14:12 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:46:49 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ int	wrap_open(const char *file, int flag)
 	else
 		fd = open(file, flag);
 	if (fd == -1)
-		return (error_return(file, strerror(errno)));
+		return (error_return(-1, file, strerror(errno)));
 	return (fd);
 }
