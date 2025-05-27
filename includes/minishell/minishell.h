@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/27 20:40:58 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/28 01:04:57 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int		count_argv(char **argv);
 int		is_valid_env_key(const char *key);
 int		no_such(char *path, char *old_path);
 t_envp	*create_new_node(char *key, char *value, int exported);
-int		print_write_error(int fd, t_string str, char *name);
 int		resolve_cd_target(char **argv, t_envp *envp, char **out_path);
 
 #endif // MINISHELL_H
