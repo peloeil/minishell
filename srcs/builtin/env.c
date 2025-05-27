@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:38:56 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/27 20:02:25 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:07:09 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	env(int fd, char **argv, t_envp **envp)
 
 	(void)argv;
 	if (ft_str_new(&str) == -1)
-		return (1);
+		return (STATUS_ERRORS);
 	tmp_envp = *envp;
 	while (tmp_envp != NULL)
 	{
@@ -34,7 +34,7 @@ int	env(int fd, char **argv, t_envp **envp)
 	}
 	i = ft_dprintf(fd, "%s", str.str);
 	free(str.str);
-	if (i != EXIT_SUCCESS)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	if (i < 0)
+		return (STATUS_ERRORS);
+	return (STATUS_SUCCESS);
 }
