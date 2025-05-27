@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:38:56 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/27 19:21:57 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:02:25 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
 #include <minishell/execute.h>
+#include <libft/ft_stdio.h>
 #include <stdlib.h>
 
 int	env(int fd, char **argv, t_envp **envp)
@@ -31,7 +32,8 @@ int	env(int fd, char **argv, t_envp **envp)
 			return (STATUS_ERRORS);
 		tmp_envp = tmp_envp->next;
 	}
-	i = print_write_error(fd, str, "env");
+	i = ft_dprintf(fd, "%s", str.str);
+	free(str.str);
 	if (i != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

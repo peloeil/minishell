@@ -30,17 +30,20 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		execute.c \
 	) \
 	$(addprefix builtin/, \
-		utils.c \
-		pwd.c \
 		echo.c \
-		export.c \
-		export_utils.c \
-		print_write_error.c \
-		cd.c \
-		cd_utils.c \
 		env.c \
-		unset.c \
 		exit.c \
+		pwd.c \
+		unset.c \
+		utils.c \
+		$(addprefix cd/, \
+			cd.c \
+			cd_utils.c \
+		) \
+		$(addprefix export/, \
+			export.c \
+			export_utils.c \
+		) \
 	) \
 	$(addprefix lexer/, \
 		lexer.c \
