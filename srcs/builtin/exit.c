@@ -13,7 +13,6 @@
 #include <libft/ft_ctype.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_stdlib.h>
-#include <libft/ft_string.h>
 #include <limits.h>
 #include <minishell/minishell.h>
 

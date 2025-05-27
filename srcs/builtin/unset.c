@@ -6,12 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:05:06 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/15 04:02:22 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 19:36:34 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft/ft_string.h>
 #include <minishell/minishell.h>
+#include <minishell/execute.h>
+#include <libft/ft_string.h>
 #include <stdlib.h>
 
 static void	remove_env_key(t_envp **envp, const char *key)
@@ -45,13 +46,11 @@ int	unset(int fd, char **argv, t_envp **envp)
 	int	i;
 
 	(void)fd;
-	if (count_argv(argv) < 2)
-		return (0);
 	i = 1;
 	while (argv[i] != NULL)
 	{
 		remove_env_key(envp, argv[i]);
 		i++;
 	}
-	return (0);
+	return (STATUS_SUCCESS);
 }

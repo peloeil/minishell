@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stat.c                                             :+:      :+:    :+:   */
+/*   ft_haskey.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: yonuma <yonuma@student.42.fr>              #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 15:10:49 by sota              #+#    #+#             */
-/*   Updated: 2025/05/27 20:47:30 by sota             ###   ########.fr       */
+/*   Created: 2025-05-20 01:22:40 by yonuma            #+#    #+#             */
+/*   Updated: 2025-05-20 01:22:40 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft/ft_string.h>
 #include <minishell/minishell.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <errno.h>
 
-int	wrap_stat(const char *path, struct stat *statbuf)
+int	ft_haskey(char *key, t_envp *envp)
 {
-	int	ret;
+	int	haskey;
 
-	ret = stat(path, statbuf);
-	if (ret == -1)
-		return (error_return(-1, path, strerror(errno)));
-	return (0);
+	haskey = 0;
+	while (envp)
+	{
+		if (ft_strcmp(key, envp->key) == 0)
+		{
+			haskey = 1;
+			break ;
+		}
+		envp = envp->next;
+	}
+	return (haskey);
 }

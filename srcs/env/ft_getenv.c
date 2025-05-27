@@ -12,6 +12,7 @@
 
 #include <minishell/minishell.h>
 #include <libft/ft_string.h>
+#include <libft/ft_stdio.h>
 
 char	*ft_getenv(const char *key, const t_envp *envp)
 {

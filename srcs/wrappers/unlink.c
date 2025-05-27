@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:12:06 by sota              #+#    #+#             */
-/*   Updated: 2025/05/16 18:13:27 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 20:46:36 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ int	wrap_unlink(const char *path)
 
 	ret = unlink(path);
 	if (ret == -1)
-		return (error_return("unlink", strerror(errno)));
+		return (error_return(-1, "unlink", strerror(errno)));
 	return (0);
 }

@@ -10,21 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/execute.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_stdlib.h>
+#include <minishell/execute.h>
+#include <minishell/minishell.h>
 
 int	update_exit_status(t_exit_status status, t_envp *envp)
 {
-	char	*argv[3];
-	char	str[20];
+	char	*str_status;
 
-	if (ft_sprintf(str, "?=%d", (int)status) == -1)
-		return (-1);
-	argv[0] = "export";
-	argv[1] = str;
-	argv[2] = NULL;
-	if (export(0, argv, &envp) == -1)
-		return (-1);
-	return (status);
+	str_status = ft_itoa(status);
+	return (add_with_flag("?", str_status, envp, FLAG_SPECIAL));
 }

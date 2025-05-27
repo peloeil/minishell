@@ -6,16 +6,16 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 05:28:19 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/22 00:10:31 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 17:58:01 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
+#include <minishell/execute.h>
 #include <libft/ft_stdio.h>
-#include <libft/libft.h>
 #include <stdlib.h>
 
-int	is_n_option(const char *str)
+static int	is_n_option(const char *str)
 {
 	int	i;
 
@@ -33,7 +33,7 @@ int	is_n_option(const char *str)
 	return (1);
 }
 
-int	skip_n_option(char **argv, int *i)
+static int	skip_n_option(char **argv, int *i)
 {
 	int	n_option;
 
@@ -54,21 +54,21 @@ int	echo(int fd, char **argv, t_envp **envp)
 
 	(void)envp;
 	if (ft_str_new(&str))
-		return (1);
+		return (STATUS_ERRORS);
 	i = 1;
 	n_option = skip_n_option(argv, &i);
 	while (argv[i])
 	{
 		if (ft_str_push_str(&str, argv[i]) == -1
 			|| (argv[i + 1] != NULL && ft_str_push(&str, ' ') == -1))
-			return (1);
+			return (STATUS_ERRORS);
 		i++;
 	}
-	if (n_option == 0 || ft_str_push(&str, '\n') == -1)
-		return (1);
+	if (!n_option && ft_str_push(&str, '\n') == -1)
+		return (STATUS_ERRORS);
 	i = ft_dprintf(fd, "%s", str.str);
 	free(str.str);
 	if (i < 0)
-		return (1);
-	return (0);
+		return (STATUS_ERRORS);
+	return (STATUS_SUCCESS);
 }

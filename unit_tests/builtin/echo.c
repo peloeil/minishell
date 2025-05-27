@@ -15,6 +15,8 @@ int main(void) {
         { "With multiple -n and no newline", "-n", "-n", "Hello", "World", NULL },
         { "With empty arguments", NULL },
         { "No arguments", NULL },
+		{ "Many", "-nnnnnnnnnnnn", "Hello", NULL},
+		{ "invalid option", "-na", "Hello", "Worlk", NULL},
     };
 
     size_t total_tests = sizeof(args_array) / sizeof(args_array[0]);

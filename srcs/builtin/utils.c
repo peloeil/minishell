@@ -10,11 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <libft/std_string.h>
-#include <libft/ft_string.h>
-#include <stdlib.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
+#include <minishell/minishell.h>
+#include <stdlib.h>
 
 int	count_argv(char **argv)
 {
@@ -26,37 +25,51 @@ int	count_argv(char **argv)
 	return (count);
 }
 
-void	make_str(int is_double, t_string *str,
-	const char *key, const char *value)
+int	make_str(int is_double, t_string *str, const char *key, const char *value)
 {
+	int	status;
+
+	status = 0;
 	if (is_double == 0)
 	{
-		ft_str_push_str(str, key);
-		ft_str_push_str(str, "=");
-		ft_str_push_str(str, value);
-		ft_str_push_str(str, "\n");
-		return ;
+		status |= ft_str_push_str(str, key);
+		status |= ft_str_push_str(str, "=");
+		status |= ft_str_push_str(str, value);
+		status |= ft_str_push_str(str, "\n");
+		return (status);
 	}
-	ft_str_push_str(str, key);
-	ft_str_push_str(str, "=\"");
-	ft_str_push_str(str, value);
-	ft_str_push_str(str, "\"\n");
+	status |= ft_str_push_str(str, key);
+	status |= ft_str_push_str(str, "=\"");
+	status |= ft_str_push_str(str, value);
+	status |= ft_str_push_str(str, "\"\n");
+	return (status);
 }
 
-void	print_sorted_env(int fd, t_envp *envp)
+int	print_sorted_env(int fd, t_envp *envp)
 {
+	int	status;
+
+	status = 0;
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
-		if (envp->exported & (FLAG_UNSET | FLAG_SPECIAL))
+		if (envp->exported & (FLAG_UNSET | FLAG_SPECIAL) || envp->exported == 0)
+		{
 			envp = envp->next;
-		else if ((envp->exported & FLAG_EXPORT)
-			&& ft_strcmp(envp->key, "_") != 0)
-			ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key, envp->value);
-		else if (!(envp->exported & FLAG_EXPORT))
-			ft_dprintf(fd, "declare -x %s\n", envp->key);
+			continue ;
+		}
+		else if ((envp->exported & FLAG_EXPORT) && ft_strcmp(envp->key,
+				"_") != 0)
+			status = ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key,
+					envp->value);
+		else if ((envp->exported & FLAG_VALUE))
+			status = ft_dprintf(fd, "declare -x %s\n", envp->key);
 		envp = envp->next;
 	}
+	if (status == -1)
+		return (EXIT_FAILURE);
+	else
+		return (EXIT_SUCCESS);
 }
 
 void	swap_envp_nodes(t_envp *curr)

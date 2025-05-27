@@ -44,6 +44,13 @@ int main(int argc, char **argv, char **envp) {
         { "argv[0]", "a", NULL },
         { "argv[0]", "a=b", NULL },
         { "argv[0]", "a=b", "c=d", NULL },
+		{ "argv[0]", "1a=b", NULL },
+        { "argv[0]", "!a=b", NULL },
+        { "argv[0]", "_a=b", "c=d", NULL },
+        { "argv[0]", "!a",  NULL },
+        { "argv[0]", "a!aa=b", NULL },
+        { "argv[0]", "a=!b", "c=d", NULL },
+        { "argv[0]", "a_=b", "c_=d", NULL },
     };
 
     t_envp *ms_envp;
