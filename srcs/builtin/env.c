@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:38:56 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/15 04:15:49 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/27 19:21:57 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
+#include <minishell/execute.h>
 #include <stdlib.h>
 
 int	env(int fd, char **argv, t_envp **envp)
@@ -25,14 +26,9 @@ int	env(int fd, char **argv, t_envp **envp)
 	tmp_envp = *envp;
 	while (tmp_envp != NULL)
 	{
-		if (tmp_envp->exported & FLAG_EXPORT)
-		{
-			if (make_str(0, &str, tmp_envp->key, tmp_envp->value) == -1)
-			{
-				free(str.str);
-				return (EXIT_FAILURE);
-			}
-		}
+		if ((tmp_envp->exported & FLAG_EXPORT)
+			&& make_str(0, &str, tmp_envp->key, tmp_envp->value) == -1)
+			return (STATUS_ERRORS);
 		tmp_envp = tmp_envp->next;
 	}
 	i = print_write_error(fd, str, "env");
