@@ -54,7 +54,7 @@ int main(int argc, char **argv, char **envp) {
     };
 
     t_envp *ms_envp;
-    make_ms_envp(&ms_envp, envp);
+    init_ms_envp(&ms_envp, envp);
 
     printf("=== export ===\n");
     int ntests = sizeof(args_array) / sizeof(args_array[0]);

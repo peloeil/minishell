@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/05/18 16:58:19 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/29 01:09:14 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 static int	initial_setup(t_envp **ms_envp, char **envp)
 {
-	if (make_ms_envp(ms_envp, envp) == -1)
+	if (init_ms_envp(ms_envp, envp) == -1)
 		return (-1);
 	return (0);
 }

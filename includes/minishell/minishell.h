@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/28 23:32:49 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/29 01:12:39 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,10 @@ int		evaluate_command(const char *cmd, t_envp *ms_envp)
 		__attribute__((nonnull(1, 2)));
 int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		__attribute__((nonnull(2, 3)));
-char	*ft_getenv(const char *key, const t_envp *envp)
-		__attribute__((nonnull(1)));
-int		ft_haskey(char *key, t_envp *envp)
-		__attribute__((nonnull(1)));
-int		make_ms_envp(t_envp **ms_envp, char **envp)
-		__attribute__((nonnull(2)));
 
+// errors
 void	free_strs(char **strs)
 		__attribute__((nonnull(1)));
-void	free_ms_envp(t_envp *env);
 void	free_token(void *ptr);
 void	free_tokens(t_token_list *tokens);
 void	free_ast(t_ast_node *ast);
@@ -69,6 +63,14 @@ int		found_parse_error(t_ast_node *ast)
 		__attribute__((nonnull(1)));
 int		error_return(int ret, const char *name, const char *msg)
 		__attribute__((nonnull(2, 3)));
+
+// envp
+char	*ft_getenv(const char *key, const t_envp *envp)
+		__attribute__((nonnull(1)));
+int		init_ms_envp(t_envp **ms_envp, char **envp)
+		__attribute__((nonnull(2)));
+void	free_ms_envp(t_envp *env);
+int		push_to_ms_envp(t_envp **ms_envp, char *str, int flag);
 
 //builtin
 int		make_str(int is_double, t_string *str, const char *key,
@@ -87,7 +89,6 @@ int		update_env_value(const char *key, const char *value, t_envp *envp);
 int		get_env_flags(const char *key, t_envp *envp);
 
 // builtin/utils.c
-t_envp	*create_new_node(char *key, char *value, int flag);
 int		print_sorted_env(int fd, t_envp *envp);
 void	add_double_quotes(int fd,
 			t_string *str,
@@ -97,7 +98,6 @@ void	sort_envp(t_envp **head);
 int		count_argv(char **argv);
 int		is_valid_env_key(const char *key);
 int		no_such(char *path, char *old_path);
-t_envp	*create_new_node(char *key, char *value, int flag);
 int		resolve_cd_target(char **argv, t_envp *envp, char **out_path);
 
 #endif // MINISHELL_H
