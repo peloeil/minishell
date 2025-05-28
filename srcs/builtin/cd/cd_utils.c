@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:08:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/14 18:08:24 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/28 23:38:32 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	add_with_flag(char *key, char *value, t_envp *envp, int flags)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			current->exported = flags;
+			current->flag = flags;
 			return (EXIT_SUCCESS);
 		}
 		if (current->next == NULL)
@@ -68,7 +68,7 @@ int	get_env_flags(const char *key, t_envp *envp)
 	while (current != NULL)
 	{
 		if (ft_strcmp(current->key, key) == 0)
-			return (current->exported);
+			return (current->flag);
 		current = current->next;
 	}
 	return (-1);

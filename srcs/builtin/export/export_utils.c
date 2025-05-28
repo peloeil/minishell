@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025-05-24 07:05:51 by yonuma            #+#    #+#             */
-/*   Updated: 2025-05-24 07:05:51 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/05/28 23:35:29 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_valid_env_key(const char *key)
 	return (1);
 }
 
-t_envp	*create_new_node(char *key, char *value, int exported)
+t_envp	*create_new_node(char *key, char *value, int flag)
 {
 	t_envp	*new_node;
 
@@ -45,7 +45,7 @@ t_envp	*create_new_node(char *key, char *value, int exported)
 		new_node->value = value;
 	else
 		new_node->value = ft_strdup("");
-	new_node->exported = exported;
+	new_node->flag = flag;
 	new_node->next = NULL;
 	return (new_node);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/15 03:56:23 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/28 23:38:05 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	register_env_with_value(t_envp *envp, char *key, char *value)
 	{
 		free(envp->value);
 		envp->value = value;
-		envp->exported = FLAG_EXPORT;
+		envp->flag = FLAG_EXPORT;
 		free(key);
 		return (EXIT_SUCCESS);
 	}
@@ -53,8 +53,8 @@ int	register_env_without_value(t_envp *envp, char *key)
 	{
 		if (ft_strcmp(curr->key, key) == 0)
 		{
-			if (curr->exported & FLAG_UNSET)
-				curr->exported = (curr->exported & ~FLAG_UNSET) | FLAG_EXPORT;
+			if (curr->flag & FLAG_UNSET)
+				curr->flag = (curr->flag & ~FLAG_UNSET) | FLAG_EXPORT;
 			free(key);
 			return (EXIT_SUCCESS);
 		}

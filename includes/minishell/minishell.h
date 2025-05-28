@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/28 01:04:57 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/28 23:32:49 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_envp
 {
 	char			*key;
 	char			*value;
-	int				exported;
+	int				flag;
 	struct s_envp	*next;
 }	t_envp;
 
@@ -87,7 +87,7 @@ int		update_env_value(const char *key, const char *value, t_envp *envp);
 int		get_env_flags(const char *key, t_envp *envp);
 
 // builtin/utils.c
-t_envp	*create_new_node(char *key, char *value, int exported);
+t_envp	*create_new_node(char *key, char *value, int flag);
 int		print_sorted_env(int fd, t_envp *envp);
 void	add_double_quotes(int fd,
 			t_string *str,
@@ -97,7 +97,7 @@ void	sort_envp(t_envp **head);
 int		count_argv(char **argv);
 int		is_valid_env_key(const char *key);
 int		no_such(char *path, char *old_path);
-t_envp	*create_new_node(char *key, char *value, int exported);
+t_envp	*create_new_node(char *key, char *value, int flag);
 int		resolve_cd_target(char **argv, t_envp *envp, char **out_path);
 
 #endif // MINISHELL_H

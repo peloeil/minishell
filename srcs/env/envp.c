@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:08:58 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 04:11:50 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/28 23:33:41 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	ms_envp_push_pwd(t_envp **ms_envp, char *node)
 		free(new_node);
 		return (-1);
 	}
-	new_node->exported = 0;
+	new_node->flag = 0;
 	new_node->next = *ms_envp;
 	*ms_envp = new_node;
 	return (0);
@@ -63,7 +63,7 @@ static int	ms_envp_push_oldpwd(t_envp **ms_envp, char *node)
 		free(new_node);
 		return (-1);
 	}
-	new_node->exported = FLAG_VALUE;
+	new_node->flag = FLAG_VALUE;
 	new_node->next = *ms_envp;
 	*ms_envp = new_node;
 	return (0);
@@ -87,7 +87,7 @@ static int	ms_envp_push(t_envp **ms_envp, char *node)
 		free(new_node);
 		return (-1);
 	}
-	new_node->exported = 1;
+	new_node->flag = 1;
 	new_node->next = *ms_envp;
 	*ms_envp = new_node;
 	return (0);
