@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/29 02:43:04 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/29 02:48:46 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	add_double_quotes(int fd,
 			t_string *str,
 			const char *key,
 			const char *value);
-void	sort_envp(t_envp **head);
 int		count_argv(char **argv);
 int		is_valid_key(const char *key);
 int		no_such(char *path, char *old_path);

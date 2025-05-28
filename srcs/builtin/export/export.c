@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/29 02:45:48 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/29 02:50:09 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	register_env(t_envp **envp, char *str)
 	{
 		free(key);
 		ft_dprintf(STDERR_FILENO,
-					"minishell: export: `%s': not a valid identifier\n", str);
+			"minishell: export: `%s': not a valid identifier\n", str);
 		return (-1);
 	}
 	return (update_ms_envp(envp, str, flag));
