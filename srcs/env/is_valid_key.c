@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_utils.c                                     :+:      :+:    :+:   */
+/*   is_valid_key.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yonuma <yonuma@student.42.fr>              #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-24 07:05:51 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/28 23:35:29 by sota             ###   ########.fr       */
+/*   Created: 2025/05/24 07:05:51 by yonuma            #+#    #+#             */
+/*   Updated: 2025/05/29 02:42:58 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
 #include <libft/ft_ctype.h>
-#include <libft/ft_string.h>
-#include <stdlib.h>
+#include <stddef.h>
 
-int	is_valid_env_key(const char *key)
+int	is_valid_key(const char *key)
 {
 	size_t	i;
 
@@ -31,21 +29,4 @@ int	is_valid_env_key(const char *key)
 		i++;
 	}
 	return (1);
-}
-
-t_envp	*create_new_node(char *key, char *value, int flag)
-{
-	t_envp	*new_node;
-
-	new_node = malloc(sizeof(t_envp));
-	if (!new_node)
-		return (NULL);
-	new_node->key = key;
-	if (value != NULL)
-		new_node->value = value;
-	else
-		new_node->value = ft_strdup("");
-	new_node->flag = flag;
-	new_node->next = NULL;
-	return (new_node);
 }

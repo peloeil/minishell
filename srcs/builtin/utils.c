@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 09:03:16 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/28 23:34:16 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/29 02:35:17 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minishell/minishell.h>
+#include <minishell/execute.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
-#include <minishell/minishell.h>
 #include <stdlib.h>
 
 int	count_argv(char **argv)
@@ -53,23 +54,21 @@ int	print_sorted_env(int fd, t_envp *envp)
 	sort_envp(&envp);
 	while (envp != NULL)
 	{
-		if (envp->flag & (FLAG_UNSET | FLAG_SPECIAL) || envp->flag == 0)
+		if (envp->flag & FLAG_SPECIAL)
 		{
 			envp = envp->next;
 			continue ;
 		}
-		else if ((envp->flag & FLAG_EXPORT) && ft_strcmp(envp->key,
-				"_") != 0)
+		if ((envp->flag & FLAG_ENV) && ft_strcmp(envp->key, "_") != 0)
 			status = ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key,
 					envp->value);
-		else if ((envp->flag & FLAG_VALUE))
+		else if ((envp->flag & FLAG_EXPORT))
 			status = ft_dprintf(fd, "declare -x %s\n", envp->key);
 		envp = envp->next;
 	}
 	if (status == -1)
-		return (EXIT_FAILURE);
-	else
-		return (EXIT_SUCCESS);
+		return (STATUS_ERRORS);
+	return (STATUS_SUCCESS);
 }
 
 void	swap_envp_nodes(t_envp *curr)

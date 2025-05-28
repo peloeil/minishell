@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/29 01:12:39 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/29 02:43:04 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,9 @@
 # define NO_VALID "not a valid identifier"
 
 // ENVIRONMENT
-# define FLAG_EXPORT 0b00000001
-# define FLAG_VALUE 0b00000010
-# define FLAG_UNSET 0b00000100
-# define FLAG_SPECIAL 0b00001000
-# define FLAG_HIDDEN 0b00010000
+# define FLAG_SPECIAL 0b00000001
+# define FLAG_EXPORT  0b00000010
+# define FLAG_ENV     0b00000100
 
 typedef struct s_envp
 {
@@ -70,7 +68,9 @@ char	*ft_getenv(const char *key, const t_envp *envp)
 int		init_ms_envp(t_envp **ms_envp, char **envp)
 		__attribute__((nonnull(2)));
 void	free_ms_envp(t_envp *env);
-int		push_to_ms_envp(t_envp **ms_envp, char *str, int flag);
+int		update_ms_envp(t_envp **ms_envp, const char *str, int flag);
+int		split_into_key_value(const char *str, char **key, char **value);
+t_envp	*search_key(const char *key, t_envp *envp);
 
 //builtin
 int		make_str(int is_double, t_string *str, const char *key,
@@ -96,7 +96,7 @@ void	add_double_quotes(int fd,
 			const char *value);
 void	sort_envp(t_envp **head);
 int		count_argv(char **argv);
-int		is_valid_env_key(const char *key);
+int		is_valid_key(const char *key);
 int		no_such(char *path, char *old_path);
 int		resolve_cd_target(char **argv, t_envp *envp, char **out_path);
 

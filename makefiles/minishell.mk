@@ -19,9 +19,13 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		readline.c \
 	) \
 	$(addprefix env/, \
+		free.c \
 		ft_getenv.c \
-		envp.c \
-		ft_haskey.c \
+		init.c \
+		is_valid_key.c \
+		search_key.c \
+		split_char.c \
+		update.c \
 	) \
 	$(addprefix error/, \
 		free_strs.c \
