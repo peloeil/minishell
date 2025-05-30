@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/29 02:48:46 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/30 15:30:43 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_envp
 
 // wrappers
 char	*wrap_readline(const char *prompt);
+int		wrap_chdir(const char *path);
 int		wrap_close(int *fd, int afterfd);
 int		wrap_dup2(int oldfd, int newfd);
 int		wrap_fork(void);
@@ -83,20 +84,9 @@ int		cd(int fd, char **argv, t_envp **envp);
 int		unset(int fd, char **argv, t_envp **envp);
 int		builtin_exit(int fd, char **argv, t_envp **envp);
 
-// cd_utils
-int		add_with_flag(char *key, char *value, t_envp *envp, int flags);
-int		update_env_value(const char *key, const char *value, t_envp *envp);
-int		get_env_flags(const char *key, t_envp *envp);
 
 // builtin/utils.c
 int		print_sorted_env(int fd, t_envp *envp);
-void	add_double_quotes(int fd,
-			t_string *str,
-			const char *key,
-			const char *value);
 int		count_argv(char **argv);
-int		is_valid_key(const char *key);
-int		no_such(char *path, char *old_path);
-int		resolve_cd_target(char **argv, t_envp *envp, char **out_path);
 
 #endif // MINISHELL_H

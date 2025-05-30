@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 00:57:35 by sota              #+#    #+#             */
-/*   Updated: 2025/05/29 02:28:54 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/29 19:49:18 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static int	update_pwd(t_envp **envp)
 		free(pwd_value);
 		return (-1);
 	}
-	if (update_ms_envp(envp, str, FLAG_SPECIAL) == -1)
+	if (update_ms_envp(envp, str, FLAG_SPECIAL) == -1
+		|| update_ms_envp(envp, str + 1, FLAG_EXPORT | FLAG_ENV) == -1)
 	{
 		free(pwd_value);
 		free(str);

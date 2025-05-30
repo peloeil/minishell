@@ -6,15 +6,34 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/29 02:50:09 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/30 15:30:59 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
 #include <minishell/execute.h>
+#include <libft/ft_ctype.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
 #include <stdlib.h>
+
+static int	is_valid_key(const char *key)
+{
+	size_t	i;
+
+	if (!key || !key[0])
+		return (0);
+	if (!ft_isalpha(key[0]) && key[0] != '_')
+		return (0);
+	i = 1;
+	while (key[i])
+	{
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 static int	register_env(t_envp **envp, char *str)
 {
