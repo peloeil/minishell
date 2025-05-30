@@ -37,8 +37,8 @@ int	main(int argc, char **argv, char **envp)
 		if (cmd_str == NULL)
 			break ;
 		add_history(cmd_str);
-		if (evaluate_command(cmd_str, ms_envp) == -1)
-			update_exit_status(STATUS_MISUSE, ms_envp);
+		if (evaluate_command(cmd_str, &ms_envp) == -1)
+			update_exit_status(STATUS_MISUSE, &ms_envp);
 	}
 	argv[1] = NULL;
 	builtin_exit(STDOUT_FILENO, argv, &ms_envp);

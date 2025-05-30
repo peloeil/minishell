@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:23:41 by sota              #+#    #+#             */
-/*   Updated: 2025/05/18 14:17:46 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/30 19:19:49 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	child_process(
 		exit(clean_up(STATUS_ERRORS, *state, ms_envp, top));
 	if (is_builtin(args->content))
 	{
-		status = execute_builtin(args, state, ms_envp);
+		status = execute_builtin(args, state, &ms_envp);
 		exit(clean_up(status, *state, ms_envp, top));
 	}
 	envp = NULL;

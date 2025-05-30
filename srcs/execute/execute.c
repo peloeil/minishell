@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:03:53 by sota              #+#    #+#             */
-/*   Updated: 2025/05/18 16:45:54 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/30 19:16:56 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 static int	execute_command(
 				t_arg_list *args,
 				t_proc_state *state,
-				t_envp *envp,
+				t_envp **envp,
 				t_ast_node *top)
 {
 	int	status;
@@ -38,28 +38,28 @@ static int	execute_command(
 	if (state->pid == -1)
 		return (-1);
 	if (state->pid == 0)
-		return (child_process(args, state, envp, top));
+		return (child_process(args, state, *envp, top));
 	return (set_parent_fds(state));
 }
 
 static int	execute_nopipe(
 				t_ast_node *ast,
 				t_proc_state *state,
-				t_envp *envp,
+				t_envp **envp,
 				t_ast_node *top)
 {
 	if (ast == NULL)
 		return (set_parent_fds(state));
 	if (ast->id == COMMAND)
 		return (execute_command(ast->args, state, envp, top));
-	set_redirect_fd(ast->id, ast->left->args->content, state, envp);
+	set_redirect_fd(ast->id, ast->left->args->content, state, *envp);
 	return (execute_nopipe(ast->right, state, envp, top));
 }
 
 static int	execute_pipe(
 				t_ast_node *ast,
 				t_proc_state *state,
-				t_envp *envp,
+				t_envp **envp,
 				t_ast_node *top)
 {
 	if (wrap_pipe(state->pipefd) == -1)
@@ -73,7 +73,7 @@ static int	execute_pipe(
 int	execute_ast(
 		t_ast_node *ast,
 		t_proc_state *state,
-		t_envp *envp,
+		t_envp **envp,
 		t_ast_node *top)
 {
 	if (ast->id == PIPE)
