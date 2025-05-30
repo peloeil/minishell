@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 02:47:43 by sota              #+#    #+#             */
-/*   Updated: 2025/05/29 02:49:24 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/30 20:53:42 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ int	print_sorted_env(int fd, t_envp *envp)
 			envp = envp->next;
 			continue ;
 		}
-		if ((envp->flag & FLAG_ENV) && ft_strcmp(envp->key, "_") != 0)
+		if ((envp->flag & FLAG_EXPORT) && (envp->flag & FLAG_ENV)
+			&& ft_strcmp(envp->key, "_") != 0)
 			status = ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key,
 					envp->value);
-		else if ((envp->flag & FLAG_EXPORT))
+		else if ((envp->flag & FLAG_ENV))
 			status = ft_dprintf(fd, "declare -x %s\n", envp->key);
 		envp = envp->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:38:56 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/28 23:36:10 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/30 19:52:07 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	env(int fd, char **argv, t_envp **envp)
 	tmp_envp = *envp;
 	while (tmp_envp != NULL)
 	{
-		if ((tmp_envp->flag & FLAG_EXPORT)
+		if ((tmp_envp->flag & FLAG_ENV)
 			&& make_str(0, &str, tmp_envp->key, tmp_envp->value) == -1)
 			return (STATUS_ERRORS);
 		tmp_envp = tmp_envp->next;
