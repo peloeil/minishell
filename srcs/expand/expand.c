@@ -6,25 +6,22 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:55:00 by sota              #+#    #+#             */
-/*   Updated: 2025/05/18 14:04:24 by sota             ###   ########.fr       */
+/*   Updated: 2025/05/30 14:51:45 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
 #include <minishell/expand.h>
 #include <libft/ft_ctype.h>
-#include <libft/ft_string.h>
 #include <stdlib.h>
 
 static int	dollar_as_prefix(const char *str, size_t index)
 {
 	if (str[index] != '$')
 		return (0);
-	if (str[index + 1] == '\0')
-		return (0);
-	if (str[index + 1] == ' ' || str[index + 1] == '\t')
-		return (0);
-	return (1);
+	if (ft_isalpha(str[index + 1]) || str[index + 1] == '_')
+		return (1);
+	return (0);
 }
 
 static int	change_quote_state(char *quote_char, const char *str, size_t *index)
