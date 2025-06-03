@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:23:41 by sota              #+#    #+#             */
-/*   Updated: 2025/05/30 19:19:49 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/03 20:59:02 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <minishell/parser.h>
 #include <minishell/execute.h>
 #include <libft/ft_string.h>
+#include <libft/ft_stdlib.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -23,12 +24,14 @@ static int	clean_up(
 				t_envp *ms_envp,
 				t_ast_node *top)
 {
+	if (status == -1)
+		status = STATUS_ERRORS;
+	if (status == -2)
+		status = ft_atoi(ft_getenv("?", ms_envp));
 	wrap_close(&state.iofd[INFD_INDEX], INFD_INDEX);
 	wrap_close(&state.iofd[OUTFD_INDEX], OUTFD_INDEX);
 	free_ms_envp(ms_envp);
 	free_ast(top);
-	if (status == -1)
-		status = STATUS_ERRORS;
 	return (status);
 }
 

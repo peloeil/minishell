@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/30 19:16:26 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/03 21:54:59 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 typedef enum e_exit_status
 {
+	STATUS_EXIT = -2,
 	STATUS_SUCCESS = 0,
 	STATUS_ERRORS = 1,
 	STATUS_MISUSE = 2,

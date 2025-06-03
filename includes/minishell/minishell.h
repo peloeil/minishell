@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/05/30 19:10:49 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/03 18:29:16 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int		pwd(int fd, char **argv, t_envp **envp);
 int		cd(int fd, char **argv, t_envp **envp);
 int		unset(int fd, char **argv, t_envp **envp);
 int		builtin_exit(int fd, char **argv, t_envp **envp);
-
 
 // builtin/utils.c
 int		print_sorted_env(int fd, t_envp *envp);
