@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:55:00 by sota              #+#    #+#             */
-/*   Updated: 2025/05/30 14:51:45 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/03 21:48:21 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static int	dollar_as_prefix(const char *str, size_t index)
 {
 	if (str[index] != '$')
 		return (0);
-	if (ft_isalpha(str[index + 1]) || str[index + 1] == '_')
+	if (ft_isalpha(str[index + 1]) || str[index + 1] == '_'
+		|| str[index + 1] == '?')
 		return (1);
 	return (0);
 }
