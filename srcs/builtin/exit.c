@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 21:30:14 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/03 21:51:26 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/03 22:42:25 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,9 @@
 #include <minishell/execute.h>
 #include <libft/ft_ctype.h>
 #include <libft/ft_stdio.h>
-#include <libft/ft_stdlib.h>
 #include <limits.h>
-#include <stdlib.h>
 
 #define MASK_EXIT 0xFF
-
-long	is_numeric_argument(const char *str)
-{
-	long	i;
-
-	if (!str || *str == '\0')
-		return (0);
-	i = 0;
-	if (str[i] == '+' || str[i] == '-')
-		i++;
-	if (!str[i])
-		return (0);
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 static int	str_to_status(const char *str)
 {
