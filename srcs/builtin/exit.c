@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 21:30:14 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/03 22:42:25 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/04 14:18:28 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 static int	str_to_status(const char *str)
 {
 	size_t	i;
-	int		sign;
+	long	sign;
 	long	res;
 
 	i = 0;
@@ -43,7 +43,7 @@ static int	str_to_status(const char *str)
 		res = res * 10 + sign * (str[i] - '0');
 		i++;
 	}
-	return ((res % MASK_EXIT + MASK_EXIT) % MASK_EXIT);
+	return (((int)res % MASK_EXIT + MASK_EXIT) % MASK_EXIT);
 }
 
 int	builtin_exit(int fd, char **argv, t_envp **envp)
@@ -52,6 +52,7 @@ int	builtin_exit(int fd, char **argv, t_envp **envp)
 	int	status;
 
 	(void)fd;
+	ft_dprintf(STDERR_FILENO, "exit\n");
 	argc = count_argv(argv);
 	if (argc == 1)
 		return (-2);
@@ -65,10 +66,7 @@ int	builtin_exit(int fd, char **argv, t_envp **envp)
 		return (-2);
 	}
 	if (argc > 2)
-	{
-		ft_dprintf(STDERR_FILENO, "%s\n", TOO_MANY);
-		return (STATUS_ERRORS);
-	}
+		return (error_return(STATUS_ERRORS, "exit", "too many arguments"));
 	if (update_exit_status(status, envp) == -1)
 		return (STATUS_ERRORS);
 	return (-2);

@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/06/03 22:09:26 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/04 14:17:47 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	exit_shell(t_envp **ms_envp)
 
 	status = ft_atoi(ft_getenv("?", *ms_envp));
 	free_ms_envp(*ms_envp);
-	ft_dprintf(STDERR_FILENO, "exit\n");
 	exit(status);
 }
 
