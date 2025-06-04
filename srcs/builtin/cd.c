@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/30 16:44:27 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/05 00:47:03 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,16 @@ static char	*cd_target(char **argv, t_envp *envp)
 		return (NULL);
 	}
 	target = argv[1];
-	if (target == NULL)
+	if (argv[1] == NULL)
 		target = ft_getenv("HOME", envp);
+	else if (ft_strcmp(argv[1], "-") == 0)
+		target = ft_getenv("OLDPWD", envp);
 	if (target == NULL)
 	{
-		error_return(0, "cd", "HOME not set");
+		if (argv[1] == NULL)
+			error_return(0, "cd", "HOME not set");
+		else if (ft_strcmp(argv[1], "-") == 0)
+			error_return(0, "cd", "OLDPWD not set");
 		return (NULL);
 	}
 	return (ft_strdup(target));
