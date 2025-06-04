@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/30 20:20:30 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/04 16:13:17 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ static int	register_env(t_envp **envp, char *str)
 	char	*key;
 	char	*value;
 
-	flag = (FLAG_EXPORT | FLAG_ENV);
 	if (split_into_key_value(str, &key, &value) == -1)
 		return (-1);
-	if (value[0] == '\0')
+	flag = (FLAG_EXPORT | FLAG_ENV);
+	if (value == NULL)
 		flag = FLAG_EXPORT;
 	free(value);
 	if (!is_valid_key(key))
