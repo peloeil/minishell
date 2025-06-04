@@ -6,14 +6,16 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 02:47:43 by sota              #+#    #+#             */
-/*   Updated: 2025/06/05 00:27:09 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/05 01:16:47 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
 #include <minishell/execute.h>
+#include <libft/std_string.h>
 #include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
+#include <stdlib.h>
 
 static void	swap_envp_nodes(t_envp *curr)
 {
@@ -54,6 +56,35 @@ static void	sort_envp(t_envp **head)
 	}
 }
 
+static int	print_export_key_value(int fd, const char *key, const char *value)
+{
+	t_string	str;
+	size_t		i;
+
+	if (ft_str_from(&str, "declare -x ") == -1
+		|| ft_str_push_str(&str, key) == -1
+		|| ft_str_push_str(&str, "=\"") == -1)
+		return (-1);
+	i = 0;
+	while (value[i] != '\0')
+	{
+		if (value[i] != '"' && ft_str_push(&str, value[i]) == -1)
+			return (-1);
+		if (value[i] == '"' && ft_str_push_str(&str, "\\\"") == -1)
+			return (-1);
+		i++;
+	}
+	if (ft_str_push_str(&str, "\"\n") == -1)
+		return (-1);
+	if (ft_dprintf(fd, "%s", str.str) == -1)
+	{
+		free(str.str);
+		return (-1);
+	}
+	free(str.str);
+	return (0);
+}
+
 int	print_sorted_env(int fd, t_envp *envp)
 {
 	int	status;
@@ -69,10 +100,10 @@ int	print_sorted_env(int fd, t_envp *envp)
 		}
 		if ((envp->flag & FLAG_EXPORT) && (envp->flag & FLAG_ENV)
 			&& ft_strcmp(envp->key, "_") != 0)
-			status = ft_dprintf(fd, "declare -x %s=\"%s\"\n", envp->key,
-					envp->value);
+			status |= (print_export_key_value(fd,
+						envp->key, envp->value) == -1);
 		else if ((envp->flag & FLAG_EXPORT) && ft_strcmp(envp->key, "_") != 0)
-			status = ft_dprintf(fd, "declare -x %s\n", envp->key);
+			status |= (ft_dprintf(fd, "declare -x %s\n", envp->key) == -1);
 		envp = envp->next;
 	}
 	if (status == -1)
