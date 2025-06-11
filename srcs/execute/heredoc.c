@@ -32,11 +32,6 @@ static void	heredoc_sigint_handler(int sig)
 	g_sig = sig;
 }
 
-static void	heredoc_sigquit_handler(int sig)
-{
-	(void)sig;
-}
-
 static int	here_document_rl_event_hook(void)
 {
 	if (g_sig == SIGINT)
@@ -46,17 +41,13 @@ static int	here_document_rl_event_hook(void)
 
 static void	heredoc_child_signal_setting(void)
 {
-	struct sigaction	sa_int;
-	struct sigaction	sa_quit;
+    struct sigaction	sa_int;
 
-	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_handler = heredoc_sigint_handler;
-	sa_int.sa_flags = 0;
-	sigaction(SIGINT, &sa_int, NULL);
-	sigemptyset(&sa_quit.sa_mask);
-	sa_quit.sa_handler = heredoc_sigquit_handler;
-	sa_quit.sa_flags = 0;
-	sigaction(SIGQUIT, &sa_quit, NULL);
+    sigemptyset(&sa_int.sa_mask);
+    sa_int.sa_handler = heredoc_sigint_handler;
+    sa_int.sa_flags = 0;
+    sigaction(SIGINT, &sa_int, NULL);
+    signal(SIGQUIT, SIG_IGN);
 }
 
 static void	heredoc_print_error_message(const char *delimiter)
