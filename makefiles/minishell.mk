@@ -9,6 +9,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	eval.c \
 	command.c \
 	$(addprefix wrappers/, \
+		chdir.c \
 		close.c \
 		dup2.c \
 		fork.c \
@@ -19,9 +20,12 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		readline.c \
 	) \
 	$(addprefix env/, \
+		free.c \
 		ft_getenv.c \
-		envp.c \
-		ft_haskey.c \
+		init.c \
+		search_key.c \
+		split_char.c \
+		update.c \
 	) \
 	$(addprefix error/, \
 		free_strs.c \
@@ -36,10 +40,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		pwd.c \
 		unset.c \
 		utils.c \
-		$(addprefix cd/, \
-			cd.c \
-			cd_utils.c \
-		) \
+		cd.c \
 		$(addprefix export/, \
 			export.c \
 			export_utils.c \

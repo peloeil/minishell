@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:54:45 by sota              #+#    #+#             */
-/*   Updated: 2025/05/18 16:58:07 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/03 21:54:59 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 typedef enum e_exit_status
 {
+	STATUS_EXIT = -2,
 	STATUS_SUCCESS = 0,
 	STATUS_ERRORS = 1,
 	STATUS_MISUSE = 2,
@@ -53,17 +54,17 @@ int	set_parent_fds(t_proc_state *state);
 int	set_child_fds(t_proc_state *state);
 int	open_heredoc(const char *delimeter, t_envp *envp);
 int	is_builtin(char *cmd);
-int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp *ms_envp);
+int	execute_builtin(t_arg_list *args, t_proc_state *state, t_envp **ms_envp);
 int	execute_ast(
 		t_ast_node *ast,
 		t_proc_state *state,
-		t_envp *envp,
+		t_envp **envp,
 		t_ast_node *top);
 int	child_process(
 		t_arg_list *args,
 		t_proc_state *state,
 		t_envp *ms_envp,
 		t_ast_node *top);
-int	update_exit_status(t_exit_status status, t_envp *envp);
+int	update_exit_status(t_exit_status status, t_envp **envp);
 
 #endif // EXECUTE_H

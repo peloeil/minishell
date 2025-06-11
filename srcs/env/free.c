@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_status.c                                      :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/11 01:03:28 by sota              #+#    #+#             */
-/*   Updated: 2025/05/30 19:31:35 by sota             ###   ########.fr       */
+/*   Created: 2025/05/03 00:08:58 by sota              #+#    #+#             */
+/*   Updated: 2025/05/29 01:07:56 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/execute.h>
 #include <minishell/minishell.h>
-#include <libft/ft_stdio.h>
+#include <stdlib.h>
 
-int	update_exit_status(t_exit_status status, t_envp **envp)
+void	free_ms_envp(t_envp *env)
 {
-	char	str[20];
+	t_envp	*next;
 
-	if (ft_snprintf(str, sizeof(str), "?=%d", (int)status) < 0)
-		return (-1);
-	return (update_ms_envp(envp, str, FLAG_SPECIAL));
+	while (env != NULL)
+	{
+		next = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = next;
+	}
 }

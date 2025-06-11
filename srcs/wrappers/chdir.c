@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_haskey.c                                        :+:      :+:    :+:   */
+/*   chdir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonuma <yonuma@student.42.fr>              #+#  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-20 01:22:40 by yonuma            #+#    #+#             */
-/*   Updated: 2025-05-20 01:22:40 by yonuma           ###   ########.fr       */
+/*   Created: 2025/05/27 21:25:51 by sota              #+#    #+#             */
+/*   Updated: 2025/06/04 14:49:34 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft/ft_string.h>
 #include <minishell/minishell.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
-int	ft_haskey(char *key, t_envp *envp)
+int	wrap_chdir(const char *path)
 {
-	int	haskey;
+	int	ret;
 
-	haskey = 0;
-	while (envp)
-	{
-		if (ft_strcmp(key, envp->key) == 0)
-		{
-			haskey = 1;
-			break ;
-		}
-		envp = envp->next;
-	}
-	return (haskey);
+	ret = chdir(path);
+	if (ret == -1)
+		return (error_return(-1, "cd", strerror(errno)));
+	return (0);
 }

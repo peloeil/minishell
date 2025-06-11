@@ -84,7 +84,7 @@ int main(int argc, char **argv, char **envp) {
     (void)argv;
 
     t_envp *ms_envp;
-    make_ms_envp(&ms_envp, envp);
+    init_ms_envp(&ms_envp, envp);
 
     printf("\n");
 

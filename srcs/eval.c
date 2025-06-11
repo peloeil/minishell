@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/16 15:02:32 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/03 22:36:28 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	init_proc_state(t_proc_state *state)
 	state->iofd[OUTFD_INDEX] = STDOUT_FILENO;
 }
 
-int	wait_children(t_proc_state *state, t_envp *envp)
+int	wait_children(t_proc_state *state, t_envp **envp)
 {
 	pid_t			pid;
 	int				wstatus;
@@ -55,12 +55,13 @@ int	wait_children(t_proc_state *state, t_envp *envp)
 	return (update_exit_status(exit_status, envp));
 }
 
-int	evaluate_command(const char *cmd, t_envp *envp)
+int	evaluate_command(const char *cmd, t_envp **envp)
 {
 	t_token_list	*tokens;
 	t_ast_node		*ast;
 	t_proc_state	state;
 	int				failed;
+	int				status;
 
 	failed = (tokenize_input(&tokens, cmd) == -1);
 	free((void *)cmd);
@@ -72,12 +73,12 @@ int	evaluate_command(const char *cmd, t_envp *envp)
 	free_tokens(tokens);
 	if (failed)
 		return (-1);
-	init_proc_state(&state);
 	failed = (found_parse_error(ast) == -1
-			|| expand_variables(ast, envp) == -1
-			|| execute_ast(ast, &state, envp, ast) == -1);
+			|| expand_variables(ast, *envp) == -1);
+	init_proc_state(&state);
+	status = execute_ast(ast, &state, envp, ast);
 	free_ast(ast);
-	if (wait_children(&state, envp) == -1 || failed)
+	if (wait_children(&state, envp) == -1 || failed || status == -1)
 		return (-1);
-	return (0);
+	return (status);
 }

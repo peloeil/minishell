@@ -6,125 +6,69 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/05/15 03:56:23 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/04 16:13:17 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minishell/minishell.h>
+#include <minishell/execute.h>
+#include <libft/ft_ctype.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
-#include <minishell/minishell.h>
 #include <stdlib.h>
 
-int	register_env_with_value(t_envp *envp, char *key, char *value)
+static int	is_valid_key(const char *key)
 {
-	t_envp	*new_node;
+	size_t	i;
 
-	while (envp->next && ft_strcmp(envp->key, key) != 0)
-		envp = envp->next;
-	if (ft_strcmp(envp->key, key) == 0)
+	if (!key || !key[0])
+		return (0);
+	if (!ft_isalpha(key[0]) && key[0] != '_')
+		return (0);
+	i = 1;
+	while (key[i])
 	{
-		free(envp->value);
-		envp->value = value;
-		envp->exported = FLAG_EXPORT;
-		free(key);
-		return (EXIT_SUCCESS);
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
 	}
-	if (ft_strcmp(key, "?") == 0)
-		new_node = create_new_node(key, value, FLAG_SPECIAL);
-	else
-		new_node = create_new_node(key, value, FLAG_EXPORT);
-	if (!new_node)
-	{
-		free(key);
-		free(value);
-		return (EXIT_FAILURE);
-	}
-	envp->next = new_node;
-	return (EXIT_SUCCESS);
+	return (1);
 }
 
-int	register_env_without_value(t_envp *envp, char *key)
+static int	register_env(t_envp **envp, char *str)
 {
-	t_envp	*curr;
-	t_envp	*new_node;
-
-	curr = envp;
-	while (curr != NULL)
-	{
-		if (ft_strcmp(curr->key, key) == 0)
-		{
-			if (curr->exported & FLAG_UNSET)
-				curr->exported = (curr->exported & ~FLAG_UNSET) | FLAG_EXPORT;
-			free(key);
-			return (EXIT_SUCCESS);
-		}
-		if (curr->next == NULL)
-			break ;
-		curr = curr->next;
-	}
-	new_node = create_new_node(key, NULL, FLAG_VALUE);
-	if (!new_node)
-	{
-		free(key);
-		return (EXIT_FAILURE);
-	}
-	curr->next = new_node;
-	return (EXIT_SUCCESS);
-}
-
-int	null_delimiter_pos(t_envp *envp, char *key)
-{
-	if (!key)
-		return (EXIT_FAILURE);
-	if (!is_valid_env_key(key))
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: export: `%s': %s\n", key,
-			NO_VALID);
-		return (free(key), EXIT_FAILURE);
-	}
-	return (register_env_without_value(envp, key));
-}
-
-int	register_env(t_envp *envp, char *str)
-{
+	int		flag;
 	char	*key;
 	char	*value;
-	char	*delimiter_pos;
 
-	delimiter_pos = ft_strchr(str, '=');
-	if (delimiter_pos == NULL)
+	if (split_into_key_value(str, &key, &value) == -1)
+		return (-1);
+	flag = (FLAG_EXPORT | FLAG_ENV);
+	if (value == NULL)
+		flag = FLAG_EXPORT;
+	free(value);
+	if (!is_valid_key(key))
 	{
-		key = ft_strdup(str);
-		return (null_delimiter_pos(envp, key));
+		free(key);
+		ft_dprintf(STDERR_FILENO,
+			"minishell: export: `%s': not a valid identifier\n", str);
+		return (-1);
 	}
-	key = ft_substr(str, 0, delimiter_pos - str);
-	value = ft_strdup(delimiter_pos + 1);
-	if (!key || !value)
-		return (free(key), free(value), EXIT_FAILURE);
-	if (!is_valid_env_key(key))
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: export: `%s=%s': %s\n", key,
-			value, NO_VALID);
-		return (free(key), free(value), EXIT_FAILURE);
-	}
-	return (register_env_with_value(envp, key, value));
+	return (update_ms_envp(envp, str, flag));
 }
 
 int	export(int fd, char **argv, t_envp **envp)
 {
 	int	i;
-	int	status;
 
-	status = 0;
 	if (argv[1] == NULL)
 		return (print_sorted_env(fd, *envp));
 	i = 1;
 	while (argv[i])
 	{
-		status = register_env(*envp, argv[i]);
-		if (status == EXIT_FAILURE)
-			return (EXIT_FAILURE);
+		if (register_env(envp, argv[i]) == -1)
+			return (STATUS_ERRORS);
 		i++;
 	}
-	return (status);
+	return (STATUS_SUCCESS);
 }
