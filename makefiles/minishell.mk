@@ -69,6 +69,9 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		exit_status.c \
 		heredoc.c \
 	) \
+	$(addprefix signal/, \
+		signal.c \
+	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 

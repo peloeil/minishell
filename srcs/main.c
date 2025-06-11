@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/06/04 14:17:47 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/11 12:11:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/minishell.h>
+#include <minishell/signal.h>
 #include <minishell/execute.h>
 #include <libft/ft_stdlib.h>
 #include <libft/ft_stdio.h>
@@ -43,10 +44,12 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	setup_signal();
 	if (initial_setup(&ms_envp, envp) == -1)
 		return (STATUS_ERRORS);
 	while (1)
 	{
+		handle_signal_in_main();
 		cmd_str = wrap_readline(PROMPT);
 		if (cmd_str == NULL)
 			break ;
