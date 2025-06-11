@@ -53,7 +53,6 @@ static void	heredoc_child_signal_setting(void)
 	sa_int.sa_handler = heredoc_sigint_handler;
 	sa_int.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
-
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_handler = heredoc_sigquit_handler;
 	sa_quit.sa_flags = 0;
@@ -76,13 +75,12 @@ static void	print_line(char *line, int fd)
 static unsigned char	heredoc_child_process(const char *delimiter, int fds[2],
 		t_envp *envp)
 {
-	char	*line;
+	char		*line;
 	t_arg_list	arg_line;
 
 	heredoc_child_signal_setting();
 	rl_event_hook = here_document_rl_event_hook;
 	close(fds[0]);
-
 	while (1)
 	{
 		line = readline("> ");
@@ -137,8 +135,9 @@ static int	heredoc_parent_process(int fds[2], pid_t pid)
 
 static int	setup_heredoc(const char *delimiter, t_envp *envp)
 {
-	int		fds[2];
-	pid_t	pid;
+	int				fds[2];
+	unsigned char	exit_status;
+	pid_t			pid;
 	
 	if (pipe(fds) == -1)
 		return (-1);
@@ -152,7 +151,7 @@ static int	setup_heredoc(const char *delimiter, t_envp *envp)
 
 	if (pid == 0)
 	{
-		unsigned char exit_status = heredoc_child_process(delimiter, fds, envp);
+		exit_status = heredoc_child_process(delimiter, fds, envp);
 		exit(exit_status);
 	}
 	return (heredoc_parent_process(fds, pid));
@@ -198,7 +197,9 @@ static int	copy_pipe_to_file(int pipe_fd, const char *filename)
 		}
 	}
 	close(file_fd);
-	return (bytes_read == 0 ? 0 : -1);
+	if (bytes_read == 0)
+		return (0);
+	return (-1);
 }
 
 int	open_heredoc(const char *delimiter, t_envp *envp)
