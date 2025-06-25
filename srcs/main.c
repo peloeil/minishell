@@ -24,6 +24,7 @@ static int	initial_setup(t_envp **ms_envp, char **envp)
 {
 	if (init_ms_envp(ms_envp, envp) == -1)
 		return (-1);
+	setup_signal();
 	return (0);
 }
 
@@ -44,7 +45,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	setup_signal();
 	if (initial_setup(&ms_envp, envp) == -1)
 		return (STATUS_ERRORS);
 	while (1)

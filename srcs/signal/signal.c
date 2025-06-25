@@ -39,16 +39,17 @@ static void	sig_handler(int signo)
     if (signo == SIGINT)
     {
         set_echoctl(1);
+	rl_done = 1;
         rl_replace_line("", 0);
-        rl_on_new_line();
         write(1, "\n", 1);
-        rl_redisplay();
+        rl_on_new_line();
+	rl_redisplay();
     }
     else if (signo == SIGQUIT)
     {
         set_echoctl(0);
-        rl_on_new_line();
-        rl_redisplay();
+	rl_done = 1;
+	rl_redisplay();
     }
 }
 
@@ -66,12 +67,7 @@ void	setup_signal(void)
 
 void	handle_signal_in_main(void)
 {
-    if (g_received_signal == SIGINT)
-    {
+    if (g_received_signal == SIGINT
+	|| g_received_signal == SIGQUIT)
         g_received_signal = 0;
-    }
-    else if (g_received_signal == SIGQUIT)
-    {
-        g_received_signal = 0;
-    }
 }
