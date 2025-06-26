@@ -36,21 +36,20 @@ static void	set_echoctl(int enable)
 static void	sig_handler(int signo)
 {
     g_received_signal = signo;
-    if (signo == SIGINT)
+    if (signo == SIGINT && RL_ISSTATE(RL_STATE_READCMD))
     {
         set_echoctl(1);
-	rl_done = 1;
-        rl_replace_line("", 0);
-        write(1, "\n", 1);
-        rl_on_new_line();
-	rl_redisplay();
+	//        rl_replace_line("", 0);
+	// write(1, "\n", 1);
+	// rl_done = 1;
+	//        rl_on_new_line();
     }
+    else if (signo == SIGQUIT && RL_ISSTATE(RL_STATE_READCMD))
+	set_echoctl(0);
+    else if (signo == SIGINT)
+        set_echoctl(1);
     else if (signo == SIGQUIT)
-    {
         set_echoctl(0);
-	rl_done = 1;
-	rl_redisplay();
-    }
 }
 
 void	setup_signal(void)
