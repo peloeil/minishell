@@ -19,37 +19,44 @@
 
 volatile sig_atomic_t	g_received_signal = 0;
 
-// static void	set_echoctl(int enable)
-// {
-//     struct termios term;
-//
-//     if (tcgetattr(STDIN_FILENO, &term) == 0)
-//     {
-//         if (enable)
-//             term.c_lflag |= ECHOCTL;
-//         else
-//             term.c_lflag &= ~ECHOCTL;
-//         tcsetattr(STDIN_FILENO, TCSANOW, &term);
-//     }
-// }
+static void	set_echoctl(int enable)
+{
+    struct termios term;
+
+    if (tcgetattr(STDIN_FILENO, &term) == 0)
+    {
+        if (enable)
+            term.c_lflag |= ECHOCTL;
+        else
+            term.c_lflag &= ~ECHOCTL;
+        tcsetattr(STDIN_FILENO, TCSANOW, &term);
+    }
+}
 
 static void	sig_handler(int signo)
 {
     g_received_signal = signo;
-	//    if (signo == SIGINT && RL_ISSTATE(RL_STATE_READCMD))
-	//    {
-	//        // set_echoctl(1);
-	// rl_replace_line("", 0);
-	// write(1, "\n", 1);
-	// rl_done = 1;
-	// rl_on_new_line();
-	//    }
-	//    else if (signo == SIGQUIT && RL_ISSTATE(RL_STATE_READCMD))
-	// set_echoctl(0);
-	//    else if (signo == SIGINT)
-	//        set_echoctl(1);
-	//    else if (signo == SIGQUIT)
-	//        set_echoctl(0);
+    if (signo == SIGINT && RL_ISSTATE(RL_STATE_READCMD))
+    {
+        set_echoctl(1);
+        rl_replace_line("", 0);
+        write(STDOUT_FILENO, "\n", 1);
+        rl_on_new_line();
+	rl_redisplay();
+    }
+    else if (signo == SIGQUIT && RL_ISSTATE(RL_STATE_READCMD))
+    {
+        set_echoctl(0);
+	rl_on_new_line();
+        rl_redisplay();
+    }
+    else if (signo == SIGINT)
+    {
+        set_echoctl(1);
+	rl_replace_line("", 0);
+    }
+    else if (signo == SIGQUIT)
+        set_echoctl(0);
 }
 
 void	setup_signal(void)
