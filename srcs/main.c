@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 		return (STATUS_ERRORS);
 	while (1)
 	{
-		handle_signal_in_main();
+		g_received_signal = 0;
 		cmd_str = wrap_readline(PROMPT);
 		if (cmd_str == NULL)
 			break ;
