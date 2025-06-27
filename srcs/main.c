@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/06/11 12:11:12 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/27 22:19:28 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <readline/readline.h>
 #include <readline/history.h>
 
 static int	initial_setup(t_envp **ms_envp, char **envp)
 {
 	if (init_ms_envp(ms_envp, envp) == -1)
 		return (-1);
-	setup_signal();
+	setup_signal_handler();
+	rl_signal_event_hook = sig_hook;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/27 16:39:33 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/27 22:11:33 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdlib.h>
+#include <errno.h>
 
 static void	init_proc_state(t_proc_state *state)
 {
@@ -40,21 +41,25 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 	exit_status = STATUS_SUCCESS;
 	while (state->nproc--)
 	{
-		pid = wait(&wstatus);
-		if (pid == -1)
-			return (-1);
-		if (pid != state->pid)
+		pid = -1;
+		while (1)
+		{
+			pid = wait(&wstatus);
+			if (pid == -1 && errno == EINTR)
+				continue ;
+			break ;
+		}
+		if (pid == -1 || pid != state->pid)
 			continue ;
+		exit_status = STATUS_ERRORS;
 		if (WIFEXITED(wstatus))
 			exit_status = WEXITSTATUS(wstatus);
-		if (WIFSIGNALED(wstatus))
+		else if (WIFSIGNALED(wstatus))
 		{
 			if (WTERMSIG(wstatus) == SIGQUIT)
 				write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 			exit_status = STATUS_INVALID_EXIT + WTERMSIG(wstatus);
 		}
-		else
-			exit_status = STATUS_ERRORS;
 	}
 	return (update_exit_status(exit_status, envp));
 }
