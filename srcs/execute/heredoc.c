@@ -54,14 +54,20 @@ static char	*heredoc_filename(void)
 {
 	char	*filename;
 	char	suffix[16];
+	size_t	i;
 	int		rngfd;
 
-	suffix[sizeof(suffix) - 1] = '\0';
 	rngfd = open("/dev/urandom", O_RDONLY);
 	if (rngfd == -1)
 		return (NULL);
-	if (read(rngfd, suffix, sizeof(suffix) - 1) == -1
-		|| ft_asprintf(&filename, "%s_%s", HEREDOC_PREFIX, suffix) == -1)
+	i = 0;
+	while (i < sizeof(suffix) - 1 && read(rngfd, suffix + i, 1) != -1)
+	{
+		suffix[i] = 'a' + (unsigned char)suffix[i] % 26;
+		i++;
+	}
+	suffix[i] = '\0';
+	if (ft_asprintf(&filename, "%s_%s", HEREDOC_PREFIX, suffix) == -1)
 	{
 		close(rngfd);
 		return (NULL);
