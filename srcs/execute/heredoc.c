@@ -10,23 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/expand.h>
-#include <minishell/signal.h>
-#include <libft/ft_string.h>
-#include <libft/ft_stdio.h>
 #include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
+#include <minishell/expand.h>
+#include <minishell/minishell.h>
+#include <minishell/signal.h>
 #include <readline/readline.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #define HEREDOC_PREFIX "/tmp/heredoc"
 
-static int	write_heredoc_file(
-				const char *file,
-				const char *delimiter,
-				t_envp *envp)
+static int	write_heredoc_file(const char *file, const char *delimiter,
+		t_envp *envp)
 {
 	int			fd;
 	t_arg_list	line;
@@ -38,16 +36,18 @@ static int	write_heredoc_file(
 	while (1)
 	{
 		line.content = readline("> ");
-		printf("line.content = %s, signum = %d\n", (char *)line.content, g_received_signal);
+		printf("line.content = %s, signum = %d\n", (char *)line.content,
+			g_received_signal);
 		if (line.content == NULL)
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: warning: here-document delimited by end-of-file (wanted `%s')\n", delimiter);
+			ft_dprintf(STDERR_FILENO,
+				"minishell: warning: here-document delimited by end-of-file (wanted `%s')\n",
+				delimiter);
 			break ;
 		}
-		if (g_received_signal != 0
-			|| ft_strcmp(line.content, delimiter) == 0
-			|| expand_arg(&line, envp) == -1
-			|| ft_dprintf(fd, "%s\n", (char *)line.content) == -1)
+		if (g_received_signal != 0 || ft_strcmp(line.content, delimiter) == 0
+			|| expand_arg(&line, envp) == -1 || ft_dprintf(fd, "%s\n",
+				(char *)line.content) == -1)
 		{
 			free(line.content);
 			break ;

@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/lexer.h>
-#include <minishell/parser.h>
-#include <minishell/expand.h>
-#include <minishell/execute.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdlib.h>
 #include <errno.h>
+#include <minishell/execute.h>
+#include <minishell/expand.h>
+#include <minishell/lexer.h>
+#include <minishell/minishell.h>
+#include <minishell/parser.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 static void	init_proc_state(t_proc_state *state)
 {

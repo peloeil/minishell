@@ -17,9 +17,9 @@
 
 extern volatile sig_atomic_t	g_received_signal;
 
-void	setup_signal_handler(void);
-void	setup_heredoc_signal(void);
-int	heredoc_sig_hook(void);
-int	sig_hook(void);
+void							setup_signal_handler(void);
+void							setup_heredoc_signal(void);
+int								heredoc_sig_hook(void);
+int								sig_hook(void);
 
 #endif

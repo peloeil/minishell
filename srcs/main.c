@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft/ft_stdio.h>
+#include <libft/ft_stdlib.h>
+#include <minishell/execute.h>
 #include <minishell/minishell.h>
 #include <minishell/signal.h>
-#include <minishell/execute.h>
-#include <libft/ft_stdlib.h>
-#include <libft/ft_stdio.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
 static int	initial_setup(t_envp **ms_envp, char **envp)
 {

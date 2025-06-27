@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include <minishell/signal.h>
-#include <signal.h>
 #include <readline/readline.h>
+#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -42,20 +42,20 @@ int	sig_hook(void)
 
 static void	sig_handler(int signo)
 {
-    g_received_signal = signo;
+	g_received_signal = signo;
 }
 
 void	setup_signal_handler(void)
 {
-    struct sigaction	sigint;
-    struct sigaction	sigquit;
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
 
-    sigemptyset(&sigint.sa_mask);
-    sigint.sa_flags = 0;
-    sigint.sa_handler = sig_handler;
-    sigaction(SIGINT, &sigint, NULL);
-    sigemptyset(&sigquit.sa_mask);
-    sigquit.sa_flags = 0;
-    sigquit.sa_handler = sig_handler;
-    sigaction(SIGQUIT, &sigquit, NULL);
+	sigemptyset(&sigint.sa_mask);
+	sigint.sa_flags = 0;
+	sigint.sa_handler = sig_handler;
+	sigaction(SIGINT, &sigint, NULL);
+	sigemptyset(&sigquit.sa_mask);
+	sigquit.sa_flags = 0;
+	sigquit.sa_handler = sig_handler;
+	sigaction(SIGQUIT, &sigquit, NULL);
 }
