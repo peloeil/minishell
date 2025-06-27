@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 12:05:48 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/27 16:07:01 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/27 16:42:07 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ void	setup_signal(void)
     struct sigaction	sigquit;
 
     sigemptyset(&sigint.sa_mask);
-    sigint.sa_flags = 0;
+    sigint.sa_flags = SA_RESTART;
     sigint.sa_handler = sig_handler;
     sigaction(SIGINT, &sigint, NULL);
     sigemptyset(&sigquit.sa_mask);
-    sigquit.sa_flags = 0;
-    sigquit.sa_handler = SIG_IGN;
+    sigquit.sa_flags = SA_RESTART;
+    sigquit.sa_handler = sig_handler;
     sigaction(SIGQUIT, &sigquit, NULL);
 }

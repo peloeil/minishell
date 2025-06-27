@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/03 22:36:28 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/27 16:39:33 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 
 	if (state->nproc == 0)
 		return (0);
-	exit_status = 0;
+	exit_status = STATUS_SUCCESS;
 	while (state->nproc--)
 	{
 		pid = wait(&wstatus);
@@ -47,8 +47,12 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 			continue ;
 		if (WIFEXITED(wstatus))
 			exit_status = WEXITSTATUS(wstatus);
-		else if (WIFSIGNALED(wstatus))
+		if (WIFSIGNALED(wstatus))
+		{
+			if (WTERMSIG(wstatus) == SIGQUIT)
+				write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 			exit_status = STATUS_INVALID_EXIT + WTERMSIG(wstatus);
+		}
 		else
 			exit_status = STATUS_ERRORS;
 	}
