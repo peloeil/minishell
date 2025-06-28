@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 21:30:14 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/28 18:00:00 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 18:33:25 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ static int	str_to_status(const char *str)
 	res = 0;
 	while (ft_isspace(str[i]))
 		i++;
-	if (str[i] == '-' || str[i] == '+')
-		if (str[i++] == '-')
-			sign = -1;
+	if ((str[i] == '-' || str[i] == '+') && str[i++] == '-')
+		sign = -1;
+	if (str[i] == '\0')
+		return (-1);
 	while (str[i] != '\0')
 	{
 		if (!ft_isdigit(str[i]))
