@@ -32,12 +32,10 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 	fd = wrap_open(file, O_WRONLY | O_CREAT | O_TRUNC);
 	if (fd == -1)
 		return (-1);
-	rl_signal_event_hook = heredoc_sig_hook;
+	rl_event_hook = heredoc_sig_hook;
 	while (1)
 	{
 		line.content = readline("> ");
-		printf("line.content = %s, signum = %d\n", (char *)line.content,
-			g_received_signal);
 		if (line.content == NULL)
 		{
 			ft_dprintf(STDERR_FILENO,
@@ -45,7 +43,7 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 				delimiter);
 			break ;
 		}
-		if (g_received_signal != 0 || ft_strcmp(line.content, delimiter) == 0
+		if (heredoc_sig_hook() != 0 || ft_strcmp(line.content, delimiter) == 0
 			|| expand_arg(&line, envp) == -1 || ft_dprintf(fd, "%s\n",
 				(char *)line.content) == -1)
 		{
@@ -54,7 +52,7 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 		}
 	}
 	close(fd);
-	rl_signal_event_hook = sig_hook;
+	rl_event_hook = sig_hook;
 	return (0);
 }
 

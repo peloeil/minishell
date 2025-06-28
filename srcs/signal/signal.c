@@ -20,10 +20,16 @@ volatile sig_atomic_t	g_received_signal = 0;
 
 int	heredoc_sig_hook(void)
 {
+	static int	flag = 0;
+
+	if (flag && g_received_signal == 0)
+		flag = 0;
+	if (flag)
+		return (1);
 	if (g_received_signal == SIGINT)
 	{
+		flag = 1;
 		rl_done = 1;
-		write(STDOUT_FILENO, "\n", 1);
 	}
 	return (0);
 }
@@ -36,6 +42,7 @@ int	sig_hook(void)
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
+		g_received_signal = 0;
 	}
 	return (0);
 }
@@ -56,6 +63,6 @@ void	setup_signal_handler(void)
 	sigaction(SIGINT, &sigint, NULL);
 	sigemptyset(&sigquit.sa_mask);
 	sigquit.sa_flags = 0;
-	sigquit.sa_handler = sig_handler;
+	sigquit.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sigquit, NULL);
 }

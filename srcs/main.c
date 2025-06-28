@@ -26,7 +26,7 @@ static int	initial_setup(t_envp **ms_envp, char **envp)
 	if (init_ms_envp(ms_envp, envp) == -1)
 		return (-1);
 	setup_signal_handler();
-	rl_signal_event_hook = sig_hook;
+	rl_event_hook = sig_hook;
 	return (0);
 }
 
@@ -62,5 +62,7 @@ int	main(int argc, char **argv, char **envp)
 		if (status == -1)
 			update_exit_status(STATUS_MISUSE, &ms_envp);
 	}
+	if (status != -2)
+		write(STDERR_FILENO, "exit\n", 5);
 	exit_shell(&ms_envp);
 }
