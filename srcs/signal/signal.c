@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 12:05:48 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/28 21:15:37 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 21:56:10 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,4 @@ void	signal_setup_after_readline(t_envp **envp)
 		update_exit_status(STATUS_SIG_BASE + g_received_signal, envp);
 		g_received_signal = 0;
 	}
-
 }
