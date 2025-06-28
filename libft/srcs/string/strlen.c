@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft/ft_string.h>
 #include <stdint.h>
 #include <stddef.h>
-
-typedef unsigned long	t_op;
 
 static __inline __attribute__((__always_inline__))
 t_op	find_zero_low(t_op x)
