@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/28 21:11:09 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/28 21:25:42 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static char	*cd_target(int fd, char **argv, t_envp *envp)
 	else if (ft_strcmp(argv[1], "-") == 0)
 	{
 		target = ft_getenv("OLDPWD", envp);
-		ft_dprintf(fd, "%s\n", target);
+		if (target != NULL)
+			ft_dprintf(fd, "%s\n", target);
 	}
 	if (target == NULL)
 	{
