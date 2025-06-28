@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 21:30:14 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/04 14:18:28 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 18:00:00 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <libft/ft_stdio.h>
 #include <limits.h>
 
-#define MASK_EXIT 0xFF
+#define MASK_EXIT 0x100
 
 static int	str_to_status(const char *str)
 {
