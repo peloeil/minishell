@@ -66,3 +66,13 @@ void	setup_signal_handler(void)
 	sigquit.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sigquit, NULL);
 }
+
+void	sigquit_handler_to_default(void)
+{
+	struct sigaction	sigquit;
+
+	sigemptyset(&sigquit.sa_mask);
+	sigquit.sa_flags = 0;
+	sigquit.sa_handler = sig_handler;
+	sigaction(SIGQUIT, &sigquit, NULL);
+}

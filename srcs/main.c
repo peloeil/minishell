@@ -53,6 +53,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		g_received_signal = 0;
 		cmd_str = wrap_readline(PROMPT);
+		sigquit_handler_to_default();
 		if (cmd_str == NULL)
 			break ;
 		add_history(cmd_str);

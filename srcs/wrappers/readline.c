@@ -10,11 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minishell/signal.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <unistd.h>
-#include <fcntl.h>
 
 char	*wrap_readline(const char *prompt)
 {
@@ -23,6 +24,7 @@ char	*wrap_readline(const char *prompt)
 	int		dev_null;
 	char	*res;
 
+	setup_signal_handler();
 	if (isatty(STDIN_FILENO) && isatty(STDERR_FILENO))
 		return (readline(prompt));
 	saved_stdout = dup(STDOUT_FILENO);
