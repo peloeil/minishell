@@ -47,7 +47,7 @@ CLEAR := $(ESC)[K
 
 # コンパイルの設定
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -ggdb3
 # CC := clang
 # CFLAGS := -Wall -Wextra -Werror
 ARFLAGS := -rcs

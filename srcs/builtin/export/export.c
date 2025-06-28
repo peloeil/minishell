@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/06/04 16:13:17 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 20:34:55 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	is_valid_key(const char *key)
 	return (1);
 }
 
-static int	register_env(t_envp **envp, char *str)
+int	register_env(t_envp **envp, char *str)
 {
 	int		flag;
 	char	*key;
