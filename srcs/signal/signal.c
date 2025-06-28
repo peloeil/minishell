@@ -6,11 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 12:05:48 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/27 22:23:59 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 21:15:37 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell/signal.h>
+#include <minishell/execute.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -36,13 +37,19 @@ int	heredoc_sig_hook(void)
 
 int	sig_hook(void)
 {
+	static int	flag = 0;
+
+	if (flag && g_received_signal == 0)
+		flag = 0;
+	if (flag)
+		return (1);
 	if (g_received_signal == SIGINT)
 	{
+		flag = 1;
 		rl_replace_line("", 0);
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
-		g_received_signal = 0;
 	}
 	return (0);
 }
@@ -67,7 +74,7 @@ void	setup_signal_handler(void)
 	sigaction(SIGQUIT, &sigquit, NULL);
 }
 
-void	sigquit_handler_to_default(void)
+void	signal_setup_after_readline(t_envp **envp)
 {
 	struct sigaction	sigquit;
 
@@ -75,4 +82,10 @@ void	sigquit_handler_to_default(void)
 	sigquit.sa_flags = 0;
 	sigquit.sa_handler = sig_handler;
 	sigaction(SIGQUIT, &sigquit, NULL);
+	if (sig_hook() == 1)
+	{
+		update_exit_status(STATUS_SIG_BASE + g_received_signal, envp);
+		g_received_signal = 0;
+	}
+
 }

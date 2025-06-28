@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:49:27 by sota              #+#    #+#             */
-/*   Updated: 2025/06/27 22:19:28 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 21:15:44 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,15 @@ int	main(int argc, char **argv, char **envp)
 	{
 		g_received_signal = 0;
 		cmd_str = wrap_readline(PROMPT);
-		sigquit_handler_to_default();
+		signal_setup_after_readline(&ms_envp);
 		if (cmd_str == NULL)
 			break ;
 		add_history(cmd_str);
 		status = evaluate_command(cmd_str, &ms_envp);
-		if (status == -2)
-			break ;
 		if (status == -1)
 			update_exit_status(STATUS_MISUSE, &ms_envp);
+		if (status == -2)
+			break ;
 	}
 	if (status != -2)
 		write(STDERR_FILENO, "exit\n", 5);
