@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/06/28 20:36:07 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/28 21:24:30 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ int		set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 		__attribute__((nonnull(2, 3)));
 
 // errors
-void	free_strs(char **strs)
-		__attribute__((nonnull(1)));
+void	free_strs(char **strs);
 void	free_token(void *ptr);
 void	free_tokens(t_token_list *tokens);
 void	free_ast(t_ast_node *ast);

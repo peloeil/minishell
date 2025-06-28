@@ -9,6 +9,7 @@ Checks: '
 
   cppcoreguidelines-*,
   -cppcoreguidelines-init-variables,
+  -cppcoreguidelines-avoid-magic-numbers,
 
   misc-*,
   -misc-include-cleaner,
@@ -20,4 +21,5 @@ Checks: '
   -readability-braces-around-statements,
   -readability-identifier-length,
   -readability-avoid-const-params-in-decls,
+  -readability-magic-numbers,
   '

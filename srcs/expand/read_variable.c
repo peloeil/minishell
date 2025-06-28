@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:00:46 by sota              #+#    #+#             */
-/*   Updated: 2025/05/15 01:57:29 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 21:21:09 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*read_variable_key(char *str, size_t index)
 
 	if (ft_isdigit(str[++index]))
 		return (NULL);
-	if (ft_strcmp(str + index, "?") == 0)
+	if (ft_strncmp(str + index, "?", 1) == 0)
 		return (ft_strdup("?"));
 	if (ft_str_new(&key) == -1)
 		return (NULL);

@@ -6,18 +6,19 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/03 22:36:28 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 20:59:11 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/lexer.h>
-#include <minishell/parser.h>
-#include <minishell/expand.h>
+#include <errno.h>
 #include <minishell/execute.h>
-#include <unistd.h>
-#include <sys/wait.h>
+#include <minishell/expand.h>
+#include <minishell/lexer.h>
+#include <minishell/minishell.h>
+#include <minishell/parser.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 static void	init_proc_state(t_proc_state *state)
 {
@@ -37,20 +38,28 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 
 	if (state->nproc == 0)
 		return (0);
-	exit_status = 0;
+	exit_status = STATUS_SUCCESS;
 	while (state->nproc--)
 	{
-		pid = wait(&wstatus);
-		if (pid == -1)
-			return (-1);
-		if (pid != state->pid)
+		pid = -1;
+		while (1)
+		{
+			pid = wait(&wstatus);
+			if (pid == -1 && errno == EINTR)
+				continue ;
+			break ;
+		}
+		if (pid == -1 || pid != state->pid)
 			continue ;
+		exit_status = STATUS_ERRORS;
 		if (WIFEXITED(wstatus))
 			exit_status = WEXITSTATUS(wstatus);
 		else if (WIFSIGNALED(wstatus))
-			exit_status = STATUS_INVALID_EXIT + WTERMSIG(wstatus);
-		else
-			exit_status = STATUS_ERRORS;
+		{
+			if (WTERMSIG(wstatus) == SIGQUIT)
+				write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+			exit_status = STATUS_SIG_BASE + WTERMSIG(wstatus);
+		}
 	}
 	return (update_exit_status(exit_status, envp));
 }

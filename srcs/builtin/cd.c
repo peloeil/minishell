@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/28 21:11:09 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/28 21:25:42 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <string.h>
 #include <errno.h>
 
-static char	*cd_target(char **argv, t_envp *envp)
+static char	*cd_target(int fd, char **argv, t_envp *envp)
 {
 	char	*target;
 
@@ -31,7 +31,11 @@ static char	*cd_target(char **argv, t_envp *envp)
 	if (argv[1] == NULL)
 		target = ft_getenv("HOME", envp);
 	else if (ft_strcmp(argv[1], "-") == 0)
+	{
 		target = ft_getenv("OLDPWD", envp);
+		if (target != NULL)
+			ft_dprintf(fd, "%s\n", target);
+	}
 	if (target == NULL)
 	{
 		if (argv[1] == NULL)
@@ -124,9 +128,8 @@ int	cd(int fd, char **argv, t_envp **envp)
 	char	*new_path;
 	int		failed;
 
-	(void)fd;
 	old_path = ft_strdup(ft_getenv("!PWD", *envp));
-	new_path = cd_target(argv, *envp);
+	new_path = cd_target(fd, argv, *envp);
 	failed = (old_path == NULL || new_path == NULL
 			|| wrap_chdir(new_path) == -1
 			|| update_oldpwd(envp) == -1

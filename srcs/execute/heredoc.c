@@ -6,26 +6,25 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:07:26 by sota              #+#    #+#             */
-/*   Updated: 2025/05/17 01:12:39 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/27 22:24:45 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/expand.h>
-#include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
+#include <minishell/expand.h>
+#include <minishell/minishell.h>
+#include <minishell/signal.h>
 #include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <readline/readline.h>
 
 #define HEREDOC_PREFIX "/tmp/heredoc"
 
-static int	write_heredoc_file(
-				const char *file,
-				const char *delimeter,
-				t_envp *envp)
+static int	write_heredoc_file(const char *file, const char *delimiter,
+		t_envp *envp)
 {
 	int			fd;
 	t_arg_list	line;
@@ -33,35 +32,48 @@ static int	write_heredoc_file(
 	fd = wrap_open(file, O_WRONLY | O_CREAT | O_TRUNC);
 	if (fd == -1)
 		return (-1);
+	rl_event_hook = heredoc_sig_hook;
 	while (1)
 	{
 		line.content = readline("> ");
 		if (line.content == NULL)
+		{
+			ft_dprintf(STDERR_FILENO,
+				"minishell: warning: here-document delimited by end-of-file (wanted `%s')\n",
+				delimiter);
 			break ;
-		if (ft_strcmp(line.content, delimeter) == 0
-			|| expand_arg(&line, envp) == -1
-			|| ft_dprintf(fd, "%s\n", (char *)line.content) == -1)
+		}
+		if (heredoc_sig_hook() != 0 || ft_strcmp(line.content, delimiter) == 0
+			|| expand_arg(&line, envp) == -1 || ft_dprintf(fd, "%s\n",
+				(char *)line.content) == -1)
 		{
 			free(line.content);
 			break ;
 		}
 	}
 	close(fd);
+	rl_event_hook = sig_hook;
 	return (0);
 }
 
 static char	*heredoc_filename(void)
 {
 	char	*filename;
-	char	suffix[16];
+	char	suffix[17];
+	size_t	i;
 	int		rngfd;
 
-	suffix[sizeof(suffix) - 1] = '\0';
 	rngfd = open("/dev/urandom", O_RDONLY);
 	if (rngfd == -1)
 		return (NULL);
-	if (read(rngfd, suffix, sizeof(suffix) - 1) == -1
-		|| ft_asprintf(&filename, "%s_%s", HEREDOC_PREFIX, suffix) == -1)
+	i = 0;
+	while (i < sizeof(suffix) - 1 && read(rngfd, suffix + i, 1) != -1)
+	{
+		suffix[i] = (char)('a' + (unsigned char)(suffix[i]) % 26);
+		i++;
+	}
+	suffix[i] = '\0';
+	if (ft_asprintf(&filename, "%s_%s", HEREDOC_PREFIX, suffix) == -1)
 	{
 		close(rngfd);
 		return (NULL);
@@ -70,13 +82,13 @@ static char	*heredoc_filename(void)
 	return (filename);
 }
 
-int	open_heredoc(const char *delimeter, t_envp *envp)
+int	open_heredoc(const char *delimiter, t_envp *envp)
 {
 	char	*filename;
 	int		fd;
 
 	filename = heredoc_filename();
-	if (filename == NULL || write_heredoc_file(filename, delimeter, envp) == -1)
+	if (filename == NULL || write_heredoc_file(filename, delimiter, envp) == -1)
 	{
 		free(filename);
 		return (-1);
@@ -87,7 +99,7 @@ int	open_heredoc(const char *delimeter, t_envp *envp)
 		free(filename);
 		return (-1);
 	}
-	if (wrap_unlink(filename) == -1)
+	if (wrap_unlink(filename) == -1 || g_received_signal != 0)
 	{
 		free(filename);
 		close(fd);

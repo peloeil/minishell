@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/execute.h>
-#include <libft/ft_string.h>
+#include <errno.h>
 #include <libft/ft_stdio.h>
-#include <unistd.h>
+#include <libft/ft_string.h>
+#include <minishell/execute.h>
+#include <minishell/minishell.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 static int	found_suitable_file(const char *path, int flag, int show_error)
 {
@@ -47,7 +47,7 @@ static int	found_suitable_file(const char *path, int flag, int show_error)
 
 static int	set_absolute_path(char **const pathptr, const char *cmd)
 {
-	char		*path;
+	char	*path;
 
 	if (!found_suitable_file(cmd, F_OK, 1))
 		return (STATUS_CMD_NOT_FOUND);
