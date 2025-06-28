@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include <minishell/signal.h>
-#include <readline/readline.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <readline/readline.h>
 
 volatile sig_atomic_t	g_received_signal = 0;
 

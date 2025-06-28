@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
 #include <minishell/expand.h>
 #include <minishell/minishell.h>
 #include <minishell/signal.h>
-#include <readline/readline.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <readline/readline.h>
 
 #define HEREDOC_PREFIX "/tmp/heredoc"
 
