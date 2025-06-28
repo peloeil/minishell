@@ -17,6 +17,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 		open.c \
 		stat.c \
 		unlink.c \
+		wait.c \
 		readline.c \
 	) \
 	$(addprefix env/, \

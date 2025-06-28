@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:07:26 by sota              #+#    #+#             */
-/*   Updated: 2025/06/27 22:24:45 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 22:05:08 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,17 @@
 
 #define HEREDOC_PREFIX "/tmp/heredoc"
 
+static int	eof_detected(char *str, const char *delimiter)
+{
+	if (str != NULL)
+		return (0);
+	ft_dprintf(STDERR_FILENO,
+		"minishell: warning: \
+here-document delimited by end-of-file (wanted `%s')\n",
+		delimiter);
+	return (1);
+}
+
 static int	write_heredoc_file(const char *file, const char *delimiter,
 		t_envp *envp)
 {
@@ -36,13 +47,8 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 	while (1)
 	{
 		line.content = readline("> ");
-		if (line.content == NULL)
-		{
-			ft_dprintf(STDERR_FILENO,
-				"minishell: warning: here-document delimited by end-of-file (wanted `%s')\n",
-				delimiter);
+		if (eof_detected((char *)line.content, delimiter))
 			break ;
-		}
 		if (heredoc_sig_hook() != 0 || ft_strcmp(line.content, delimiter) == 0
 			|| expand_arg(&line, envp) == -1 || ft_dprintf(fd, "%s\n",
 				(char *)line.content) == -1)
