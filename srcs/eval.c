@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:11:44 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/28 20:59:11 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 21:54:57 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,7 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 	exit_status = STATUS_SUCCESS;
 	while (state->nproc--)
 	{
-		pid = -1;
-		while (1)
-		{
-			pid = wait(&wstatus);
-			if (pid == -1 && errno == EINTR)
-				continue ;
-			break ;
-		}
+		pid = wrap_wait(&wstatus);
 		if (pid == -1 || pid != state->pid)
 			continue ;
 		exit_status = STATUS_ERRORS;
