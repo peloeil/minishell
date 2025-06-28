@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <minishell/signal.h>
+#include <libft/ft_stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -19,24 +20,19 @@
 
 char	*wrap_readline(const char *prompt)
 {
-	int		saved_stdout;
-	int		saved_stderr;
-	int		dev_null;
 	char	*res;
+	size_t	size;
 
 	setup_signal_handler();
+	if (isatty(STDIN_FILENO) == -1)
+		return (NULL);
+	if (isatty(STDERR_FILENO) == -1)
+		return (NULL);
 	if (isatty(STDIN_FILENO) && isatty(STDERR_FILENO))
 		return (readline(prompt));
-	saved_stdout = dup(STDOUT_FILENO);
-	saved_stderr = dup(STDERR_FILENO);
-	dev_null = open("/dev/null", O_WRONLY);
-	dup2(dev_null, STDOUT_FILENO);
-	dup2(dev_null, STDERR_FILENO);
-	close(dev_null);
-	res = readline(NULL);
-	dup2(saved_stdout, STDOUT_FILENO);
-	dup2(saved_stderr, STDERR_FILENO);
-	close(saved_stdout);
-	close(saved_stderr);
+	size = 0;
+	if (ft_getline(&res, &size, STDIN_FILENO) == -1)
+		return (NULL);
+	res[size - 1] = '\0';
 	return (res);
 }
