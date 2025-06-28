@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/05 00:47:03 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 21:11:09 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	update_oldpwd(t_envp **envp)
 	{
 		if (ft_asprintf(&str, "OLDPWD=%s", pwd_node->value) == -1)
 			return (-1);
-		if (ft_getenv("OLDPWD", *envp) == NULL)
+		if (search_key("OLDPWD", *envp) == NULL)
 			flag = FLAG_SPECIAL;
 	}
 	failed = (update_ms_envp(envp, str, flag) == -1);

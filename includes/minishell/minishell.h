@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:56:03 by sota              #+#    #+#             */
-/*   Updated: 2025/06/03 18:29:16 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 20:36:07 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,7 @@ int		builtin_exit(int fd, char **argv, t_envp **envp);
 // builtin/utils.c
 int		print_sorted_env(int fd, t_envp *envp);
 int		count_argv(char **argv);
+
+int		register_env(t_envp **envp, char *str);
 
 #endif // MINISHELL_H

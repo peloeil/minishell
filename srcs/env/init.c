@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 00:57:35 by sota              #+#    #+#             */
-/*   Updated: 2025/05/29 19:49:18 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/28 20:35:42 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	init_ms_envp(t_envp **ms_envp, char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		if (update_ms_envp(ms_envp, envp[i], FLAG_EXPORT | FLAG_ENV) == -1)
+		if (register_env(ms_envp, envp[i]) == -1)
 		{
 			free_ms_envp(*ms_envp);
 			return (-1);
