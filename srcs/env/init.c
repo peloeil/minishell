@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 00:57:35 by sota              #+#    #+#             */
-/*   Updated: 2025/06/28 20:35:42 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/29 09:35:22 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,20 @@ static int	update_pwd(t_envp **envp)
 {
 	char	*pwd_value;
 	char	*str;
+	int	failed;
 
 	pwd_value = getcwd(NULL, 0);
 	if (pwd_value == NULL)
 		return (-1);
-	if (ft_asprintf(&str, "!PWD=%s", pwd_value) == -1)
-	{
-		free(pwd_value);
+	failed = (ft_asprintf(&str, "!PWD=%s", pwd_value) == -1);
+	free(pwd_value);
+	if (failed)
 		return (-1);
-	}
-	if (update_ms_envp(envp, str, FLAG_SPECIAL) == -1
-		|| update_ms_envp(envp, str + 1, FLAG_EXPORT | FLAG_ENV) == -1)
-	{
-		free(pwd_value);
-		free(str);
+	failed = (update_ms_envp(envp, str, FLAG_SPECIAL) == -1
+		|| update_ms_envp(envp, str + 1, FLAG_EXPORT | FLAG_ENV) == -1);
+	free(str);
+	if (failed)
 		return (-1);
-	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/06/28 20:34:55 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/29 09:29:03 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	register_env(t_envp **envp, char *str)
 			"minishell: export: `%s': not a valid identifier\n", str);
 		return (-1);
 	}
+	free(key);
 	return (update_ms_envp(envp, str, flag));
 }
 
