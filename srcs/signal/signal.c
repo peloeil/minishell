@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 12:05:48 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/28 21:56:10 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/29 11:48:49 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,31 @@ int	heredoc_sig_hook(void)
 	return (0);
 }
 
+static int	save_signum(int num)
+{
+	static volatile sig_atomic_t	signum = 0;
+
+	if (num != -1)
+		signum = num;
+	return (signum);
+}
+
 int	sig_hook(void)
 {
-	static int	flag = 0;
-
-	if (flag && g_received_signal == 0)
-		flag = 0;
-	if (flag)
-		return (1);
+	if (g_received_signal == SIGINT)
+		save_signum(SIGINT);
+	if (save_signum(-1) == SIGINT && g_received_signal == 0)
+		return (SIGINT);
 	if (g_received_signal == SIGINT)
 	{
-		flag = 1;
+		g_received_signal = 0;
 		rl_replace_line("", 0);
-		write(STDOUT_FILENO, "\n", 1);
+		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
+		return (SIGINT);
 	}
-	return (0);
+	return (save_signum(-1));
 }
 
 static void	sig_handler(int signo)
@@ -82,9 +90,10 @@ void	signal_setup_after_readline(t_envp **envp)
 	sigquit.sa_flags = 0;
 	sigquit.sa_handler = sig_handler;
 	sigaction(SIGQUIT, &sigquit, NULL);
-	if (sig_hook() == 1)
+	if (sig_hook() == SIGINT)
 	{
-		update_exit_status(STATUS_SIG_BASE + g_received_signal, envp);
+		update_exit_status(STATUS_SIG_BASE + SIGINT, envp);
+		save_signum(0);
 		g_received_signal = 0;
 	}
 }
