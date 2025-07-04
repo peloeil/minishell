@@ -6,15 +6,15 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/06/29 09:29:03 by sota             ###   ########.fr       */
+/*   Updated: 2025/07/04 21:01:39 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/execute.h>
 #include <libft/ft_ctype.h>
 #include <libft/ft_stdio.h>
 #include <libft/ft_string.h>
+#include <minishell/execute.h>
+#include <minishell/minishell.h>
 #include <stdlib.h>
 
 static int	is_valid_key(const char *key)
@@ -35,9 +35,49 @@ static int	is_valid_key(const char *key)
 	return (1);
 }
 
+static int	make_env_str(char **result, const char *key, const char *value)
+{
+	size_t	len;
+
+	len = ft_strlen(key) + 1 + ft_strlen(value) + 1;
+	*result = (char *)malloc(len);
+	if (*result == NULL)
+		return (-1);
+	ft_snprintf(*result, len, "%s=%s", key, value);
+	return (0);
+}
+
+static int	handle_env_update(t_envp **envp, char *key, char *value, int flag)
+{
+	t_envp	*exist;
+	char	*result;
+	int		ret;
+
+	if (value == NULL)
+	{
+		exist = search_key(key, *envp);
+		if (exist && exist->value)
+		{
+			if (make_env_str(&result, key, exist->value) == -1)
+				return (free(key), -1);
+			ret = update_ms_envp(envp, result, flag | FLAG_ENV);
+			free(result);
+			return (free(key), ret);
+		}
+		ret = update_ms_envp(envp, key, flag);
+		return (free(key), ret);
+	}
+	if (make_env_str(&result, key, value) == -1)
+		return (free(key), free(value), -1);
+	ret = update_ms_envp(envp, result, flag);
+	free(result);
+	return (ret);
+}
+
 int	register_env(t_envp **envp, char *str)
 {
 	int		flag;
+	int		result;
 	char	*key;
 	char	*value;
 
@@ -46,16 +86,15 @@ int	register_env(t_envp **envp, char *str)
 	flag = (FLAG_EXPORT | FLAG_ENV);
 	if (value == NULL)
 		flag = FLAG_EXPORT;
-	free(value);
 	if (!is_valid_key(key))
 	{
-		free(key);
 		ft_dprintf(STDERR_FILENO,
-			"minishell: export: `%s': not a valid identifier\n", str);
-		return (-1);
+			"minishell: export: \
+`%s': not a valid identifier\n", str);
+		return (free(key), free(value), -1);
 	}
-	free(key);
-	return (update_ms_envp(envp, str, flag));
+	result = handle_env_update(envp, key, value, flag);
+	return (free(key), free(value), result);
 }
 
 int	export(int fd, char **argv, t_envp **envp)
