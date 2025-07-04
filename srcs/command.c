@@ -87,16 +87,14 @@ static char	*search_file(const char *cmd, char **dirs, int mode)
 
 int	set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 {
-	char	*path;
 	char	**dirs;
 	char	*file;
 
 	if (ft_strchr(cmd, '/') != NULL)
 		return (set_absolute_path(pathptr, cmd));
-	path = ft_getenv("PATH", envp);
-	dirs = ft_split(path, ':');
-	if (path == NULL || dirs == NULL)
-		return (-1);
+	dirs = ft_split(ft_getenv("PATH", envp), ':');
+	if (dirs == NULL)
+		return (error_return(0, cmd, "command not found"));
 	file = search_file(cmd, dirs, X_OK);
 	if (file != NULL)
 	{
