@@ -37,23 +37,16 @@ static int	clean_up(
 	return (status);
 }
 
-int	child_process(
+static int	execute_file(
 		t_arg_list *args,
 		t_proc_state *state,
 		t_envp *ms_envp,
 		t_ast_node *top)
 {
+	int		status;
 	char	**argv;
 	char	**envp;
-	int		status;
 
-	if (set_child_fds(state) == -1)
-		exit(clean_up(STATUS_ERRORS, *state, ms_envp, top));
-	if (is_builtin(args->content))
-	{
-		status = execute_builtin(args, state, &ms_envp);
-		exit(clean_up(status, *state, ms_envp, top));
-	}
 	envp = NULL;
 	if (make_argv(&argv, args) == -1 || make_envp(&envp, ms_envp) == -1)
 	{
@@ -70,4 +63,22 @@ int	child_process(
 	free_strs(argv);
 	free_strs(envp);
 	exit(clean_up(status, *state, ms_envp, top));
+}
+
+int	child_process(
+		t_arg_list *args,
+		t_proc_state *state,
+		t_envp *ms_envp,
+		t_ast_node *top)
+{
+	int		status;
+
+	if (set_child_fds(state) == -1)
+		exit(clean_up(STATUS_ERRORS, *state, ms_envp, top));
+	if (is_builtin(args->content))
+	{
+		status = execute_builtin(args, state, &ms_envp);
+		exit(clean_up(status, *state, ms_envp, top));
+	}
+	return (execute_file(args, state, ms_envp, top));
 }
