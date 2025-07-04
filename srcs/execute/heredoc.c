@@ -67,8 +67,9 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 			break ;
 	}
 	close(fd);
-	if (heredoc_sig_hook())
-		update_exit_status(STATUS_SIG_BASE + SIGINT, &envp);
+	if (heredoc_signal(-1) == SIGINT
+		&& update_exit_status(STATUS_SIG_BASE + SIGINT, &envp))
+		return (-1);
 	rl_event_hook = sig_hook;
 	return (0);
 }

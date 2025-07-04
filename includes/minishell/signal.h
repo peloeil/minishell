@@ -19,8 +19,10 @@
 extern volatile sig_atomic_t	g_received_signal;
 
 void							setup_signal_handler(void);
+void							signal_setup_after_readline(t_envp **envp);
 int								heredoc_sig_hook(void);
 int								sig_hook(void);
-void							signal_setup_after_readline(t_envp **envp);
+int								heredoc_signal(int num);
+int								save_signum(int num);
 
 #endif
