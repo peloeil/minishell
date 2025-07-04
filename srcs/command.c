@@ -92,9 +92,11 @@ int	set_command_path(char **const pathptr, const char *cmd, t_envp *envp)
 
 	if (ft_strchr(cmd, '/') != NULL)
 		return (set_absolute_path(pathptr, cmd));
+	if (search_key("PATH", envp) == NULL)
+		return (error_return(STATUS_CMD_NOT_FOUND, cmd, strerror(ENOENT)));
 	dirs = ft_split(ft_getenv("PATH", envp), ':');
 	if (dirs == NULL)
-		return (error_return(0, cmd, "command not found"));
+		return (error_return(STATUS_CMD_NOT_FOUND, cmd, "command not found"));
 	file = search_file(cmd, dirs, X_OK);
 	if (file != NULL)
 	{

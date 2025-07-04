@@ -38,9 +38,9 @@ static char	*cd_target(int fd, char **argv, t_envp *envp)
 	}
 	if (target == NULL)
 	{
-		if (argv[1] == NULL)
+		if (argv[1] == NULL && search_key("HOME", envp) == NULL)
 			error_return(0, "cd", "HOME not set");
-		else if (ft_strcmp(argv[1], "-") == 0)
+		if (argv[1] != NULL && ft_strcmp(argv[1], "-") == 0)
 			error_return(0, "cd", "OLDPWD not set");
 		return (NULL);
 	}

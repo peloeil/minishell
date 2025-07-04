@@ -17,6 +17,8 @@
 #include <libft/ft_stdlib.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 
 static int	clean_up(
 				int status,
@@ -60,8 +62,11 @@ int	child_process(
 		exit(clean_up(STATUS_ERRORS, *state, ms_envp, top));
 	}
 	status = set_command_path(&argv[0], args->content, ms_envp);
-	if (status != -1)
+	if (status == 0)
+	{
 		execve(argv[0], argv, envp);
+		error_return(0, argv[0], strerror(errno));
+	}
 	free_strs(argv);
 	free_strs(envp);
 	exit(clean_up(status, *state, ms_envp, top));

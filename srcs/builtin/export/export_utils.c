@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 02:47:43 by sota              #+#    #+#             */
-/*   Updated: 2025/06/29 12:45:37 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/05 01:16:47 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	print_export_key_value(int fd, const char *key, const char *value)
 		|| ft_str_push_str(&str, "=\"") == -1)
 		return (-1);
 	i = 0;
-	while (value[i] != '\0')
+	while (value != NULL && value[i] != '\0')
 	{
 		if (value[i] != '"' && ft_str_push(&str, value[i]) == -1)
 			return (-1);

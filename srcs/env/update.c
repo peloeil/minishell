@@ -41,14 +41,10 @@ int	update_ms_envp(t_envp **envp, const char *str, int flag)
 	char	*value;
 	t_envp	*old;
 
+	if (*envp == NULL)
+		return (push_to_ms_envp(envp, str, flag));
 	if (split_into_key_value(str, &key, &value) == -1)
 		return (-1);
-	if (*envp == NULL)
-	{
-		free(key);
-		free(value);
-		return (push_to_ms_envp(envp, str, flag));
-	}
 	old = search_key(key, *envp);
 	free(key);
 	if (old == NULL)
