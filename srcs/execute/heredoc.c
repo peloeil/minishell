@@ -6,7 +6,7 @@
 /*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:07:26 by sota              #+#    #+#             */
-/*   Updated: 2025/06/28 22:05:08 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/29 12:09:18 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,28 @@ here-document delimited by end-of-file (wanted `%s')\n",
 	return (1);
 }
 
+static int	read_heredoc_input(int fd, const char *delimiter, t_envp *envp)
+{
+	t_arg_list	line;
+
+	line.content = readline("> ");
+	if (eof_detected((char *)line.content, delimiter))
+		return (-1);
+	if (heredoc_sig_hook()
+		|| ft_strcmp(line.content, delimiter) == 0
+		|| expand_arg(&line, envp) == -1
+		|| ft_dprintf(fd, "%s\n", (char *)line.content) == -1)
+	{
+		free(line.content);
+		return (-1);
+	}
+	return (0);
+}
+
 static int	write_heredoc_file(const char *file, const char *delimiter,
 		t_envp *envp)
 {
 	int			fd;
-	t_arg_list	line;
 
 	fd = wrap_open(file, O_WRONLY | O_CREAT | O_TRUNC);
 	if (fd == -1)
@@ -46,18 +63,12 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 	rl_event_hook = heredoc_sig_hook;
 	while (1)
 	{
-		line.content = readline("> ");
-		if (eof_detected((char *)line.content, delimiter))
+		if (read_heredoc_input(fd, delimiter, envp) == -1)
 			break ;
-		if (heredoc_sig_hook() != 0 || ft_strcmp(line.content, delimiter) == 0
-			|| expand_arg(&line, envp) == -1 || ft_dprintf(fd, "%s\n",
-				(char *)line.content) == -1)
-		{
-			free(line.content);
-			break ;
-		}
 	}
 	close(fd);
+	if (heredoc_sig_hook())
+		update_exit_status(STATUS_SIG_BASE + SIGINT, &envp);
 	rl_event_hook = sig_hook;
 	return (0);
 }
