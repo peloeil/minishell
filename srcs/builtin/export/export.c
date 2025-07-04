@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/07/04 21:01:39 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/07/04 21:41:11 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,16 @@ static int	handle_env_update(t_envp **envp, char *key, char *value, int flag)
 		if (exist && exist->value)
 		{
 			if (make_env_str(&result, key, exist->value) == -1)
-				return (free(key), -1);
+				return (-1);
 			ret = update_ms_envp(envp, result, flag | FLAG_ENV);
 			free(result);
-			return (free(key), ret);
+			return (ret);
 		}
 		ret = update_ms_envp(envp, key, flag);
-		return (free(key), ret);
+		return (ret);
 	}
 	if (make_env_str(&result, key, value) == -1)
-		return (free(key), free(value), -1);
+		return (-1);
 	ret = update_ms_envp(envp, result, flag);
 	free(result);
 	return (ret);
