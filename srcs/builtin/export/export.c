@@ -40,7 +40,15 @@ static int	export_oldpwd(t_envp **envp)
 	char	*str;
 	int		status;
 
-	if (ft_asprintf(&str, "OLDPWD=%s", ft_getenv("OLDPWD", *envp)) == -1)
+	if (ft_getenv("OLDPWD", *envp) == NULL)
+	{
+		if (ft_asprintf(&str, "OLDPWD") == -1)
+			return (-1);
+		status = (update_ms_envp(envp, str, FLAG_EXPORT) == -1);
+		free(str);
+		return (status);
+	}
+	else if (ft_asprintf(&str, "OLDPWD=%s", ft_getenv("OLDPWD", *envp)) == -1)
 		return (-1);
 	status = (update_ms_envp(envp, str, FLAG_EXPORT | FLAG_ENV) == -1);
 	free(str);
@@ -50,16 +58,21 @@ static int	export_oldpwd(t_envp **envp)
 static int	export_pwd(t_envp **envp)
 {
 	char	*str;
+	int		status;
 
-	if (ft_asprintf(&str, "PWD=%s", ft_getenv("!PWD", *envp)) == -1)
-		return (-1);
-	if (register_env(envp, str) == -1)
+	if (ft_getenv("PWD", *envp) == NULL)
 	{
+		if (ft_asprintf(&str, "PWD") == -1)
+			return (-1);
+		status = (update_ms_envp(envp, str, FLAG_EXPORT) == -1);
 		free(str);
-		return (-1);
+		return (status);
 	}
+	else if (ft_asprintf(&str, "PWD=%s", ft_getenv("PWD", *envp)) == -1)
+		return (-1);
+	status = (update_ms_envp(envp, str, FLAG_EXPORT | FLAG_ENV) == -1);
 	free(str);
-	return (0);
+	return (status);
 }
 
 int	register_env(t_envp **envp, char *str)
