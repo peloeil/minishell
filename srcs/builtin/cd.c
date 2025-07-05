@@ -51,30 +51,28 @@ static int	update_oldpwd(t_envp **envp)
 {
 	int		flag;
 	char	*str;
-	int		failed;
+	t_envp	*oldpwd_node;
 
-	flag = (FLAG_EXPORT | FLAG_ENV);
-	if (search_key("PWD", *envp) == NULL
-		|| search_key("PWD", *envp)->value == NULL)
+	oldpwd_node = search_key("PWD", *envp);
+	if (oldpwd_node == NULL || oldpwd_node->value == NULL)
 	{
-		flag = FLAG_EXPORT;
+		if (oldpwd_node == NULL)
+			flag = FLAG_EXPORT;
+		if (oldpwd_node != NULL && oldpwd_node->value == NULL)
+			flag = FLAG_SPECIAL;
 		if (ft_asprintf(&str, "OLDPWD=") == -1)
 			return (-1);
 	}
 	else
 	{
-		if (ft_asprintf(&str, "OLDPWD=%s",
-				search_key("PWD", *envp)->value) == -1)
+		if (ft_asprintf(&str, "OLDPWD=%s", oldpwd_node->value) == -1)
 			return (-1);
-		if (search_key("OLDPWD", *envp) == NULL
-			|| (search_key("OLDPWD", *envp)->flag & FLAG_SPECIAL))
+		if (oldpwd_node == NULL || (oldpwd_node->flag & FLAG_SPECIAL))
 			flag = FLAG_SPECIAL;
 	}
-	failed = (update_ms_envp(envp, str, flag) == -1);
-	free(str);
-	if (failed)
-		return (-1);
-	return (0);
+	if (update_ms_envp(envp, str, flag) == -1)
+		return (free(str), -1);
+	return (free(str), 0);
 }
 
 static int	update_internal_pwd(t_envp **envp)
