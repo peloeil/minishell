@@ -46,10 +46,8 @@ BG_DEFAULT := $(ESC)[49m
 CLEAR := $(ESC)[K
 
 # コンパイルの設定
-CC := gcc
-CFLAGS := -Wall -Wextra -Werror -ggdb3
-# CC := clang
-# CFLAGS := -Wall -Wextra -Werror
+CC := cc
+CFLAGS := -Wall -Wextra -Werror
 ARFLAGS := -rcs
 
 # ディレクトリの設定

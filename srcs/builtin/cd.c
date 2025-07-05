@@ -54,6 +54,7 @@ static int	update_oldpwd(t_envp **envp)
 	t_envp	*oldpwd_node;
 
 	oldpwd_node = search_key("PWD", *envp);
+	flag = (FLAG_EXPORT | FLAG_ENV);
 	if (oldpwd_node == NULL || oldpwd_node->value == NULL)
 	{
 		if (oldpwd_node == NULL)
