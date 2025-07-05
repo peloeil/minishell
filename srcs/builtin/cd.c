@@ -57,7 +57,7 @@ static int	update_oldpwd(t_envp **envp)
 	if (search_key("PWD", *envp) == NULL || search_key("PWD", *envp)->value == NULL)
 	{
 		if (search_key("PWD", *envp) == NULL)
-			flag = FLAG_SPECIAL;
+			flag = FLAG_EXPORT;
 		if (ft_asprintf(&str, "OLDPWD=") == -1)
 			return (-1);
 	}
