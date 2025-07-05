@@ -49,9 +49,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (initial_setup(&ms_envp, envp) == -1)
 		return (STATUS_ERRORS);
+	status = STATUS_SUCCESS;
 	while (1)
 	{
-		g_received_signal = 0;
 		cmd_str = wrap_readline(PROMPT);
 		signal_setup_after_readline(&ms_envp);
 		if (cmd_str == NULL)

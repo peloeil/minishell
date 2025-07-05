@@ -49,6 +49,7 @@ static int	read_heredoc_input(int fd, const char *delimiter, t_envp *envp)
 		free(line.content);
 		return (-1);
 	}
+	free(line.content);
 	return (0);
 }
 

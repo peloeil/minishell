@@ -66,7 +66,7 @@ static int	execute_nopipe(
 		}
 		ast = ast->right;
 	}
-	if (ast == NULL)
+	if (failed || ast == NULL)
 		return (set_parent_fds(state));
 	return (execute_command(ast->args, state, envp, top));
 }
