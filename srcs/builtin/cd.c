@@ -50,15 +50,11 @@ static char	*cd_target(int fd, char **argv, t_envp *envp)
 static int	update_oldpwd(t_envp **envp)
 {
 	int		flag;
-	t_envp	*pwd_node;
-	t_envp	*oldpwd_node;
 	char	*str;
 	int		failed;
 
 	flag = (FLAG_EXPORT | FLAG_ENV);
-	pwd_node = search_key("PWD", *envp);
-	oldpwd_node = search_key("OLDPWD", *envp);
-	if (pwd_node == NULL)
+	if (search_key("PWD", *envp) == NULL)
 	{
 		if (ft_asprintf(&str, "OLDPWD=") == -1)
 			return (-1);
@@ -66,9 +62,10 @@ static int	update_oldpwd(t_envp **envp)
 	}
 	else
 	{
-		if (ft_asprintf(&str, "OLDPWD=%s", pwd_node->value) == -1)
+		if (ft_asprintf(&str, "OLDPWD=%s", search_key("PWD", *envp)->value) == -1)
 			return (-1);
-		if (oldpwd_node == NULL || (oldpwd_node->flag & FLAG_SPECIAL))
+		if (search_key("OLDPWD", *envp) == NULL ||
+			(search_key("OLDPWD", *envp)->flag & FLAG_SPECIAL))
 			flag = FLAG_SPECIAL;
 	}
 	failed = (update_ms_envp(envp, str, flag) == -1);

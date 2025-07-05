@@ -35,20 +35,16 @@ static int	is_valid_key(const char *key)
 	return (1);
 }
 
-
 static int	export_oldpwd(t_envp **envp)
 {
 	char	*str;
+	int		status;
 
-	if (ft_asprintf(&str, "OLDPWD=%s", ft_getenv("PWD", *envp)) == -1)
+	if (ft_asprintf(&str, "OLDPWD=%s", ft_getenv("OLDPWD", *envp)) == -1)
 		return (-1);
-	if (register_env(envp, str) == -1)
-	{
-		free(str);
-		return (-1);
-	}
+	status = (update_ms_envp(envp, str, FLAG_EXPORT | FLAG_ENV) == -1);
 	free(str);
-	return (0);
+	return (status);
 }
 
 static int	export_pwd(t_envp **envp)
@@ -72,12 +68,12 @@ int	register_env(t_envp **envp, char *str)
 	char	*key;
 	char	*value;
 
-	if (ft_strcmp(str, "OLDPWD") == 0)
-		return (export_oldpwd(envp));
 	if (ft_strcmp(str, "PWD") == 0)
 		return (export_pwd(envp));
+	if (ft_strcmp(str, "OLDPWD") == 0)
+		return (export_oldpwd(envp));
 	if (search_key(str, *envp) != NULL)
-		return (0);
+		return (update_ms_envp(envp, str, FLAG_EXPORT));
 	if (split_into_key_value(str, &key, &value) == -1)
 		return (-1);
 	flag = (FLAG_EXPORT | FLAG_ENV);
