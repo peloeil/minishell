@@ -35,6 +35,22 @@ static int	is_valid_key(const char *key)
 	return (1);
 }
 
+
+static int	export_oldpwd(t_envp **envp)
+{
+	char	*str;
+
+	if (ft_asprintf(&str, "OLDPWD=%s", ft_getenv("PWD", *envp)) == -1)
+		return (-1);
+	if (register_env(envp, str) == -1)
+	{
+		free(str);
+		return (-1);
+	}
+	free(str);
+	return (0);
+}
+
 static int	export_pwd(t_envp **envp)
 {
 	char	*str;
@@ -56,6 +72,8 @@ int	register_env(t_envp **envp, char *str)
 	char	*key;
 	char	*value;
 
+	if (ft_strcmp(str, "OLDPWD") == 0)
+		return (export_oldpwd(envp));
 	if (ft_strcmp(str, "PWD") == 0)
 		return (export_pwd(envp));
 	if (search_key(str, *envp) != NULL)

@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/execute.h>
-#include <libft/ft_string.h>
+#include <errno.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
+#include <minishell/execute.h>
+#include <minishell/minishell.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 static char	*cd_target(int fd, char **argv, t_envp *envp)
 {
@@ -51,22 +51,24 @@ static int	update_oldpwd(t_envp **envp)
 {
 	int		flag;
 	t_envp	*pwd_node;
+	t_envp	*oldpwd_node;
 	char	*str;
 	int		failed;
 
 	flag = (FLAG_EXPORT | FLAG_ENV);
 	pwd_node = search_key("PWD", *envp);
+	oldpwd_node = search_key("OLDPWD", *envp);
 	if (pwd_node == NULL)
 	{
 		if (ft_asprintf(&str, "OLDPWD=") == -1)
 			return (-1);
-		flag = FLAG_EXPORT;
+		flag = FLAG_SPECIAL;
 	}
 	else
 	{
 		if (ft_asprintf(&str, "OLDPWD=%s", pwd_node->value) == -1)
 			return (-1);
-		if (search_key("OLDPWD", *envp) == NULL)
+		if (oldpwd_node == NULL || (oldpwd_node->flag & FLAG_SPECIAL))
 			flag = FLAG_SPECIAL;
 	}
 	failed = (update_ms_envp(envp, str, flag) == -1);
@@ -130,10 +132,8 @@ int	cd(int fd, char **argv, t_envp **envp)
 
 	old_path = ft_strdup(ft_getenv("!PWD", *envp));
 	new_path = cd_target(fd, argv, *envp);
-	failed = (old_path == NULL || new_path == NULL
-			|| wrap_chdir(new_path) == -1
-			|| update_oldpwd(envp) == -1
-			|| update_internal_pwd(envp) == -1
+	failed = (old_path == NULL || new_path == NULL || wrap_chdir(new_path) == -1
+			|| update_oldpwd(envp) == -1 || update_internal_pwd(envp) == -1
 			|| update_pwd(envp) == -1);
 	free(old_path);
 	free(new_path);
