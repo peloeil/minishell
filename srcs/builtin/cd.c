@@ -54,16 +54,17 @@ static int	update_oldpwd(t_envp **envp)
 	int		failed;
 
 	flag = (FLAG_EXPORT | FLAG_ENV);
-	if (search_key("PWD", *envp) == NULL || search_key("PWD", *envp)->value == NULL)
+	if (search_key("PWD", *envp) == NULL
+		|| search_key("PWD", *envp)->value == NULL)
 	{
-		if (search_key("PWD", *envp) == NULL)
-			flag = FLAG_EXPORT;
+		flag = FLAG_EXPORT;
 		if (ft_asprintf(&str, "OLDPWD=") == -1)
 			return (-1);
 	}
 	else
 	{
-		if (ft_asprintf(&str, "OLDPWD=%s", search_key("PWD", *envp)->value) == -1)
+		if (ft_asprintf(&str, "OLDPWD=%s",
+				search_key("PWD", *envp)->value) == -1)
 			return (-1);
 		if (search_key("OLDPWD", *envp) == NULL
 			|| (search_key("OLDPWD", *envp)->flag & FLAG_SPECIAL))
