@@ -66,7 +66,7 @@ static int	print_export_key_value(int fd, const char *key, const char *value)
 		|| ft_str_push_str(&str, "=\"") == -1)
 		return (-1);
 	i = 0;
-	while (value[i] != '\0')
+	while (value != NULL && value[i] != '\0')
 	{
 		if (value[i] != '"' && ft_str_push(&str, value[i]) == -1)
 			return (-1);

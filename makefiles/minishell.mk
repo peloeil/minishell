@@ -72,6 +72,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, \
 	) \
 	$(addprefix signal/, \
 		signal.c \
+		hook.c \
 	) \
 )
 OBJS := $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))

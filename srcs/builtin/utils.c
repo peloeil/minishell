@@ -31,6 +31,8 @@ int	make_str(int is_double, t_string *str, const char *key, const char *value)
 	int	status;
 
 	status = 0;
+	if (value == NULL)
+		value = "";
 	if (is_double == 0)
 	{
 		status |= ft_str_push_str(str, key);

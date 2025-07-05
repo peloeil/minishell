@@ -17,6 +17,8 @@
 #include <libft/ft_stdlib.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 
 static int	clean_up(
 				int status,
@@ -35,14 +37,40 @@ static int	clean_up(
 	return (status);
 }
 
+static int	execute_file(
+		t_arg_list *args,
+		t_proc_state *state,
+		t_envp *ms_envp,
+		t_ast_node *top)
+{
+	int		status;
+	char	**argv;
+	char	**envp;
+
+	envp = NULL;
+	if (make_argv(&argv, args) == -1 || make_envp(&envp, ms_envp) == -1)
+	{
+		free_strs(argv);
+		free_strs(envp);
+		exit(clean_up(STATUS_ERRORS, *state, ms_envp, top));
+	}
+	status = set_command_path(&argv[0], args->content, ms_envp);
+	if (status == 0)
+	{
+		execve(argv[0], argv, envp);
+		error_return(0, argv[0], strerror(errno));
+	}
+	free_strs(argv);
+	free_strs(envp);
+	exit(clean_up(status, *state, ms_envp, top));
+}
+
 int	child_process(
 		t_arg_list *args,
 		t_proc_state *state,
 		t_envp *ms_envp,
 		t_ast_node *top)
 {
-	char	**argv;
-	char	**envp;
 	int		status;
 
 	if (set_child_fds(state) == -1)
@@ -52,17 +80,5 @@ int	child_process(
 		status = execute_builtin(args, state, &ms_envp);
 		exit(clean_up(status, *state, ms_envp, top));
 	}
-	envp = NULL;
-	if (make_argv(&argv, args) == -1 || make_envp(&envp, ms_envp) == -1)
-	{
-		free_strs(argv);
-		free_strs(envp);
-		exit(clean_up(STATUS_ERRORS, *state, ms_envp, top));
-	}
-	status = set_command_path(&argv[0], args->content, ms_envp);
-	if (status != -1)
-		execve(argv[0], argv, envp);
-	free_strs(argv);
-	free_strs(envp);
-	exit(clean_up(status, *state, ms_envp, top));
+	return (execute_file(args, state, ms_envp, top));
 }

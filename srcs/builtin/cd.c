@@ -6,17 +6,17 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:04:24 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/28 21:25:42 by sota             ###   ########.fr       */
+/*   Updated: 2025/06/29 12:05:25 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
-#include <minishell/execute.h>
-#include <libft/ft_string.h>
+#include <errno.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_string.h>
+#include <minishell/execute.h>
+#include <minishell/minishell.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 static char	*cd_target(int fd, char **argv, t_envp *envp)
 {
@@ -38,9 +38,9 @@ static char	*cd_target(int fd, char **argv, t_envp *envp)
 	}
 	if (target == NULL)
 	{
-		if (argv[1] == NULL)
+		if (argv[1] == NULL && search_key("HOME", envp) == NULL)
 			error_return(0, "cd", "HOME not set");
-		else if (ft_strcmp(argv[1], "-") == 0)
+		if (argv[1] != NULL && ft_strcmp(argv[1], "-") == 0)
 			error_return(0, "cd", "OLDPWD not set");
 		return (NULL);
 	}
@@ -50,30 +50,29 @@ static char	*cd_target(int fd, char **argv, t_envp *envp)
 static int	update_oldpwd(t_envp **envp)
 {
 	int		flag;
-	t_envp	*pwd_node;
 	char	*str;
-	int		failed;
+	t_envp	*oldpwd_node;
 
-	flag = (FLAG_EXPORT | FLAG_ENV);
-	pwd_node = search_key("PWD", *envp);
-	if (pwd_node == NULL)
+	oldpwd_node = search_key("PWD", *envp);
+	if (oldpwd_node == NULL || oldpwd_node->value == NULL)
 	{
+		if (oldpwd_node == NULL)
+			flag = FLAG_EXPORT;
+		if (oldpwd_node != NULL && oldpwd_node->value == NULL)
+			flag = FLAG_SPECIAL;
 		if (ft_asprintf(&str, "OLDPWD=") == -1)
 			return (-1);
-		flag = FLAG_EXPORT;
 	}
 	else
 	{
-		if (ft_asprintf(&str, "OLDPWD=%s", pwd_node->value) == -1)
+		if (ft_asprintf(&str, "OLDPWD=%s", oldpwd_node->value) == -1)
 			return (-1);
-		if (search_key("OLDPWD", *envp) == NULL)
+		if (oldpwd_node == NULL || (oldpwd_node->flag & FLAG_SPECIAL))
 			flag = FLAG_SPECIAL;
 	}
-	failed = (update_ms_envp(envp, str, flag) == -1);
-	free(str);
-	if (failed)
-		return (-1);
-	return (0);
+	if (update_ms_envp(envp, str, flag) == -1)
+		return (free(str), -1);
+	return (free(str), 0);
 }
 
 static int	update_internal_pwd(t_envp **envp)
@@ -130,10 +129,8 @@ int	cd(int fd, char **argv, t_envp **envp)
 
 	old_path = ft_strdup(ft_getenv("!PWD", *envp));
 	new_path = cd_target(fd, argv, *envp);
-	failed = (old_path == NULL || new_path == NULL
-			|| wrap_chdir(new_path) == -1
-			|| update_oldpwd(envp) == -1
-			|| update_internal_pwd(envp) == -1
+	failed = (old_path == NULL || new_path == NULL || wrap_chdir(new_path) == -1
+			|| update_oldpwd(envp) == -1 || update_internal_pwd(envp) == -1
 			|| update_pwd(envp) == -1);
 	free(old_path);
 	free(new_path);

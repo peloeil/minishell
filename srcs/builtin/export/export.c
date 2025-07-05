@@ -6,7 +6,7 @@
 /*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 09:39:15 by yonuma            #+#    #+#             */
-/*   Updated: 2025/06/28 20:34:55 by yonuma           ###   ########.fr       */
+/*   Updated: 2025/06/29 09:29:03 by sota             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,62 @@ static int	is_valid_key(const char *key)
 	return (1);
 }
 
+static int	export_oldpwd(t_envp **envp)
+{
+	char	*str;
+	int		status;
+
+	if (ft_getenv("OLDPWD", *envp) == NULL)
+	{
+		if (ft_asprintf(&str, "OLDPWD") == -1)
+			return (-1);
+		status = (update_ms_envp(envp, str, FLAG_EXPORT) == -1);
+		free(str);
+		return (status);
+	}
+	else if (ft_asprintf(&str, "OLDPWD=%s", ft_getenv("OLDPWD", *envp)) == -1)
+		return (-1);
+	status = (update_ms_envp(envp, str, FLAG_EXPORT | FLAG_ENV) == -1);
+	free(str);
+	return (status);
+}
+
+static int	export_pwd(t_envp **envp)
+{
+	char	*str;
+	int		status;
+
+	if (ft_getenv("PWD", *envp) == NULL)
+	{
+		if (ft_asprintf(&str, "PWD") == -1)
+			return (-1);
+		status = (update_ms_envp(envp, str, FLAG_EXPORT) == -1);
+		free(str);
+		return (status);
+	}
+	else if (ft_asprintf(&str, "PWD=%s", ft_getenv("PWD", *envp)) == -1)
+		return (-1);
+	status = (update_ms_envp(envp, str, FLAG_EXPORT | FLAG_ENV) == -1);
+	free(str);
+	return (status);
+}
+
 int	register_env(t_envp **envp, char *str)
 {
 	int		flag;
 	char	*key;
 	char	*value;
 
+	if (ft_strcmp(str, "PWD") == 0)
+		return (export_pwd(envp));
+	if (ft_strcmp(str, "OLDPWD") == 0)
+		return (export_oldpwd(envp));
+	if (search_key(str, *envp) != NULL)
+		return (update_ms_envp(envp, str, FLAG_EXPORT));
 	if (split_into_key_value(str, &key, &value) == -1)
 		return (-1);
 	flag = (FLAG_EXPORT | FLAG_ENV);
-	if (value == NULL)
+	if (value == NULL && ft_strchr(str, '=') == NULL)
 		flag = FLAG_EXPORT;
 	free(value);
 	if (!is_valid_key(key))
@@ -54,21 +100,23 @@ int	register_env(t_envp **envp, char *str)
 			"minishell: export: `%s': not a valid identifier\n", str);
 		return (-1);
 	}
+	free(key);
 	return (update_ms_envp(envp, str, flag));
 }
 
 int	export(int fd, char **argv, t_envp **envp)
 {
 	int	i;
+	int	status;
 
 	if (argv[1] == NULL)
 		return (print_sorted_env(fd, *envp));
 	i = 1;
+	status = STATUS_SUCCESS;
 	while (argv[i])
 	{
-		if (register_env(envp, argv[i]) == -1)
-			return (STATUS_ERRORS);
+		status |= (register_env(envp, argv[i]) == -1);
 		i++;
 	}
-	return (STATUS_SUCCESS);
+	return (status);
 }

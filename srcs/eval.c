@@ -16,6 +16,7 @@
 #include <minishell/lexer.h>
 #include <minishell/minishell.h>
 #include <minishell/parser.h>
+#include <minishell/signal.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -36,23 +37,25 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 	int				wstatus;
 	t_exit_status	exit_status;
 
+	if (state->nproc == 0 && heredoc_signal(-1) == SIGINT)
+	{
+		heredoc_signal(0);
+		return (update_exit_status(STATUS_SIG_BASE + SIGINT, envp));
+	}
 	if (state->nproc == 0)
 		return (0);
-	exit_status = STATUS_SUCCESS;
+	exit_status = STATUS_ERRORS;
 	while (state->nproc--)
 	{
 		pid = wrap_wait(&wstatus);
 		if (pid == -1 || pid != state->pid)
 			continue ;
-		exit_status = STATUS_ERRORS;
 		if (WIFEXITED(wstatus))
 			exit_status = WEXITSTATUS(wstatus);
-		else if (WIFSIGNALED(wstatus))
-		{
-			if (WTERMSIG(wstatus) == SIGQUIT)
-				write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+		if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGQUIT)
+			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+		if (WIFSIGNALED(wstatus))
 			exit_status = STATUS_SIG_BASE + WTERMSIG(wstatus);
-		}
 	}
 	return (update_exit_status(exit_status, envp));
 }

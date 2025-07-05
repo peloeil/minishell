@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   update.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sota <sota@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: yonuma <yonuma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 01:00:41 by sota              #+#    #+#             */
-/*   Updated: 2025/05/29 02:30:37 by sota             ###   ########.fr       */
+/*   Updated: 2025/07/04 20:10:29 by yonuma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell/minishell.h>
+#include <libft/ft_stdio.h>
 #include <libft/ft_stdlib.h>
+#include <minishell/minishell.h>
 #include <stdlib.h>
 
 static int	push_to_ms_envp(t_envp **ms_envp, const char *str, int flag)
@@ -40,14 +41,10 @@ int	update_ms_envp(t_envp **envp, const char *str, int flag)
 	char	*value;
 	t_envp	*old;
 
+	if (*envp == NULL)
+		return (push_to_ms_envp(envp, str, flag));
 	if (split_into_key_value(str, &key, &value) == -1)
 		return (-1);
-	if (*envp == NULL)
-	{
-		free(key);
-		free(value);
-		return (push_to_ms_envp(envp, str, flag));
-	}
 	old = search_key(key, *envp);
 	free(key);
 	if (old == NULL)
