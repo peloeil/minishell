@@ -52,9 +52,9 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 			continue ;
 		if (WIFEXITED(wstatus))
 			exit_status = WEXITSTATUS(wstatus);
-		else if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGQUIT)
+		if (WIFSIGNALED(wstatus) && WTERMSIG(wstatus) == SIGQUIT)
 			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
-		else if (WIFSIGNALED(wstatus))
+		if (WIFSIGNALED(wstatus))
 			exit_status = STATUS_SIG_BASE + WTERMSIG(wstatus);
 	}
 	return (update_exit_status(exit_status, envp));

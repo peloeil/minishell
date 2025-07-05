@@ -61,6 +61,7 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 	if (fd == -1)
 		return (-1);
 	rl_event_hook = heredoc_sig_hook;
+	setup_signal_handler();
 	while (1)
 	{
 		if (read_heredoc_input(fd, delimiter, envp) == -1)
@@ -71,6 +72,7 @@ static int	write_heredoc_file(const char *file, const char *delimiter,
 		&& update_exit_status(STATUS_SIG_BASE + SIGINT, &envp))
 		return (-1);
 	rl_event_hook = sig_hook;
+	signal_setup_after_readline(&envp);
 	return (0);
 }
 
@@ -123,5 +125,6 @@ int	open_heredoc(const char *delimiter, t_envp *envp)
 		close(fd);
 		return (-1);
 	}
+	free(filename);
 	return (fd);
 }
