@@ -21,7 +21,7 @@ int		push_expanded_str(
 			char *str,
 			size_t *index,
 			const t_envp *envp);
-int		expand_arg(t_arg_list *arg, const t_envp *envp);
+int		expand_arg(t_arg_list *arg, const t_envp *envp, int heredoc_flag);
 int		expand_variables(t_ast_node *ast, const t_envp *envp);
 
 #endif // EXPAND_H

@@ -43,12 +43,13 @@ static int	read_heredoc_input(int fd, const char *delimiter, t_envp *envp)
 		return (-1);
 	if (heredoc_sig_hook()
 		|| ft_strcmp(line.content, delimiter) == 0
-		|| expand_arg(&line, envp) == -1
+		|| expand_arg(&line, envp, 1) == -1
 		|| ft_dprintf(fd, "%s\n", (char *)line.content) == -1)
 	{
 		free(line.content);
 		return (-1);
 	}
+	free(line.content);
 	return (0);
 }
 

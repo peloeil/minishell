@@ -40,7 +40,7 @@ static int	change_quote_state(char *quote_char, const char *str, size_t *index)
 	return (0);
 }
 
-int	expand_arg(t_arg_list *arg, const t_envp *envp)
+int	expand_arg(t_arg_list *arg, const t_envp *envp, int heredoc_flag)
 {
 	char		quote_char;
 	size_t		index;
@@ -55,10 +55,10 @@ int	expand_arg(t_arg_list *arg, const t_envp *envp)
 		return (-1);
 	while (str[index] != '\0')
 	{
-		if (change_quote_state(&quote_char, str, &index))
+		if (!heredoc_flag && change_quote_state(&quote_char, str, &index))
 			continue ;
-		cond = ((quote_char == 0 || quote_char == '\"')
-				&& dollar_as_prefix(str, index));
+		cond = (dollar_as_prefix(str, index)
+				&& (heredoc_flag || quote_char == 0 || quote_char == '\"'));
 		if (cond && push_expanded_str(&after, str, &index, envp) == -1)
 			return (-1);
 		if (!cond && ft_str_push(&after, str[index++]) == -1)
@@ -76,7 +76,7 @@ static int	expand_args(t_arg_list *args, const t_envp *envp)
 	cur = args;
 	while (1)
 	{
-		if (expand_arg(cur, envp) == -1)
+		if (expand_arg(cur, envp, 0) == -1)
 			return (-1);
 		cur = cur->next;
 		if (cur == args)

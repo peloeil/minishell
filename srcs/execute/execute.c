@@ -62,9 +62,14 @@ static int	execute_nopipe(
 		{
 			failed = 1;
 			if (heredoc_signal(-1) == SIGINT)
-				return (0);
+				break ;
 		}
 		ast = ast->right;
+	}
+	if (failed)
+	{
+		set_parent_fds(state);
+		return (-1);
 	}
 	if (ast == NULL)
 		return (set_parent_fds(state));

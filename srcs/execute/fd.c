@@ -12,6 +12,8 @@
 
 #include <minishell/minishell.h>
 #include <minishell/execute.h>
+#include <minishell/signal.h>
+#include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -65,6 +67,8 @@ int	set_parent_fds(t_proc_state *state)
 	wrap_close(&state->iofd[INFD_INDEX], STDIN_FILENO);
 	wrap_close(&state->iofd[OUTFD_INDEX], STDOUT_FILENO);
 	wrap_close(&state->pipefd[WRITE_PIPE], STDOUT_FILENO);
+	if (heredoc_signal(-1) == SIGINT)
+		wrap_close(&state->pipefd[READ_PIPE], STDIN_FILENO);
 	return (0);
 }
 

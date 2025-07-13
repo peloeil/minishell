@@ -23,6 +23,7 @@ char	*wrap_readline(const char *prompt)
 	char	*res;
 	size_t	size;
 
+	g_received_signal = 0;
 	setup_signal_handler();
 	if (isatty(STDIN_FILENO) == -1)
 		return (NULL);

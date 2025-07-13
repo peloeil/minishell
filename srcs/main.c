@@ -49,9 +49,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (initial_setup(&ms_envp, envp) == -1)
 		return (STATUS_ERRORS);
+	status = STATUS_SUCCESS;
 	while (1)
 	{
-		g_received_signal = 0;
 		cmd_str = wrap_readline(PROMPT);
 		signal_setup_after_readline(&ms_envp);
 		if (cmd_str == NULL)
@@ -59,7 +59,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(cmd_str);
 		status = evaluate_command(cmd_str, &ms_envp);
 		if (status == -1)
-			update_exit_status(STATUS_MISUSE, &ms_envp);
+			update_exit_status(STATUS_ERRORS, &ms_envp);
 		if (status == -2)
 			break ;
 	}
