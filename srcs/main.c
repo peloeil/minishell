@@ -59,7 +59,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(cmd_str);
 		status = evaluate_command(cmd_str, &ms_envp);
 		if (status == -1)
-			update_exit_status(STATUS_MISUSE, &ms_envp);
+			update_exit_status(STATUS_ERRORS, &ms_envp);
 		if (status == -2)
 			break ;
 	}
