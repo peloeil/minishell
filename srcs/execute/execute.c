@@ -62,7 +62,7 @@ static int	execute_nopipe(
 		{
 			failed = 1;
 			if (heredoc_signal(-1) == SIGINT)
-				return (0);
+				break ;
 		}
 		ast = ast->right;
 	}
