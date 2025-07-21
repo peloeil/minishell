@@ -60,30 +60,45 @@ int	wait_children(t_proc_state *state, t_envp **envp)
 	return (update_exit_status(exit_status, envp));
 }
 
-int	evaluate_command(const char *cmd, t_envp **envp)
+static int	make_ast_from_str(t_ast_node **ast, const char *cmd)
 {
 	t_token_list	*tokens;
-	t_ast_node		*ast;
-	t_proc_state	state;
 	int				failed;
-	int				status;
 
+	*ast = NULL;
 	failed = (tokenize_input(&tokens, cmd) == -1);
 	free((void *)cmd);
 	if (failed)
 		return (-1);
 	if (tokens == NULL)
 		return (0);
-	failed = (parse_tokens(&ast, tokens, tokens->prev) == -1);
+	failed = (parse_tokens(ast, tokens, tokens->prev) == -1);
 	free_tokens(tokens);
 	if (failed)
 		return (-1);
-	failed = (found_parse_error(ast) == -1
-			|| expand_variables(ast, *envp) == -1);
+	return (0);
+}
+
+int	evaluate_command(const char *cmd, t_envp **envp)
+{
+	t_ast_node		*ast;
+	t_proc_state	state;
+	int				status;
+
+	if (make_ast_from_str(&ast, cmd) == -1)
+		return (-1);
+	if (ast == NULL)
+		return (0);
+	if (found_parse_error(ast) == -1
+		|| expand_variables(ast, *envp) == -1)
+	{
+		free_ast(ast);
+		return (-1);
+	}
 	init_proc_state(&state);
 	status = execute_ast(ast, &state, envp, ast);
 	free_ast(ast);
-	if (wait_children(&state, envp) == -1 || failed || status == -1)
+	if (wait_children(&state, envp) == -1 || status == -1)
 		return (-1);
 	return (status);
 }
