@@ -46,7 +46,7 @@ static void	redirects_to_head(t_token_list *start, t_token_list *end)
 	redirect = search_redirect_token(start, end);
 	file = redirect->next;
 	node_to_head(file, start);
-	redirect = search_redirect_token(start, end);
+	redirect = redirect->next;
 	node_to_head(redirect, start);
 }
 
