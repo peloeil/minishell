@@ -14,6 +14,7 @@
 #include <minishell/parser.h>
 #include <libft/ft_string.h>
 #include <libft/ft_stdio.h>
+#include <libft/ft_ctype.h>
 #include <stdlib.h>
 
 int	make_argv(char ***argv, t_arg_list *args)
@@ -57,6 +58,33 @@ static size_t	ms_envp_size(t_envp *ms_envp)
 	return (size);
 }
 
+static int	is_valid_key(const char *key)
+{
+	size_t	i;
+
+	if (!key || !key[0])
+		return (0);
+	if (!ft_isalpha(key[0]) && key[0] != '_')
+		return (0);
+	i = 1;
+	while (key[i])
+	{
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static int	set_key_value(char **envp, char *key, char *value)
+{
+	if (value == NULL && ft_asprintf(envp, "%s=", key) == -1)
+		return (-1);
+	if (value != NULL && ft_asprintf(envp, "%s=%s", key, value) == -1)
+		return (-1);
+	return (0);
+}
+
 int	make_envp(char ***envp, t_envp *ms_envp)
 {
 	size_t	i;
@@ -67,7 +95,12 @@ int	make_envp(char ***envp, t_envp *ms_envp)
 	i = 0;
 	while (ms_envp != NULL)
 	{
-		if (ft_asprintf(*envp + i, "%s=%s", ms_envp->key, ms_envp->value) == -1)
+		if (!is_valid_key(ms_envp->key) || !(ms_envp->flag & FLAG_ENV))
+		{
+			ms_envp = ms_envp->next;
+			continue ;
+		}
+		if (set_key_value(*envp + i, ms_envp->key, ms_envp->value) == -1)
 		{
 			free_strs(*envp);
 			*envp = NULL;
